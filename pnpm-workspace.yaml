@@ -1,0 +1,7 @@
+packages:
+  - "apps/*"
+  - "packages/configs/*"
+  - "packages/cli/*"
+  - "!**/dist/**"
+  - "!**/node_modules/**"
+  - "!templates/**"
