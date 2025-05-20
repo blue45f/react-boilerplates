@@ -1,0 +1,12 @@
+{
+  "name": "@repo/typescript-config",
+  "version": "1.0.0",
+  "private": true,
+  "description": "공유 TypeScript 설정",
+  "files": ["*.json"],
+  "exports": {
+    "./base": "./base.json",
+    "./react": "./react.json",
+    "./node": "./node.json"
+  }
+}
