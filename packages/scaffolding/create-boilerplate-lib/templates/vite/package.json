@@ -1,0 +1,36 @@
+{
+  "name": "@template/vite-lib",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "build:lib": "tsc -b && BUILD_LIB=true vite build",
+    "test": "vitest",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@boilerplate/sentry-config": "workspace:*",
+    "@boilerplate/vite-config": "workspace:*",
+    "@boilerplate/vitest-config": "workspace:*",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@boilerplate/ts-config": "workspace:*",
+    "@types/jest": "^29.5.14",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-legacy": "^5.4.3",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react-refresh": "^0.4.14",
+    "globals": "^15.11.0",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.12.2",
+    "vite": "^5.4.9",
+    "vitest": "^2.1.3"
+  }
+}
