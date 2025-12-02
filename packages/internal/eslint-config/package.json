@@ -1,0 +1,32 @@
+{
+  "name": "@internal/eslint-config",
+  "version": "1.0.0",
+  "description": "Internal ESLint configuration",
+  "main": "./src/eslint.config.js",
+  "exports": {
+    "./base": {
+      "require": "./src/base.js",
+      "import": "./src/base.js"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "eslint",
+    "config"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1"
+  },
+  "peerDependencies": {
+    "eslint": "^8.0.0",
+    "typescript": "^5.0.0"
+  }
+}
