@@ -1,0 +1,10 @@
+{
+  "name": "@boilerplate/browserslist-config",
+  "version": "0.1.0",
+  "description": "Shared browserslist configuration",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "keywords": ["browserslist", "config"],
+  "author": "",
+  "license": "MIT"
+}
