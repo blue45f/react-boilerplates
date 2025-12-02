@@ -1,0 +1,55 @@
+import React from 'react'
+import { Typography, Space, Button } from 'antd'
+import { LockOutlined } from '@ant-design/icons'
+
+const { Title, Text } = Typography
+
+const ErrorPage403: React.FC = () => {
+  const goAuthAdmin = () => {
+    // 권한 관리 페이지로 이동하도록 수정해주세요.
+    window.location.href = '/auth-admin'
+  }
+
+  const goHome = () => {
+    window.location.href = '/'
+  }
+
+  return (
+    <div style=\{{
+      width: '100%',
+      minHeight: '100vh',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      background: '#f5f5f5'
+    }}>
+      <Space direction="vertical" align="center" size="large">
+        <div style=\{{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <img src="/assets/images/logo.png" alt="" height={32} width={109} />
+          <Text strong>Admin</Text>
+        </div>
+
+        <LockOutlined style=\{{ fontSize: 88, color: '#ff4d4f' }} />
+
+        <Title level={2} style=\{{ textAlign: 'center', margin: 0 }}>
+          권한이 없습니다.
+        </Title>
+
+        <Text type="secondary" style=\{{ textAlign: 'center', display: 'block' }}>
+          백오피스 권한 확인 후 신청을 해주세요
+        </Text>
+
+        <Space direction="vertical">
+          <Button type="primary" size="large" onClick={goAuthAdmin}>
+            백오피스 권한 관리
+          </Button>
+          <Button size="large" onClick={goHome}>
+            홈으로 이동
+          </Button>
+        </Space>
+      </Space>
+    </div>
+  )
+}
+
+export default ErrorPage403

@@ -1,0 +1,49 @@
+import React, { useEffect } from 'react'
+import { Typography, Space } from 'antd'
+import { ClockCircleOutlined } from '@ant-design/icons'
+
+const { Title, Text } = Typography
+
+const ErrorPage401: React.FC = () => {
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      window.location.reload()
+    }, 3000)
+
+    return () => {
+      clearTimeout(handler)
+    }
+  }, [])
+
+  return (
+    <div style=\{{
+      width: '100%',
+      minHeight: '100vh',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      background: '#f5f5f5'
+    }}>
+      <Space direction="vertical" align="center" size="large">
+        <div style=\{{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <img src="/assets/images/logo.png" alt="" height={32} width={109} />
+          <Text strong>Admin</Text>
+        </div>
+
+        <ClockCircleOutlined style=\{{ fontSize: 88, color: '#1890ff' }} />
+
+        <Title level={2} style=\{{ textAlign: 'center', margin: 0 }}>
+          자동 로그아웃 안내
+        </Title>
+
+        <Text type="secondary" style=\{{ textAlign: 'center', display: 'block' }}>
+          안전한 사이트 이용을 위해 로그인 후 <br />
+          일정 시간 동안 사이트 이용이 발생하지 않아 <br />
+          자동 로그아웃 되었습니다.
+        </Text>
+      </Space>
+    </div>
+  )
+}
+
+export default ErrorPage401

@@ -1,0 +1,213 @@
+import React, { useState, useEffect } from 'react'
+import { Card, Button, Space, Typography, Form, Input, Select, Radio, Tag, Table, Tooltip } from 'antd'
+import { SearchOutlined } from '@ant-design/icons'
+import type { ColumnsType } from 'antd/es/table'
+import dayjs from 'dayjs'
+
+const { Title, Text } = Typography
+
+interface DataType {
+  key: string
+  sampleId: string
+  sampleName: string
+  name: string
+  sampleStartAt: string
+  sampleEndAt: string
+}
+
+interface Props {
+  content?: string
+}
+
+const {{convertName name feature}}: React.FC<Props> = ({ content = '내용을 입력하세요' }) => {
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(20)
+  const [selectedChips, setSelectedChips] = useState<string[]>([])
+  const [form] = Form.useForm()
+
+  const data = sampleData.map((item, index) => ({ ...item, key: index.toString() }))
+  const total = data.length
+
+  const onSubmit = (values: any) => {
+    console.log('Search values:', values, 'Selected chips:', selectedChips)
+  }
+
+  const handleReset = () => {
+    form.resetFields()
+    setSelectedChips([])
+  }
+
+  const handleChipClick = (value: string) => {
+    setSelectedChips((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+    )
+  }
+
+  const handleSelectAll = () => {
+    const allValues = ['VALUE_1', 'VALUE_2', 'VALUE_3', 'VALUE_4']
+    setSelectedChips((prev) => (prev.length === allValues.length ? [] : allValues))
+  }
+
+  const columns: ColumnsType<DataType> = [
+    {
+      title: '샘플 ID',
+      dataIndex: 'sampleId',
+      key: 'sampleId',
+      width: 100,
+    },
+    {
+      title: '샘플 Name',
+      dataIndex: 'sampleName',
+      key: 'sampleName',
+      width: 100,
+    },
+    {
+      title: '샘플 기간',
+      key: 'sampleDate',
+      width: 200,
+      render: (_, record) => {
+        const startString = record.sampleStartAt
+          ? dayjs(record.sampleStartAt).format('YYYY.MM.DD (ddd) HH:mm')
+          : '기간 없음'
+        const endString = record.sampleEndAt
+          ? dayjs(record.sampleEndAt).format('YYYY.MM.DD (ddd) HH:mm')
+          : '기간 없음'
+        return <Text>{`${startString} ~ ${endString}`}</Text>
+      },
+    },
+  ]
+
+  const chipOptions = [
+    { value: 'VALUE_1', label: 'label1' },
+    { value: 'VALUE_2', label: 'label2' },
+    { value: 'VALUE_3', label: 'label3' },
+    { value: 'VALUE_4', label: 'label4' },
+  ]
+
+  return (
+    <div style=\{{ padding: '24px' }}>
+      {/* Search Filter */}
+      <Card style=\{{ marginBottom: 24 }}>
+        <Form form={form} layout="vertical" onFinish={onSubmit}>
+          <Space direction="vertical" size="middle" style=\{{ width: '100%' }}>
+            <Form.Item label={<Tooltip title="라벨 툴팁 샘플">검색어</Tooltip>} style=\{{ marginBottom: 0 }}>
+              <Space>
+                <Form.Item name="sample1" noStyle>
+                  <Select placeholder="sample placeholder" style=\{{ width: 200 }}>
+                    <Select.Option value="value1">value1</Select.Option>
+                    <Select.Option value="value2">value2</Select.Option>
+                    <Select.Option value="value3">value3</Select.Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  name="sample2"
+                  noStyle
+                  rules={[{ message: '입력값을 확인해주세요' }]}
+                >
+                  <Input placeholder="sample placeholder" style=\{{ width: 328 }} />
+                </Form.Item>
+              </Space>
+            </Form.Item>
+
+            <Form.Item label="다중 선택(chip)" style=\{{ marginBottom: 0 }}>
+              <Space wrap>
+                <Tag.CheckableTag
+                  checked={selectedChips.length === chipOptions.length}
+                  onChange={handleSelectAll}
+                >
+                  전체
+                </Tag.CheckableTag>
+                {chipOptions.map((opt) => (
+                  <Tag.CheckableTag
+                    key={opt.value}
+                    checked={selectedChips.includes(opt.value)}
+                    onChange={() => handleChipClick(opt.value)}
+                  >
+                    {opt.label}
+                  </Tag.CheckableTag>
+                ))}
+              </Space>
+            </Form.Item>
+
+            <Form.Item label="단일 선택(radio)" name="sample4" style=\{{ marginBottom: 0 }}>
+              <Radio.Group>
+                <Radio value="value1">label1</Radio>
+                <Radio value="value2">label2</Radio>
+                <Radio value="value3">label3</Radio>
+                <Radio value="value4">label4</Radio>
+              </Radio.Group>
+            </Form.Item>
+          </Space>
+
+          <div style=\{{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 24 }}>
+            <Button onClick={handleReset}>초기화</Button>
+            <Button type="primary" htmlType="submit" icon={<SearchOutlined />}>
+              검색
+            </Button>
+          </div>
+        </Form>
+      </Card>
+
+      {/* Table */}
+      <div>
+        <div style=\{{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+          <Space>
+            <Title level={5} style=\{{ margin: 0 }}>샘플 목록</Title>
+            <Text type="secondary">총 {total}개</Text>
+          </Space>
+          <Select
+            value={pageSize}
+            onChange={(value) => {
+              setPageSize(value)
+              setPage(1)
+            }}
+            style=\{{ width: 120 }}
+          >
+            <Select.Option value={10}>10개씩 보기</Select.Option>
+            <Select.Option value={20}>20개씩 보기</Select.Option>
+            <Select.Option value={50}>50개씩 보기</Select.Option>
+          </Select>
+        </div>
+
+        <Table
+          columns={columns}
+          dataSource={data}
+          pagination=\{{
+            current: page,
+            pageSize: pageSize,
+            total: total,
+            onChange: (p) => setPage(p),
+            showSizeChanger: false,
+          }}
+          locale=\{{ emptyText: '데이터가 없습니다.' }}
+        />
+      </div>
+    </div>
+  )
+}
+
+export default {{convertName name feature}}
+
+const sampleData: Omit<DataType, 'key'>[] = [
+  {
+    sampleId: 'sampleId1',
+    sampleName: '샘플 이름1',
+    name: '링크 연결된 샘플 이름1',
+    sampleStartAt: '2021-01-01T00:00:00.000Z',
+    sampleEndAt: '2021-01-01T00:00:00.000Z',
+  },
+  {
+    sampleId: 'sampleId2',
+    sampleName: '샘플 이름2',
+    name: '링크 연결된 샘플 이름2',
+    sampleStartAt: '2021-01-01T00:00:00.000Z',
+    sampleEndAt: '2021-01-01T00:00:00.000Z',
+  },
+  {
+    sampleId: 'sampleId3',
+    sampleName: '샘플 이름3',
+    name: '링크 연결된 샘플 이름3',
+    sampleStartAt: '2021-01-01T00:00:00.000Z',
+    sampleEndAt: '2021-01-01T00:00:00.000Z',
+  },
+]

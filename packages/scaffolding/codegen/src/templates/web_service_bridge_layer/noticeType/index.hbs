@@ -1,0 +1,72 @@
+import React from 'react'
+import { Tabs, Typography, List, Badge, Space } from 'antd'
+
+const { Title, Text } = Typography
+
+interface NoticeItem {
+  id: number
+  category: string
+  title: string
+  description: string
+  date: string
+}
+
+const NoticePage: React.FC = () => {
+  const noticeData: NoticeItem[] = Array.from({ length: 11 }, (_, i) => ({
+    id: i,
+    category: '카테고리1',
+    title: '타이틀',
+    description: '이 글이 어떤 글인지 조금 더 자세히 설명해주는 서브타이틀 또는 본문 요약',
+    date: '2024. 07. 25 (목) 12:00',
+  }))
+
+  const renderNoticeList = () => (
+    <div>
+      <div style=\{{ marginBottom: 16 }}>
+        <Space>
+          <Title level={5} style=\{{ margin: 0 }}>목록</Title>
+          <Text type="secondary">{noticeData.length}개</Text>
+        </Space>
+      </div>
+      <List
+        itemLayout="vertical"
+        dataSource={noticeData}
+        renderItem={(item) => (
+          <List.Item style=\{{ borderBottom: '1px solid #f0f0f0', padding: '16px 0' }}>
+            <Text type="secondary" style=\{{ fontSize: 12 }}>{item.category}</Text>
+            <Title level={5} style=\{{ marginTop: 4, marginBottom: 8 }}>{item.title}</Title>
+            <div>
+              <Text>{item.description}</Text>
+            </div>
+            <Text type="secondary" style=\{{ fontSize: 12 }}>{item.date}</Text>
+          </List.Item>
+        )}
+      />
+    </div>
+  )
+
+  const tabItems = [
+    {
+      key: '1',
+      label: (
+        <Badge dot>
+          <span>전체</span>
+        </Badge>
+      ),
+      children: renderNoticeList(),
+    },
+    { key: '2', label: '카테고리1', children: <Text>내용1</Text> },
+    { key: '3', label: '카테고리2', children: <Text>내용2</Text> },
+    { key: '4', label: '카테고리3', children: <Text>내용3</Text> },
+    { key: '5', label: '카테고리4', children: <Text>내용4</Text> },
+    { key: '6', label: '카테고리5', children: <Text>내용5</Text> },
+  ]
+
+  return (
+    <div style=\{{ minHeight: '100vh', padding: '24px' }}>
+      <Tabs defaultActiveKey="1" items={tabItems} />
+    </div>
+  )
+}
+
+export default NoticePage

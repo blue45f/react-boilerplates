@@ -1,0 +1,47 @@
+import React from 'react'
+import { Typography, Space, Button } from 'antd'
+import { WarningOutlined } from '@ant-design/icons'
+
+const { Title, Text } = Typography
+
+const ErrorPage500: React.FC = () => {
+  const goHome = () => {
+    window.location.href = '/'
+  }
+
+  return (
+    <div style=\{{
+      width: '100%',
+      minHeight: '100vh',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      background: '#f5f5f5'
+    }}>
+      <Space direction="vertical" align="center" size="large">
+        <div style=\{{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <img src="/assets/images/logo.png" alt="" height={32} width={109} />
+          <Text strong>Admin</Text>
+        </div>
+
+        <WarningOutlined style=\{{ fontSize: 88, color: '#ff4d4f' }} />
+
+        <Title level={2} style=\{{ textAlign: 'center', margin: 0 }}>
+          서비스 이용이 <br />
+          원활하지 않습니다
+        </Title>
+
+        <Text type="secondary" style=\{{ textAlign: 'center', display: 'block' }}>
+          문제를 해결하기 위해 노력하고 있습니다. <br />
+          잠시 후 다시 확인해주세요.
+        </Text>
+
+        <Button type="primary" size="large" onClick={goHome}>
+          홈으로 이동
+        </Button>
+      </Space>
+    </div>
+  )
+}
+
+export default ErrorPage500
