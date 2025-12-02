@@ -1,0 +1,50 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules
+.pnp
+.pnp.js
+
+# testing
+coverage
+
+# next.js
+.next/
+out/
+build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# turbo
+.turbo
+
+# jetbrain
+.idea/*
+!.idea/jsLinters
+.idea/jsLinters/*
+!.idea/jsLinters/eslint.xml
+
+# deploy bundle
+.deploy
+
+# storybook-bild
+storybook-static
+
+screenlog.0
+
+# build
+dist
+
+my-app/*
+
+# docusaurus
+.docusaurus
+/.idea/

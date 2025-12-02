@@ -1,0 +1,53 @@
+# GitLab CI/CD Configuration
+# Customize according to your needs
+
+image: node:20
+
+stages:
+  - install
+  - build
+  - test
+  - publish
+
+variables:
+  PNPM_VERSION: "8.11.0"
+
+.pnpm-setup: &pnpm-setup
+  before_script:
+    - corepack enable
+    - corepack prepare pnpm@$PNPM_VERSION --activate
+    - pnpm config set store-dir .pnpm-store
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .pnpm-store
+    - node_modules/
+
+install:
+  stage: install
+  <<: *pnpm-setup
+  script:
+    - pnpm install --frozen-lockfile
+
+build:
+  stage: build
+  <<: *pnpm-setup
+  needs:
+    - install
+  script:
+    - pnpm install
+    - pnpm tr --filter "@boilerplate/*" build
+    - pnpm tr --filter "create-boilerplate-app" build
+
+# Uncomment for publishing
+# publish:
+#   stage: publish
+#   <<: *pnpm-setup
+#   needs:
+#     - build
+#   script:
+#     - echo "Publish packages"
+#   only:
+#     - main
+#   when: manual

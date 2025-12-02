@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+FILE=~/.huskyrc
+
+# NOTE: ~/.huskyrc 설정이 없는 경우 추가(volta PATH 경로)
+if [ ! -e $FILE ];then
+  touch $FILE
+  echo "export PATH=\$PATH:~/.volta/bin" > $FILE
+fi
+
+pnpm lint
+# exit 1 # NOTE: husky commit Test용도
