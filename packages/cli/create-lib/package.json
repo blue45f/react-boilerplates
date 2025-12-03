@@ -1,0 +1,39 @@
+{
+  "name": "create-react-lib",
+  "version": "1.0.0",
+  "description": "React 라이브러리 생성 CLI",
+  "license": "MIT",
+  "type": "module",
+  "keywords": ["react", "library", "component", "scaffold", "generator", "cli", "vite", "typescript"],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blue45f/react-boilerplates",
+    "directory": "packages/cli/create-lib"
+  },
+  "bin": {
+    "create-react-lib": "./dist/index.js"
+  },
+  "files": ["dist", "templates"],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "dev": "tsup src/index.ts --format esm --watch",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "chalk": "^5.4.0",
+    "commander": "^13.1.0",
+    "fs-extra": "^11.3.0",
+    "ora": "^8.2.0",
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^22.14.0",
+    "@types/prompts": "^2.4.9",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.0"
+  }
+}
