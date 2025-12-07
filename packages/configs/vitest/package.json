@@ -1,0 +1,25 @@
+{
+  "name": "@repo/vitest-config",
+  "version": "1.0.0",
+  "private": true,
+  "description": "공유 Vitest 설정",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js"
+    },
+    "./setup": "./src/setup.js"
+  },
+  "files": ["src"],
+  "dependencies": {
+    "@testing-library/jest-dom": "^6.6.0",
+    "@testing-library/react": "^16.1.0",
+    "jsdom": "^25.0.0"
+  },
+  "peerDependencies": {
+    "vitest": "^2.0.0"
+  }
+}

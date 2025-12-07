@@ -1,2 +1,0 @@
-declare const WEBVIEW_SUPPORTED_BROWSERS_LIST: string[]
-export default WEBVIEW_SUPPORTED_BROWSERS_LIST
