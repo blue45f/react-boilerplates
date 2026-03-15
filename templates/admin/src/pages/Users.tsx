@@ -1,5 +1,6 @@
-import { Button, Space, Table, Tag } from 'antd';
+import { Button, Modal, Space, Table, Tag, message } from 'antd';
 import type { TableColumnsType } from 'antd';
+import { ExclamationCircleFilled } from '@ant-design/icons';
 
 interface User {
   key: string;
@@ -7,6 +8,22 @@ interface User {
   email: string;
   role: string;
   status: 'active' | 'inactive';
+}
+
+const { confirm } = Modal;
+
+function showDeleteConfirm(user: User) {
+  confirm({
+    title: `'${user.name}' 사용자를 삭제하시겠습니까?`,
+    icon: <ExclamationCircleFilled />,
+    content: '이 작업은 되돌릴 수 없습니다.',
+    okText: '삭제',
+    okType: 'danger',
+    cancelText: '취소',
+    onOk() {
+      message.success(`${user.name} 사용자가 삭제되었습니다.`);
+    },
+  });
 }
 
 const columns: TableColumnsType<User> = [
@@ -49,7 +66,13 @@ const columns: TableColumnsType<User> = [
         <Button type="link" size="small" aria-label={`${record.name} 수정`}>
           수정
         </Button>
-        <Button type="link" size="small" danger aria-label={`${record.name} 삭제`}>
+        <Button
+          type="link"
+          size="small"
+          danger
+          aria-label={`${record.name} 삭제`}
+          onClick={() => showDeleteConfirm(record)}
+        >
           삭제
         </Button>
       </Space>

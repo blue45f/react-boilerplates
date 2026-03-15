@@ -8,6 +8,9 @@ import { Layout, Menu, theme } from 'antd';
 import { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 
+import Breadcrumb from './Breadcrumb';
+import HeaderUserInfo from './HeaderUserInfo';
+
 const { Header, Sider, Content } = Layout;
 
 const menuItems = [
@@ -102,8 +105,19 @@ function AdminLayout() {
           />
         </Sider>
         <Layout>
-          <Header style={{ padding: 0, background: colorBgContainer }} />
+          <Header
+            style={{
+              padding: '0 16px',
+              background: colorBgContainer,
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+            }}
+          >
+            <HeaderUserInfo />
+          </Header>
           <Content style={{ margin: 16 }}>
+            <Breadcrumb />
             <div
               id="main-content"
               style={{
