@@ -15,12 +15,15 @@
     "@ant-design/icons": "^5.6.0",
     "@tanstack/react-query": "^5.74.0",
     "antd": "^5.24.0",
+    "ky": "^1.8.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-helmet-async": "^2.0.5",
     "react-router-dom": "^7.5.0",
     "zustand": "^5.0.0"
   },
   "devDependencies": {
+    "@tanstack/react-query-devtools": "^5.74.0",
     "@types/react": "^18.3.20",
     "@types/react-dom": "^18.3.6",
     "@vitejs/plugin-react": "^4.4.0",

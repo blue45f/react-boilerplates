@@ -5,8 +5,10 @@ import {
 } from '@ant-design/icons';
 import type { CSSProperties } from 'react';
 import { Layout, Menu, theme } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+
+import { useAuthStore } from '@/stores/useAuthStore';
 
 import Breadcrumb from './Breadcrumb';
 import HeaderUserInfo from './HeaderUserInfo';
@@ -56,9 +58,17 @@ function AdminLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { isAuthenticated, login } = useAuthStore();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  // 데모용: 인증되지 않은 경우 mock 사용자로 로그인
+  useEffect(() => {
+    if (!isAuthenticated) {
+      login({ id: '1', name: '관리자', email: 'admin@example.com', role: 'admin' });
+    }
+  }, [isAuthenticated, login]);
 
   return (
     <>
