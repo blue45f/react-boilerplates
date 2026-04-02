@@ -3,6 +3,7 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 
 const navLinks = [
   { to: '/', label: '홈' },
+  { to: '/posts', label: '게시글' },
   { to: '/about', label: '소개' },
 ];
 
