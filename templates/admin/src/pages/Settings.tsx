@@ -1,4 +1,5 @@
 import { Button, Card, Form, Input, Switch, message } from 'antd';
+import { Helmet } from 'react-helmet-async';
 
 interface SettingsFormValues {
   siteName: string;
@@ -16,6 +17,9 @@ function Settings() {
 
   return (
     <div>
+      <Helmet>
+        <title>설정 - Admin</title>
+      </Helmet>
       <h1>설정</h1>
       <Card title="기본 설정" style={{ marginTop: 24, maxWidth: 600 }}>
         <Form

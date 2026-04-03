@@ -1,4 +1,12 @@
-import { Box, Container, Flex, Link as ChakraLink } from '@chakra-ui/react';
+import {
+  Box,
+  Container,
+  Flex,
+  IconButton,
+  Link as ChakraLink,
+  useColorMode,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
 const navLinks = [
@@ -9,6 +17,10 @@ const navLinks = [
 
 function Layout() {
   const location = useLocation();
+  const { colorMode, toggleColorMode } = useColorMode();
+  const headerBg = useColorModeValue('blue.500', 'blue.700');
+  const footerBg = useColorModeValue('gray.100', 'gray.800');
+  const footerColor = useColorModeValue('gray.600', 'gray.400');
 
   return (
     <Flex direction="column" minH="100vh">
@@ -23,26 +35,23 @@ function Layout() {
           overflow: 'hidden',
         }}
         onFocus={(e) => {
-          e.currentTarget.style.position = 'fixed';
-          e.currentTarget.style.left = '8px';
-          e.currentTarget.style.top = '8px';
-          e.currentTarget.style.width = 'auto';
-          e.currentTarget.style.height = 'auto';
-          e.currentTarget.style.zIndex = '9999';
-          e.currentTarget.style.background = '#3182ce';
-          e.currentTarget.style.color = 'white';
-          e.currentTarget.style.padding = '8px 16px';
-          e.currentTarget.style.borderRadius = '4px';
+          Object.assign(e.currentTarget.style, {
+            position: 'fixed', left: '8px', top: '8px',
+            width: 'auto', height: 'auto', zIndex: '9999',
+            background: '#3182ce', color: 'white',
+            padding: '8px 16px', borderRadius: '4px',
+          });
         }}
         onBlur={(e) => {
-          e.currentTarget.style.position = 'absolute';
-          e.currentTarget.style.left = '-9999px';
+          Object.assign(e.currentTarget.style, {
+            position: 'absolute', left: '-9999px',
+          });
         }}
       >
         본문으로 건너뛰기
       </a>
 
-      <Box as="header" bg="blue.500" color="white" py={4}>
+      <Box as="header" bg={headerBg} color="white" py={4}>
         <Container maxW="container.xl">
           <Flex justify="space-between" align="center">
             <ChakraLink
@@ -54,19 +63,31 @@ function Layout() {
             >
               React App
             </ChakraLink>
-            <Flex as="nav" gap={6} aria-label="메인 네비게이션">
-              {navLinks.map(({ to, label }) => (
-                <ChakraLink
-                  key={to}
-                  as={Link}
-                  to={to}
-                  aria-current={location.pathname === to ? 'page' : undefined}
-                  fontWeight={location.pathname === to ? 'bold' : 'normal'}
-                  textDecoration={location.pathname === to ? 'underline' : 'none'}
-                >
-                  {label}
-                </ChakraLink>
-              ))}
+            <Flex align="center" gap={6}>
+              <Flex as="nav" gap={6} aria-label="메인 네비게이션">
+                {navLinks.map(({ to, label }) => (
+                  <ChakraLink
+                    key={to}
+                    as={Link}
+                    to={to}
+                    aria-current={location.pathname === to ? 'page' : undefined}
+                    fontWeight={location.pathname === to ? 'bold' : 'normal'}
+                    textDecoration={location.pathname === to ? 'underline' : 'none'}
+                  >
+                    {label}
+                  </ChakraLink>
+                ))}
+              </Flex>
+              <IconButton
+                aria-label={colorMode === 'light' ? '다크모드 전환' : '라이트모드 전환'}
+                onClick={toggleColorMode}
+                variant="ghost"
+                color="white"
+                size="sm"
+                _hover={{ bg: 'whiteAlpha.300' }}
+              >
+                {colorMode === 'light' ? '🌙' : '☀️'}
+              </IconButton>
             </Flex>
           </Flex>
         </Container>
@@ -78,9 +99,9 @@ function Layout() {
         </Container>
       </Box>
 
-      <Box as="footer" bg="gray.100" py={4}>
+      <Box as="footer" bg={footerBg} py={4}>
         <Container maxW="container.xl" textAlign="center">
-          <Box as="p" color="gray.600">
+          <Box as="p" color={footerColor}>
             &copy; {new Date().getFullYear()} React App. All rights reserved.
           </Box>
         </Container>

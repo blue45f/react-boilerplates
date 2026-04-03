@@ -4,43 +4,60 @@ import {
   DollarOutlined,
   RiseOutlined,
 } from '@ant-design/icons';
-import { Card, Col, Row, Statistic } from 'antd';
+import { Card, Col, Row, Skeleton, Statistic } from 'antd';
+import { Helmet } from 'react-helmet-async';
+import type { ReactNode } from 'react';
 
-const stats = [
-  { title: '총 사용자', value: 1128, icon: <UserOutlined /> },
-  { title: '총 주문', value: 93, icon: <ShoppingCartOutlined /> },
-  {
-    title: '총 매출',
-    value: 1250000,
-    icon: <DollarOutlined />,
-    suffix: '원',
-  },
+import { useDashboardStats } from '@/hooks/useDashboardStats';
+
+interface StatConfig {
+  title: string;
+  key: keyof ReturnType<typeof useDashboardStats>['data'] & string;
+  icon: ReactNode;
+  suffix?: string;
+  precision?: number;
+  valueStyle?: React.CSSProperties;
+}
+
+const statConfigs: StatConfig[] = [
+  { title: '총 사용자', key: 'totalUsers', icon: <UserOutlined /> },
+  { title: '총 주문', key: 'totalOrders', icon: <ShoppingCartOutlined /> },
+  { title: '총 매출', key: 'totalRevenue', icon: <DollarOutlined />, suffix: '원' },
   {
     title: '성장률',
-    value: 11.28,
-    precision: 2,
+    key: 'growthRate',
     icon: <RiseOutlined />,
     suffix: '%',
+    precision: 2,
     valueStyle: { color: '#3f8600' },
   },
-] as const;
+];
 
 function Dashboard() {
+  const { data: stats, isLoading } = useDashboardStats();
+
   return (
     <div>
+      <Helmet>
+        <title>대시보드 - Admin</title>
+      </Helmet>
       <h1>대시보드</h1>
       <Row gutter={16} style={{ marginTop: 24 }}>
-        {stats.map((stat) => (
-          <Col span={6} key={stat.title}>
+        {statConfigs.map((config) => (
+          <Col span={6} key={config.title}>
             <Card>
-              <Statistic
-                title={stat.title}
-                value={stat.value}
-                prefix={stat.icon}
-                suffix={'suffix' in stat ? stat.suffix : undefined}
-                precision={'precision' in stat ? stat.precision : undefined}
-                valueStyle={'valueStyle' in stat ? stat.valueStyle : undefined}
-              />
+              {isLoading ? (
+                <Skeleton active paragraph={{ rows: 1 }} />
+              ) : (
+                <Statistic
+                  title={config.title}
+                  value={stats?.[config.key] ?? 0}
+                  prefix={config.icon}
+                  suffix={config.suffix}
+                  precision={config.precision}
+                  valueStyle={config.valueStyle}
+                />
+              )}
             </Card>
           </Col>
         ))}

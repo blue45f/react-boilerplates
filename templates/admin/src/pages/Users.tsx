@@ -1,6 +1,7 @@
 import { Button, Modal, Space, Table, Tag, message } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { ExclamationCircleFilled } from '@ant-design/icons';
+import { Helmet } from 'react-helmet-async';
 
 interface User {
   key: string;
@@ -107,6 +108,9 @@ const data: User[] = [
 function Users() {
   return (
     <div>
+      <Helmet>
+        <title>사용자 관리 - Admin</title>
+      </Helmet>
       <div
         style={{
           display: 'flex',

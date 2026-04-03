@@ -97,7 +97,11 @@ pnpm format
 | 언어 | [TypeScript 5](https://www.typescriptlang.org) |
 | UI | [React 19](https://react.dev), [Chakra UI 3](https://chakra-ui.com), [Ant Design 5](https://ant.design) |
 | 라우팅 | [React Router 7](https://reactrouter.com) |
-| 테스트 | [Vitest 2](https://vitest.dev), [Testing Library](https://testing-library.com) |
+| 서버 상태 | [Tanstack Query 5](https://tanstack.com/query) |
+| 클라이언트 상태 | [Zustand 5](https://zustand.docs.pmnd.rs) |
+| HTTP | [ky](https://github.com/sindresorhus/ky) |
+| SEO | [react-helmet-async](https://github.com/staylor/react-helmet-async) |
+| 테스트 | [Vitest 3](https://vitest.dev), [Playwright](https://playwright.dev), [Testing Library](https://testing-library.com) |
 | 코드 품질 | [ESLint 9](https://eslint.org), [Prettier 3](https://prettier.io) |
 | 패키지 관리 | [pnpm 9](https://pnpm.io) |
 
