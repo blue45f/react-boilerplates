@@ -1,10 +1,15 @@
 import { Button, Result } from 'antd';
+import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 
 function NotFound() {
   const navigate = useNavigate();
 
   return (
+    <>
+    <Helmet>
+      <title>404 - Admin</title>
+    </Helmet>
     <Result
       status="404"
       title="404"
@@ -18,6 +23,7 @@ function NotFound() {
         </Button>,
       ]}
     />
+    </>
   );
 }
 
