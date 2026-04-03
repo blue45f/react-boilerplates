@@ -27,6 +27,27 @@ export default defineConfig(createAppConfig());
 - `vite-tsconfig-paths`
 - `@/` 경로 별칭
 - 자동 vendor 청크 분리
+- 소스맵 생성
+- 개발 서버 포트 3000
+
+## 환경 변수
+
+`VITE_` 접두사가 붙은 환경 변수는 클라이언트에서 `import.meta.env`로 접근 가능합니다:
+
+```bash
+# .env
+VITE_API_URL=http://localhost:8080/api
+VITE_APP_TITLE=My App
+```
+
+타입 안전한 사용을 위해 `src/vite-env.d.ts`에 타입을 선언하세요:
+
+```ts
+interface ImportMetaEnv {
+  readonly VITE_API_URL: string;
+  readonly VITE_APP_TITLE: string;
+}
+```
 
 ### createLibConfig
 
