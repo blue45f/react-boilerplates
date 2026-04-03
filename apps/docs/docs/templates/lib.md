@@ -172,6 +172,17 @@ pnpm dev    # 데모 앱 실행 (포트 3000)
 | `index.cjs` | CommonJS | `require()` 사용 시 |
 | `index.d.ts` | TypeScript | 타입 선언 |
 
+## Storybook
+
+컴포넌트를 독립적으로 개발하고 문서화할 수 있습니다:
+
+```bash
+pnpm storybook         # Storybook 개발 서버 (포트 6006)
+pnpm build-storybook   # 정적 Storybook 빌드
+```
+
+모든 컴포넌트에 `*.stories.tsx` 파일이 포함되어 있어 자동으로 Storybook에 등록됩니다.
+
 ## 테스트
 
 ```bash
