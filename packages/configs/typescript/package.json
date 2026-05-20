@@ -1,12 +1,16 @@
 {
   "name": "@repo/typescript-config",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
-  "description": "공유 TypeScript 설정",
-  "files": ["*.json"],
+  "description": "공유 TypeScript 설정 (base / strict / react / node / lib)",
+  "files": [
+    "*.json"
+  ],
   "exports": {
     "./base": "./base.json",
+    "./strict": "./strict.json",
     "./react": "./react.json",
-    "./node": "./node.json"
+    "./node": "./node.json",
+    "./lib": "./lib.json"
   }
 }

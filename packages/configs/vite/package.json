@@ -12,10 +12,12 @@
       "import": "./src/index.js"
     }
   },
-  "files": ["src"],
+  "files": [
+    "src"
+  ],
   "dependencies": {
     "vite-plugin-dts": "^4.5.0",
-    "vite-tsconfig-paths": "^5.2.0"
+    "vite-tsconfig-paths": "^5.0.0"
   },
   "peerDependencies": {
     "vite": "^6.0.0"
