@@ -114,7 +114,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Install template deps
         working-directory: templates/${{ matrix.template }}
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --ignore-workspace --no-frozen-lockfile
       - name: Install Playwright browsers
         working-directory: templates/${{ matrix.template }}
         run: pnpm run test:e2e:install
