@@ -34,6 +34,11 @@ coverage/
 test-results/
 playwright-report/
 blob-report/
+.vitest-cache/
+
+# Storybook
+storybook-static/
+.storybook-out/
 
 # Cache
 .cache/
