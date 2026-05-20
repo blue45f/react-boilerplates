@@ -4,203 +4,195 @@ sidebar_position: 3
 
 # Library 템플릿
 
-React 컴포넌트 라이브러리 개발을 위한 템플릿입니다.
+React 컴포넌트 라이브러리 개발을 위한 템플릿입니다. Vite 라이브러리 모드, 디자인 토큰, 다크모드, Storybook, Vitest를 기본 포함합니다.
 
 ## 기술 스택
 
-| 기술 | 버전 | 용도 |
-|------|------|------|
-| React | 18+ (peer dependency) | UI 라이브러리 |
-| Vite | 6 | 라이브러리 빌드 모드 |
-| vite-plugin-dts | 4 | TypeScript 선언 파일 자동 생성 |
-| TypeScript | 5 | 타입 안전성 |
-| Vitest | 2 | 테스트 프레임워크 |
-| Testing Library | 16 | 컴포넌트 테스트 |
+| 기술            | 버전                  | 용도                           |
+| --------------- | --------------------- | ------------------------------ |
+| React           | 18+ (peer dependency) | UI 라이브러리                  |
+| Vite            | 6                     | 라이브러리 빌드 모드           |
+| vite-plugin-dts | 4                     | TypeScript 선언 파일 자동 생성 |
+| TypeScript      | 5                     | 타입 안전성                    |
+| Vitest          | 3                     | 단위 테스트                    |
+| Testing Library | 16                    | 컴포넌트 테스트                |
+| Storybook       | 8                     | 컴포넌트 카탈로그 (있는 경우)  |
 
 ## 생성 방법
 
 ```bash
 npx create-react-lib my-lib
+
+# 스코프 패키지
+npx create-react-lib @my-org/ui
 ```
 
-## 프로젝트 구조
+## 디렉토리 구조 (요약)
 
 ```
 my-lib/
 ├── src/
-│   ├── index.ts              # 라이브러리 진입점 (public API)
-│   ├── components/           # 컴포넌트
-│   │   ├── Button.tsx
-│   │   └── Button.test.tsx
-│   ├── hooks/                # 커스텀 훅
-│   │   ├── useToggle.ts
-│   │   ├── useToggle.test.ts
-│   │   ├── useDebounce.ts
-│   │   └── useDebounce.test.ts
-│   ├── utils/                # 유틸리티
-│   │   ├── cn.ts
-│   │   └── cn.test.ts
-│   ├── test-setup.ts         # 테스트 환경 설정
-│   └── demo/                 # 개발용 데모 앱
-│       ├── main.tsx
-│       └── App.tsx
-├── dist/                     # 빌드 결과물
-│   ├── index.mjs             # ES Module
-│   ├── index.cjs             # CommonJS
-│   └── index.d.ts            # TypeScript 타입 선언
+│   ├── index.ts            # public API barrel export
+│   ├── components/         # UI 컴포넌트 (+ 테스트 / 스토리)
+│   ├── hooks/              # 커스텀 훅 (+ 테스트)
+│   ├── utils/              # 유틸리티
+│   ├── providers/          # ThemeProvider 등 컨텍스트 프로바이더
+│   ├── styles/             # tokens.css / globals.css (디자인 토큰)
+│   ├── demo/               # 개발용 데모 앱
+│   └── test-setup.ts
+├── .storybook/             # Storybook 설정 (있는 경우)
 ├── vite.config.ts
 ├── tsconfig.json
 └── package.json
 ```
 
-## 포함된 예시
+:::tip
+"실제 파일이 정확히 무엇이 들어 있는지"는 빠르게 진화합니다. 이 문서는 카탈로그 역할만 하며,
+정확한 시그니처는 `src/index.ts` barrel을 import하여 IDE 자동완성으로 확인하는 것을 권장합니다.
+:::
 
-### Button 컴포넌트
+## UI 컴포넌트 카탈로그
 
-다양한 variant와 size를 지원하는 버튼 컴포넌트:
+기본/고도화 컴포넌트가 함께 포함됩니다. 모든 컴포넌트는 `src/index.ts`에서 named export 됩니다.
 
-```tsx
-import { Button } from 'my-lib';
+### 기본
 
-<Button>클릭</Button>
-<Button variant="outline" size="lg">Outline Large</Button>
-<Button disabled>비활성</Button>
-```
+| 컴포넌트  | 설명                                       |
+| --------- | ------------------------------------------ |
+| `Button`  | variant, size, disabled, focus ring        |
+| `Input`   | label, error, helperText, ref forwarding   |
+| `Card`    | `CardHeader`/`CardBody`/`CardFooter` 합성  |
+| `Badge`   | default / success / warning / error / info |
+| `Spinner` | sm/md/lg, `role="status"`                  |
+| `Alert`   | info/success/warning/error, 닫기 버튼      |
 
-### Input 컴포넌트
+### 추가 컴포넌트
 
-라벨, 에러, 도움말을 지원하는 접근성 있는 입력 필드:
-
-```tsx
-import { Input } from 'my-lib';
-
-<Input label="이메일" type="email" helperText="example@mail.com" />
-<Input label="비밀번호" error="8자 이상 입력하세요" />
-```
-
-### Card 컴포넌트
-
-Header, Body, Footer로 구성되는 카드 레이아웃:
-
-```tsx
-import { Card, CardHeader, CardBody, CardFooter } from 'my-lib';
-
-<Card>
-  <CardHeader>제목</CardHeader>
-  <CardBody>내용</CardBody>
-  <CardFooter><Button>확인</Button></CardFooter>
-</Card>
-```
-
-### useToggle 훅
-
-boolean 상태를 쉽게 관리하는 훅:
+| 컴포넌트               | 용도                                 |
+| ---------------------- | ------------------------------------ |
+| `Modal`                | 포커스 트랩, ESC 닫기, 오버레이      |
+| `Tooltip`              | 포지셔닝, delay, 접근 가능한 trigger |
+| `Tabs`                 | 키보드 네비게이션 (`role=tablist`)   |
+| `Switch`               | on/off 토글, label 연동              |
+| `Avatar`               | 이미지/이니셜 fallback               |
+| `Toast`                | 알림 메시지, autoDismiss             |
+| `Tag`                  | 색상/사이즈 variant                  |
+| `Skeleton`             | 로딩 placeholder                     |
+| `Divider`              | 가로/세로 구분선                     |
+| `Checkbox`             | 단일 체크박스                        |
+| `Radio` / `RadioGroup` | 단일 선택 그룹                       |
+| `Select`               | 드롭다운 선택                        |
+| `Progress`             | 진행률 바                            |
 
 ```tsx
-import { useToggle } from 'my-lib';
-
-const [isOpen, toggle, setIsOpen] = useToggle(false);
-
-// toggle() - 값 반전
-// setIsOpen(true) - 직접 설정
+import { Modal, Tabs, Toast, Select } from 'my-lib';
 ```
 
-### useDebounce 훅
+## 커스텀 훅 카탈로그
 
-입력값의 디바운스 처리:
+### 기본
+
+| 훅                | 설명                   |
+| ----------------- | ---------------------- |
+| `useToggle`       | boolean 상태 토글      |
+| `useDebounce`     | 값 디바운스            |
+| `useLocalStorage` | localStorage 동기 상태 |
+| `useMediaQuery`   | 미디어 쿼리 매치       |
+| `useClickOutside` | 외부 클릭 감지         |
+
+### 추가 훅
+
+| 훅                        | 설명                                          |
+| ------------------------- | --------------------------------------------- |
+| `useIntersectionObserver` | 뷰포트 교차 감지 (lazy load, infinite scroll) |
+| `useCopyToClipboard`      | 클립보드 복사 + 결과 상태                     |
+| `useKeyPress`             | 특정 키 입력 감지                             |
+| `usePrevious`             | 이전 렌더의 값 보관                           |
+| `useEventListener`        | 이벤트 리스너 안전 등록/해제                  |
+| `useTheme`                | 현재 테마 / 토글 (ThemeProvider 필요)         |
+| `useFocusTrap`            | 모달/다이얼로그용 포커스 트랩                 |
 
 ```tsx
-import { useDebounce } from 'my-lib';
+import { useIntersectionObserver, useCopyToClipboard, useTheme } from 'my-lib';
 
-const [search, setSearch] = useState('');
-const debouncedSearch = useDebounce(search, 300);
-
-// debouncedSearch는 300ms 후에 업데이트
+const { ref, isIntersecting } = useIntersectionObserver();
+const [copied, copy] = useCopyToClipboard();
+const { theme, toggle } = useTheme();
 ```
 
-### useLocalStorage 훅
+## 디자인 토큰
 
-localStorage 기반 상태 관리:
+`src/styles/tokens.css`에 색상/타이포/spacing/radius 등 디자인 토큰이 CSS 커스텀 프로퍼티로 정의되어 있습니다.
+컴포넌트는 토큰을 참조하므로, 토큰만 바꿔도 전체 룩앤필이 바뀝니다.
+
+```css
+/* 사용 예: 소비자 프로젝트의 global.css에서 토큰 override */
+:root {
+  --color-primary: #6366f1;
+  --radius-md: 8px;
+}
+```
+
+## 다크모드
+
+`ThemeProvider`로 앱을 감싸면 라이트/다크 테마 토큰이 자동으로 적용됩니다.
 
 ```tsx
-import { useLocalStorage } from 'my-lib';
+import { ThemeProvider, useTheme } from 'my-lib';
 
-const [theme, setTheme, removeTheme] = useLocalStorage('theme', 'light');
+function App() {
+  return (
+    <ThemeProvider defaultTheme="system">
+      <Root />
+    </ThemeProvider>
+  );
+}
 
-setTheme('dark');       // localStorage에 저장
-setTheme(prev => prev === 'dark' ? 'light' : 'dark'); // 함수형 업데이트
-removeTheme();          // localStorage에서 삭제
+function Header() {
+  const { theme, toggle } = useTheme();
+  return <button onClick={toggle}>{theme}</button>;
+}
 ```
 
-### useMediaQuery 훅
-
-반응형 미디어 쿼리 감지:
-
-```tsx
-import { useMediaQuery } from 'my-lib';
-
-const isMobile = useMediaQuery('(max-width: 768px)');
-const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
-```
-
-### cn 유틸리티
-
-조건부 클래스명 결합 (clsx와 유사):
-
-```tsx
-import { cn } from 'my-lib';
-
-cn('base', { active: isActive, hidden: !visible });
-// isActive=true, visible=true → 'base active'
-```
-
-## 개발 모드
-
-`src/demo/` 폴더에 개발용 데모 앱이 포함되어 있습니다:
-
-```bash
-pnpm dev    # 데모 앱 실행 (포트 3000)
-```
-
-## 빌드 결과물
-
-`pnpm build` 실행 시 `dist/` 폴더에 다음 파일이 생성됩니다:
-
-| 파일 | 포맷 | 용도 |
-|------|------|------|
-| `index.mjs` | ES Module | `import` 사용 시 |
-| `index.cjs` | CommonJS | `require()` 사용 시 |
-| `index.d.ts` | TypeScript | 타입 선언 |
+토큰은 `[data-theme="dark"]` 셀렉터에 다크 변형이 정의되어 있으며, `prefers-color-scheme`도 지원합니다.
 
 ## Storybook
 
-컴포넌트를 독립적으로 개발하고 문서화할 수 있습니다:
-
 ```bash
-pnpm storybook         # Storybook 개발 서버 (포트 6006)
-pnpm build-storybook   # 정적 Storybook 빌드
+pnpm storybook         # 개발 서버 (포트 6006)
+pnpm build-storybook   # 정적 빌드 → storybook-static/
 ```
 
-모든 컴포넌트에 `*.stories.tsx` 파일이 포함되어 있어 자동으로 Storybook에 등록됩니다.
+모든 컴포넌트에 `*.stories.tsx` 파일이 함께 제공되며 자동으로 카탈로그에 등록됩니다.
 
 ## 테스트
 
 ```bash
-pnpm test              # 테스트 실행
-pnpm test:coverage     # 커버리지 포함 테스트
+pnpm test              # 단위 테스트
+pnpm test:coverage     # 커버리지 포함
 ```
+
+## 빌드
+
+```bash
+pnpm build
+```
+
+| 파일              | 포맷       | 용도        |
+| ----------------- | ---------- | ----------- |
+| `dist/index.mjs`  | ES Module  | `import`    |
+| `dist/index.cjs`  | CommonJS   | `require()` |
+| `dist/index.d.ts` | TypeScript | 타입 선언   |
 
 ## npm 배포
 
 ```bash
-# 1. package.json에서 name, version 확인
-# 2. private: true → 제거 또는 false로 변경
-# 3. 빌드 및 배포
+# 1. package.json에서 private 제거
+# 2. 빌드 + 배포
 pnpm build
-npm publish
+npm publish --access public
 ```
 
 :::tip Peer Dependencies
-이 라이브러리는 `react`와 `react-dom`을 peer dependency로 사용합니다.
-소비자(consumer) 프로젝트에 React 18 이상이 설치되어 있어야 합니다.
+`react`, `react-dom`은 peer dependency입니다. 소비자 프로젝트에 React 18 이상이 있어야 합니다.
 :::

@@ -4,20 +4,23 @@ sidebar_position: 2
 
 # Admin 템플릿
 
-Ant Design을 사용한 관리자 대시보드 템플릿입니다.
+Ant Design 5 기반의 관리자 대시보드 템플릿입니다. 보호 라우트(인증 가드), recharts 기반 대시보드 차트, 사용자 관리 테이블/모달, 로그인 페이지가 포함됩니다.
 
 ## 기술 스택
 
-| 기술 | 버전 | 용도 |
-|------|------|------|
-| React | 18 | UI 라이브러리 |
-| Vite | 6 | 빌드 도구 |
-| Ant Design | 5 | 엔터프라이즈급 UI 컴포넌트 |
-| React Router | 7 | 클라이언트 라우팅 |
-| Tanstack Query | 5 | 서버 상태 관리 (데이터 페칭, 캐싱) |
-| Zustand | 5 | 클라이언트 상태 관리 (인증 등) |
-| TypeScript | 5 | 타입 안전성 |
-| Vitest | 3 | 테스트 프레임워크 |
+| 기술                  | 버전  | 용도                            |
+| --------------------- | ----- | ------------------------------- |
+| React                 | 18    | UI 라이브러리                   |
+| Vite                  | 6     | 빌드 도구                       |
+| Ant Design            | 5     | 엔터프라이즈 UI 컴포넌트        |
+| recharts              | 2     | 대시보드 차트                   |
+| React Router          | 7     | 클라이언트 라우팅 (보호 라우트) |
+| Tanstack Query        | 5     | 서버 상태 (API 데이터)          |
+| Zustand               | 5     | 인증/UI 상태                    |
+| react-hook-form + zod | 7 / 3 | 로그인/설정 폼 검증             |
+| TypeScript            | 5     | 타입 안전성                     |
+| Vitest                | 3     | 단위 테스트                     |
+| Playwright            | 1     | E2E 테스트 (로그인 플로우 등)   |
 
 ## 생성 방법
 
@@ -25,77 +28,110 @@ Ant Design을 사용한 관리자 대시보드 템플릿입니다.
 npx create-react-bp my-admin --template admin
 ```
 
-## 프로젝트 구조
+## 디렉토리 구조 (요약)
 
 ```
 my-admin/
 ├── src/
-│   ├── main.tsx               # 앱 진입점 (Providers 설정)
-│   ├── App.tsx                # 라우트 설정 (코드 스플리팅)
+│   ├── main.tsx                # Providers (AntD ConfigProvider / Query / Router)
+│   ├── App.tsx                 # 라우트 (보호 라우트 포함)
 │   ├── components/
-│   │   ├── AdminLayout.tsx    # 사이드바 + 헤더 + 콘텐츠 레이아웃
-│   │   └── ErrorBoundary.tsx  # 에러 바운더리
+│   │   ├── AdminLayout.tsx     # 사이드바 + 헤더
+│   │   ├── ProtectedRoute.tsx  # 인증 가드
+│   │   └── ErrorBoundary.tsx
 │   ├── pages/
-│   │   ├── Dashboard.tsx      # 대시보드 (통계 카드)
-│   │   ├── Users.tsx          # 사용자 관리 (테이블)
-│   │   └── Settings.tsx       # 설정 (폼)
-│   ├── stores/
-│   │   └── useAuthStore.ts   # 인증 상태 관리 (Zustand)
-│   └── styles/
-│       └── global.css         # 전역 스타일
-├── index.html
-├── package.json
-├── vite.config.ts
-└── eslint.config.js
+│   │   ├── Login.tsx           # 로그인 페이지 (rhf + zod)
+│   │   ├── Dashboard.tsx       # 통계 카드 + recharts
+│   │   ├── Users.tsx           # 사용자 테이블 + 생성/수정 모달
+│   │   ├── Settings.tsx        # 시스템 설정
+│   │   └── NotFound.tsx
+│   ├── stores/                 # useAuthStore 등
+│   ├── styles/                 # global.css
+│   └── lib/                    # api 클라이언트
+├── e2e/                        # Playwright (로그인 → 대시보드 시나리오)
+└── playwright.config.ts
 ```
 
-## 아키텍처
+## 보호 라우트
 
-### 상태 관리
-
-- **서버 상태**: Tanstack Query로 API 데이터 관리
-- **인증 상태**: Zustand `useAuthStore` (login, logout, user 정보)
+`ProtectedRoute` 컴포넌트가 `useAuthStore`를 확인하고, 인증되지 않은 경우 `/login`으로 리다이렉트합니다.
 
 ```tsx
+import { Navigate, Outlet } from 'react-router';
 import { useAuthStore } from '@/stores/useAuthStore';
 
-function Header() {
-  const { user, logout } = useAuthStore();
-  return <span>{user?.name} <button onClick={logout}>로그아웃</button></span>;
+export function ProtectedRoute() {
+  const user = useAuthStore((s) => s.user);
+  if (!user) return <Navigate to="/login" replace />;
+  return <Outlet />;
 }
+
+// App.tsx
+<Route element={<ProtectedRoute />}>
+  <Route path="/" element={<Dashboard />} />
+  <Route path="/users" element={<Users />} />
+  <Route path="/settings" element={<Settings />} />
+</Route>
+<Route path="/login" element={<Login />} />
 ```
 
-### 에러 처리
+## Dashboard (recharts)
 
-`ErrorBoundary`가 에러 발생 시 Ant Design `Result` 컴포넌트로 에러 화면을 표시합니다.
+`Dashboard.tsx`는 AntD `Statistic` 카드와 함께 recharts의 `LineChart` / `BarChart` / `PieChart` 등을 조합한 패널을 보여줍니다.
 
-## 라우팅
+```tsx
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
-| 경로 | 컴포넌트 | 설명 |
-|------|----------|------|
-| `/` | `Dashboard` | 통계 카드가 있는 대시보드 |
-| `/users` | `Users` | 사용자 목록 테이블 (정렬, 필터) |
-| `/settings` | `Settings` | 사이트 설정 폼 |
+<ResponsiveContainer width="100%" height={280}>
+  <LineChart data={series}>
+    <XAxis dataKey="month" />
+    <YAxis />
+    <Tooltip />
+    <Line type="monotone" dataKey="users" stroke="#1677ff" />
+  </LineChart>
+</ResponsiveContainer>;
+```
+
+## Users 페이지
+
+- AntD `Table`: 정렬, 필터, 페이지네이션
+- "추가" 버튼 → `Modal` 안에 react-hook-form + zod로 검증되는 사용자 생성 폼
+- 행 액션(`Edit` / `Delete`)에는 사용자 이름이 포함된 `aria-label`을 적용
+
+## Login
+
+`/login` 페이지는 react-hook-form + zod로 검증하며, 성공 시 `useAuthStore.login(user)`로 상태를 채우고 `/`로 이동합니다.
+
+```tsx
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+});
+```
+
+## 라우트 요약
+
+| 경로        | 페이지    | 인증 |
+| ----------- | --------- | ---- |
+| `/login`    | Login     | 공개 |
+| `/`         | Dashboard | 보호 |
+| `/users`    | Users     | 보호 |
+| `/settings` | Settings  | 보호 |
+| `*`         | NotFound  | 공개 |
 
 ## 접근성
 
-- 본문 건너뛰기 링크 (skip link)
-- 사이드바, 메뉴, 테이블 ARIA 라벨
-- 액션 버튼별 사용자 이름 포함 aria-label
+- skip link (본문 건너뛰기)
+- 사이드바/메뉴/테이블 ARIA 라벨
+- 모달은 ESC 닫기, 포커스 트랩
 
-## 주요 기능
+## 명령어
 
-- **접이식 사이드바** - 메뉴를 접어 넓은 작업 공간 확보
-- **한국어 로케일** - Ant Design 컴포넌트 한국어 적용
-- **코드 스플리팅** - 페이지별 React.lazy 동적 임포트
-- **데이터 테이블** - 정렬, 필터, 페이지네이션 지원
-- **타입 안전한 폼** - SettingsFormValues 인터페이스 기반
-
-## 사용 가능한 명령어
-
-| 명령어 | 설명 |
-|--------|------|
-| `pnpm dev` | 개발 서버 시작 |
-| `pnpm build` | 프로덕션 빌드 |
-| `pnpm test` | 테스트 실행 |
-| `pnpm lint` | ESLint 검사 |
+| 명령어             | 설명               |
+| ------------------ | ------------------ |
+| `pnpm dev`         | 개발 서버          |
+| `pnpm build`       | 프로덕션 빌드      |
+| `pnpm test`        | 단위 테스트        |
+| `pnpm test:e2e`    | Playwright E2E     |
+| `pnpm test:e2e:ui` | Playwright UI 모드 |
+| `pnpm lint`        | ESLint             |

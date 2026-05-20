@@ -4,35 +4,73 @@ sidebar_position: 3
 
 # Vite 설정
 
-`@repo/vite-config` 패키지는 Vite 설정 유틸리티를 제공합니다.
+`@repo/vite-config` 패키지는 두 가지 프리셋을 제공합니다 — **앱 모드**(`createAppConfig`)와 **라이브러리 모드**(`createLibConfig`).
 
-## 함수
+## createAppConfig
 
-### createAppConfig
-
-React 앱을 위한 Vite 설정을 생성합니다:
+React SPA용 Vite 설정.
 
 ```ts
-import { createAppConfig } from '@repo/vite-config';
 import { defineConfig } from 'vite';
+import { createAppConfig } from '@repo/vite-config';
 
 export default defineConfig(createAppConfig());
 ```
 
-**옵션:**
-- `root` - 프로젝트 루트 경로
+**옵션**
 
-**포함 기능:**
+| 옵션   | 기본값          | 설명                       |
+| ------ | --------------- | -------------------------- |
+| `root` | `process.cwd()` | 프로젝트 루트              |
+| `port` | `3000`          | 개발 서버 포트             |
+| `open` | `true`          | 시작 시 브라우저 자동 오픈 |
+
+**포함 기능**
+
 - `@vitejs/plugin-react`
-- `vite-tsconfig-paths`
-- `@/` 경로 별칭
-- 자동 vendor 청크 분리
-- 소스맵 생성
-- 개발 서버 포트 3000
+- `vite-tsconfig-paths` (tsconfig `paths` 자동 해석)
+- `@/` → `src/` 별칭
+- 자동 vendor 청크 (react, react-dom)
+- 소스맵
+
+## createLibConfig
+
+React 컴포넌트 라이브러리용 (ES + CJS 듀얼 빌드 + d.ts 자동 생성).
+
+```ts
+import { defineConfig } from 'vite';
+import { createLibConfig } from '@repo/vite-config';
+
+export default defineConfig(
+  createLibConfig({
+    name: 'MyLib',
+    entry: 'src/index.ts',
+  })
+);
+```
+
+**옵션**
+
+| 옵션       | 기본값           | 설명                         |
+| ---------- | ---------------- | ---------------------------- |
+| `name`     | —                | 라이브러리 글로벌 이름 (UMD) |
+| `entry`    | `'src/index.ts'` | 엔트리 파일                  |
+| `root`     | `process.cwd()`  | 프로젝트 루트                |
+| `external` | `[]`             | 추가 external 의존성         |
+
+기본적으로 `react`, `react-dom`, `react/jsx-runtime`이 external로 처리됩니다. `external` 옵션은 추가로 묶지 않을 패키지(예: `clsx`, `chakra-ui` 등)를 지정할 때 사용합니다.
+
+**산출물**
+
+| 파일              | 포맷                                 |
+| ----------------- | ------------------------------------ |
+| `dist/index.mjs`  | ES Module                            |
+| `dist/index.cjs`  | CommonJS                             |
+| `dist/index.d.ts` | TypeScript 선언 (rollup된 단일 파일) |
 
 ## 환경 변수
 
-`VITE_` 접두사가 붙은 환경 변수는 클라이언트에서 `import.meta.env`로 접근 가능합니다:
+`VITE_` 접두사가 붙은 변수만 클라이언트에서 `import.meta.env`로 접근 가능합니다.
 
 ```bash
 # .env
@@ -40,7 +78,7 @@ VITE_API_URL=http://localhost:8080/api
 VITE_APP_TITLE=My App
 ```
 
-타입 안전한 사용을 위해 `src/vite-env.d.ts`에 타입을 선언하세요:
+`src/vite-env.d.ts`에 타입 선언:
 
 ```ts
 interface ImportMetaEnv {
@@ -49,26 +87,15 @@ interface ImportMetaEnv {
 }
 ```
 
-### createLibConfig
-
-React 라이브러리를 위한 Vite 설정을 생성합니다:
+## 커스터마이징
 
 ```ts
-import { createLibConfig } from '@repo/vite-config';
-import { defineConfig } from 'vite';
+import { defineConfig, mergeConfig } from 'vite';
+import { createAppConfig } from '@repo/vite-config';
 
-export default defineConfig(createLibConfig({
-  name: 'MyLib',
-  entry: 'src/index.ts'
-}));
+export default defineConfig(
+  mergeConfig(createAppConfig({ port: 5173 }), {
+    server: { proxy: { '/api': 'http://localhost:8080' } },
+  })
+);
 ```
-
-**옵션:**
-- `name` - 라이브러리 이름
-- `entry` - 진입점 파일
-- `root` - 프로젝트 루트 경로
-
-**포함 기능:**
-- ES/CJS 듀얼 빌드
-- TypeScript 선언 파일 생성
-- React를 외부 의존성으로 처리

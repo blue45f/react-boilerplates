@@ -6,10 +6,10 @@ sidebar_position: 1
 
 ## 요구사항
 
-| 도구 | 최소 버전 | 확인 명령어 |
-|------|-----------|-------------|
-| Node.js | 20 이상 | `node -v` |
-| pnpm | 9 이상 | `pnpm -v` |
+| 도구    | 최소 버전 | 확인 명령어 |
+| ------- | --------- | ----------- |
+| Node.js | 20 이상   | `node -v`   |
+| pnpm    | 9 이상    | `pnpm -v`   |
 
 ## CLI 도구 설치
 
@@ -62,6 +62,34 @@ corepack prepare pnpm@latest --activate
 node -v    # v20.x.x 이상
 pnpm -v    # 9.x.x 이상
 ```
+
+## 공통 명령어
+
+생성된 모든 프로젝트(App / Admin / Library)에서 공통으로 제공되는 명령어:
+
+| 명령어               | 설명                                         |
+| -------------------- | -------------------------------------------- |
+| `pnpm install`       | 의존성 설치                                  |
+| `pnpm dev`           | 개발 서버 (App/Admin) 또는 데모 앱 (Library) |
+| `pnpm build`         | 프로덕션/라이브러리 빌드                     |
+| `pnpm test`          | Vitest 단위 테스트                           |
+| `pnpm test:coverage` | 커버리지                                     |
+| `pnpm lint`          | ESLint                                       |
+
+App/Admin 추가:
+
+| 명령어             | 설명               |
+| ------------------ | ------------------ |
+| `pnpm preview`     | 빌드 미리보기      |
+| `pnpm test:e2e`    | Playwright E2E     |
+| `pnpm test:e2e:ui` | Playwright UI 모드 |
+
+Library 추가:
+
+| 명령어                 | 설명                  |
+| ---------------------- | --------------------- |
+| `pnpm storybook`       | Storybook (포트 6006) |
+| `pnpm build-storybook` | 정적 Storybook 빌드   |
 
 ## 문제 해결
 

@@ -6,7 +6,11 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: '시작하기',
-      items: ['getting-started/installation', 'getting-started/create-app', 'getting-started/create-lib'],
+      items: [
+        'getting-started/installation',
+        'getting-started/create-app',
+        'getting-started/create-lib',
+      ],
     },
     {
       type: 'category',
