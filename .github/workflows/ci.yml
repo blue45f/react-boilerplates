@@ -117,10 +117,10 @@ jobs:
         run: pnpm install --no-frozen-lockfile
       - name: Install Playwright browsers
         working-directory: templates/${{ matrix.template }}
-        run: pnpm exec playwright install --with-deps chromium
+        run: pnpm run test:e2e:install
       - name: Run E2E
         working-directory: templates/${{ matrix.template }}
-        run: pnpm exec playwright test
+        run: pnpm run test:e2e
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
