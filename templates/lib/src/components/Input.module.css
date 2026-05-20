@@ -1,0 +1,107 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rl-space-1);
+}
+
+.label {
+  font-size: var(--rl-font-size-sm);
+  font-weight: var(--rl-font-weight-medium);
+  color: var(--rl-color-fg);
+}
+
+.field {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--rl-color-border-strong);
+  border-radius: var(--rl-radius-md);
+  background-color: var(--rl-color-bg);
+  transition:
+    border-color var(--rl-transition-fast),
+    box-shadow var(--rl-transition-fast);
+}
+
+.field:focus-within {
+  border-color: var(--rl-color-primary);
+  box-shadow: var(--rl-shadow-focus);
+}
+
+.fieldError {
+  border-color: var(--rl-color-danger);
+}
+
+.fieldError:focus-within {
+  border-color: var(--rl-color-danger);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.3);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: var(--rl-space-2) var(--rl-space-3);
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: var(--rl-font-size-md);
+  color: var(--rl-color-fg);
+}
+
+.input::placeholder {
+  color: var(--rl-color-fg-subtle);
+}
+
+.input:disabled {
+  cursor: not-allowed;
+  color: var(--rl-color-fg-subtle);
+}
+
+.sizeSm .input {
+  padding: var(--rl-space-1) var(--rl-space-2);
+  font-size: var(--rl-font-size-sm);
+}
+.sizeMd .input {
+  padding: var(--rl-space-2) var(--rl-space-3);
+  font-size: var(--rl-font-size-md);
+}
+.sizeLg .input {
+  padding: var(--rl-space-3) var(--rl-space-4);
+  font-size: var(--rl-font-size-lg);
+}
+
+.addon {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--rl-space-3);
+  background-color: var(--rl-color-bg-muted);
+  color: var(--rl-color-fg-muted);
+  font-size: var(--rl-font-size-sm);
+  border: none;
+}
+
+.leftAddon {
+  border-right: 1px solid var(--rl-color-border);
+  border-top-left-radius: var(--rl-radius-md);
+  border-bottom-left-radius: var(--rl-radius-md);
+}
+
+.rightAddon {
+  border-left: 1px solid var(--rl-color-border);
+  border-top-right-radius: var(--rl-radius-md);
+  border-bottom-right-radius: var(--rl-radius-md);
+}
+
+.disabled {
+  background-color: var(--rl-color-bg-muted);
+  cursor: not-allowed;
+}
+
+.error {
+  color: var(--rl-color-danger);
+  font-size: var(--rl-font-size-sm);
+}
+
+.helper {
+  color: var(--rl-color-fg-subtle);
+  font-size: var(--rl-font-size-sm);
+}

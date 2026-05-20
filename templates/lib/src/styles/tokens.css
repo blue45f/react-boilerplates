@@ -1,0 +1,158 @@
+/* 디자인 토큰: 색상/간격/타이포/라운드/그림자 */
+
+:root {
+  /* color - 브랜드 */
+  --rl-color-brand-50: #eff6ff;
+  --rl-color-brand-100: #dbeafe;
+  --rl-color-brand-200: #bfdbfe;
+  --rl-color-brand-300: #93c5fd;
+  --rl-color-brand-400: #60a5fa;
+  --rl-color-brand-500: #3b82f6;
+  --rl-color-brand-600: #2563eb;
+  --rl-color-brand-700: #1d4ed8;
+  --rl-color-brand-800: #1e40af;
+  --rl-color-brand-900: #1e3a8a;
+
+  /* color - 시멘틱 (라이트) */
+  --rl-color-bg: #ffffff;
+  --rl-color-bg-subtle: #f9fafb;
+  --rl-color-bg-muted: #f3f4f6;
+  --rl-color-fg: #111827;
+  --rl-color-fg-muted: #4b5563;
+  --rl-color-fg-subtle: #6b7280;
+  --rl-color-border: #e5e7eb;
+  --rl-color-border-strong: #d1d5db;
+  --rl-color-overlay: rgba(0, 0, 0, 0.5);
+
+  --rl-color-primary: #2563eb;
+  --rl-color-primary-hover: #1d4ed8;
+  --rl-color-primary-fg: #ffffff;
+
+  --rl-color-secondary: #6b7280;
+  --rl-color-secondary-hover: #4b5563;
+  --rl-color-secondary-fg: #ffffff;
+
+  --rl-color-success: #16a34a;
+  --rl-color-success-bg: #f0fdf4;
+  --rl-color-success-border: #bbf7d0;
+  --rl-color-success-fg: #166534;
+
+  --rl-color-warning: #ca8a04;
+  --rl-color-warning-bg: #fefce8;
+  --rl-color-warning-border: #fef08a;
+  --rl-color-warning-fg: #854d0e;
+
+  --rl-color-danger: #dc2626;
+  --rl-color-danger-bg: #fef2f2;
+  --rl-color-danger-border: #fecaca;
+  --rl-color-danger-fg: #991b1b;
+
+  --rl-color-info: #2563eb;
+  --rl-color-info-bg: #eff6ff;
+  --rl-color-info-border: #bfdbfe;
+  --rl-color-info-fg: #1e40af;
+
+  --rl-color-focus-ring: rgba(59, 130, 246, 0.5);
+
+  /* 간격 */
+  --rl-space-1: 4px;
+  --rl-space-2: 8px;
+  --rl-space-3: 12px;
+  --rl-space-4: 16px;
+  --rl-space-5: 20px;
+  --rl-space-6: 24px;
+  --rl-space-8: 32px;
+  --rl-space-10: 40px;
+  --rl-space-12: 48px;
+
+  /* 라운드 */
+  --rl-radius-sm: 4px;
+  --rl-radius-md: 6px;
+  --rl-radius-lg: 8px;
+  --rl-radius-xl: 12px;
+  --rl-radius-full: 9999px;
+
+  /* 그림자 */
+  --rl-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --rl-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --rl-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --rl-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --rl-shadow-focus: 0 0 0 3px var(--rl-color-focus-ring);
+
+  /* 타이포그래피 */
+  --rl-font-sans:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --rl-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+
+  --rl-font-size-xs: 12px;
+  --rl-font-size-sm: 14px;
+  --rl-font-size-md: 16px;
+  --rl-font-size-lg: 18px;
+  --rl-font-size-xl: 20px;
+  --rl-font-size-2xl: 24px;
+
+  --rl-line-height-tight: 1.25;
+  --rl-line-height-normal: 1.5;
+  --rl-line-height-relaxed: 1.625;
+
+  --rl-font-weight-regular: 400;
+  --rl-font-weight-medium: 500;
+  --rl-font-weight-semibold: 600;
+  --rl-font-weight-bold: 700;
+
+  /* z-index */
+  --rl-z-dropdown: 1000;
+  --rl-z-overlay: 1300;
+  --rl-z-modal: 1400;
+  --rl-z-popover: 1500;
+  --rl-z-toast: 1600;
+  --rl-z-tooltip: 1700;
+
+  /* transition */
+  --rl-transition-fast: 120ms ease;
+  --rl-transition-base: 180ms ease;
+}
+
+[data-theme='dark'],
+.dark {
+  --rl-color-bg: #0b0f19;
+  --rl-color-bg-subtle: #111827;
+  --rl-color-bg-muted: #1f2937;
+  --rl-color-fg: #f9fafb;
+  --rl-color-fg-muted: #d1d5db;
+  --rl-color-fg-subtle: #9ca3af;
+  --rl-color-border: #374151;
+  --rl-color-border-strong: #4b5563;
+  --rl-color-overlay: rgba(0, 0, 0, 0.7);
+
+  --rl-color-primary: #3b82f6;
+  --rl-color-primary-hover: #60a5fa;
+  --rl-color-primary-fg: #ffffff;
+
+  --rl-color-secondary: #9ca3af;
+  --rl-color-secondary-hover: #d1d5db;
+  --rl-color-secondary-fg: #111827;
+
+  --rl-color-success: #22c55e;
+  --rl-color-success-bg: rgba(34, 197, 94, 0.12);
+  --rl-color-success-border: rgba(34, 197, 94, 0.4);
+  --rl-color-success-fg: #86efac;
+
+  --rl-color-warning: #eab308;
+  --rl-color-warning-bg: rgba(234, 179, 8, 0.12);
+  --rl-color-warning-border: rgba(234, 179, 8, 0.4);
+  --rl-color-warning-fg: #fde68a;
+
+  --rl-color-danger: #ef4444;
+  --rl-color-danger-bg: rgba(239, 68, 68, 0.12);
+  --rl-color-danger-border: rgba(239, 68, 68, 0.4);
+  --rl-color-danger-fg: #fca5a5;
+
+  --rl-color-info: #3b82f6;
+  --rl-color-info-bg: rgba(59, 130, 246, 0.12);
+  --rl-color-info-border: rgba(59, 130, 246, 0.4);
+  --rl-color-info-fg: #93c5fd;
+
+  --rl-color-focus-ring: rgba(96, 165, 250, 0.6);
+}

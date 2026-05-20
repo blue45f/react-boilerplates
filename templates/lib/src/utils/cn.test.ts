@@ -18,9 +18,7 @@ describe('cn', () => {
   });
 
   it('객체 문법을 지원한다', () => {
-    expect(cn('base', { active: true, hidden: false, visible: true })).toBe(
-      'base active visible'
-    );
+    expect(cn('base', { active: true, hidden: false, visible: true })).toBe('base active visible');
   });
 
   it('배열을 지원한다', () => {
@@ -28,9 +26,7 @@ describe('cn', () => {
   });
 
   it('복합 사용을 지원한다', () => {
-    expect(cn('base', { active: true }, ['extra'], false, 'last')).toBe(
-      'base active extra last'
-    );
+    expect(cn('base', { active: true }, ['extra'], false, 'last')).toBe('base active extra last');
   });
 
   it('인자가 없으면 빈 문자열을 반환한다', () => {

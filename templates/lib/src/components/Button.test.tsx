@@ -25,43 +25,23 @@ describe('Button', () => {
     expect(handleClick).toHaveBeenCalledOnce();
   });
 
-  it('primary 변형이 기본값이다', () => {
-    render(<Button>Primary</Button>);
-    const button = screen.getByRole('button');
-    expect(button.className).toContain('bg-blue-500');
+  it('variant 마다 다른 클래스가 적용된다', () => {
+    const { rerender } = render(<Button>Primary</Button>);
+    const primaryClass = screen.getByRole('button').className;
+    rerender(<Button variant="secondary">Secondary</Button>);
+    expect(screen.getByRole('button').className).not.toBe(primaryClass);
   });
 
-  it('secondary 변형을 적용한다', () => {
-    render(<Button variant="secondary">Secondary</Button>);
-    const button = screen.getByRole('button');
-    expect(button.className).toContain('bg-gray-500');
-  });
-
-  it('outline 변형을 적용한다', () => {
-    render(<Button variant="outline">Outline</Button>);
-    const button = screen.getByRole('button');
-    expect(button.className).toContain('border');
-    expect(button.className).toContain('text-blue-500');
-  });
-
-  it('sm 사이즈를 적용한다', () => {
-    render(<Button size="sm">Small</Button>);
-    const button = screen.getByRole('button');
-    expect(button.className).toContain('px-3');
-    expect(button.className).toContain('text-sm');
-  });
-
-  it('lg 사이즈를 적용한다', () => {
-    render(<Button size="lg">Large</Button>);
-    const button = screen.getByRole('button');
-    expect(button.className).toContain('px-6');
-    expect(button.className).toContain('text-lg');
+  it('size 마다 다른 클래스가 적용된다', () => {
+    const { rerender } = render(<Button size="sm">Small</Button>);
+    const sm = screen.getByRole('button').className;
+    rerender(<Button size="lg">Large</Button>);
+    expect(screen.getByRole('button').className).not.toBe(sm);
   });
 
   it('추가 className을 적용한다', () => {
     render(<Button className="custom-class">Custom</Button>);
-    const button = screen.getByRole('button');
-    expect(button.className).toContain('custom-class');
+    expect(screen.getByRole('button').className).toContain('custom-class');
   });
 
   it('disabled 상태를 처리한다', () => {
@@ -81,15 +61,30 @@ describe('Button', () => {
       </Button>
     );
     await user.click(screen.getByRole('button'));
-
     expect(handleClick).not.toHaveBeenCalled();
   });
 
-  it('focus ring 스타일이 포함된다', () => {
-    render(<Button>Focus</Button>);
+  it('loading 상태이면 스피너를 보여주고 비활성화된다', () => {
+    render(<Button loading>저장</Button>);
     const button = screen.getByRole('button');
-    expect(button.className).toContain('focus:ring-2');
-    expect(button.className).toContain('focus:ring-offset-2');
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute('aria-busy', 'true');
+    expect(screen.getByRole('status', { hidden: true })).toBeInTheDocument();
+  });
+
+  it('leftIcon/rightIcon을 렌더링한다', () => {
+    render(
+      <Button leftIcon={<span data-testid="left" />} rightIcon={<span data-testid="right" />}>
+        Hi
+      </Button>
+    );
+    expect(screen.getByTestId('left')).toBeInTheDocument();
+    expect(screen.getByTestId('right')).toBeInTheDocument();
+  });
+
+  it('fullWidth 클래스가 추가된다', () => {
+    render(<Button fullWidth>Wide</Button>);
+    expect(screen.getByRole('button').className).toMatch(/fullWidth/);
   });
 
   it('type을 변경할 수 있다', () => {
@@ -100,5 +95,11 @@ describe('Button', () => {
   it('aria-label을 전달할 수 있다', () => {
     render(<Button aria-label="닫기 버튼">X</Button>);
     expect(screen.getByLabelText('닫기 버튼')).toBeInTheDocument();
+  });
+
+  it('ref를 전달한다', () => {
+    const ref = { current: null as HTMLButtonElement | null };
+    render(<Button ref={ref}>Ref</Button>);
+    expect(ref.current).toBeInstanceOf(HTMLButtonElement);
   });
 });

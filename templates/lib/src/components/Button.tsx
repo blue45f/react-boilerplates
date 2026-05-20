@@ -1,50 +1,73 @@
+import { forwardRef } from 'react';
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
 import { cn } from '../utils/cn';
+import { Spinner } from './Spinner';
+import styles from './Button.module.css';
+
+export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
+export type ButtonSize = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline';
-  size?: 'sm' | 'md' | 'lg';
-  children: ReactNode;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  loading?: boolean;
+  fullWidth?: boolean;
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
+  children?: ReactNode;
 }
 
-const variantStyles = {
-  primary: 'bg-blue-500 text-white hover:bg-blue-600',
-  secondary: 'bg-gray-500 text-white hover:bg-gray-600',
-  outline: 'border border-blue-500 text-blue-500 hover:bg-blue-50',
-};
-
-const sizeStyles = {
-  sm: 'px-3 py-1.5 text-sm',
-  md: 'px-4 py-2 text-base',
-  lg: 'px-6 py-3 text-lg',
-};
-
-export function Button({
-  variant = 'primary',
-  size = 'md',
-  type = 'button',
-  className,
-  children,
-  disabled,
-  ...props
-}: ButtonProps) {
+/** 다양한 variant/size + 아이콘/로딩 상태를 지원하는 기본 버튼 */
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  {
+    variant = 'primary',
+    size = 'md',
+    type = 'button',
+    className,
+    children,
+    disabled,
+    loading = false,
+    fullWidth = false,
+    leftIcon,
+    rightIcon,
+    ...props
+  },
+  ref
+) {
+  const isDisabled = disabled || loading;
   return (
     <button
+      ref={ref}
       type={type}
-      disabled={disabled}
-      aria-disabled={disabled}
+      disabled={isDisabled}
+      aria-disabled={isDisabled || undefined}
+      aria-busy={loading || undefined}
       className={cn(
-        'rounded font-medium transition-colors',
-        'focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2',
-        'disabled:opacity-50 disabled:cursor-not-allowed',
-        variantStyles[variant],
-        sizeStyles[size],
+        styles.button,
+        styles[variant],
+        styles[size],
+        fullWidth && styles.fullWidth,
         className
       )}
       {...props}
     >
+      {loading && (
+        <span className={styles.spinner} aria-hidden="true">
+          <Spinner size="sm" />
+        </span>
+      )}
+      {!loading && leftIcon && (
+        <span className={styles.icon} aria-hidden="true">
+          {leftIcon}
+        </span>
+      )}
       {children}
+      {!loading && rightIcon && (
+        <span className={styles.icon} aria-hidden="true">
+          {rightIcon}
+        </span>
+      )}
     </button>
   );
-}
+});

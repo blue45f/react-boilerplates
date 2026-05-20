@@ -19,11 +19,10 @@ describe('Spinner', () => {
     expect(screen.getByLabelText('데이터 불러오는 중')).toBeInTheDocument();
   });
 
-  it('사이즈별 스타일이 적용된다', () => {
+  it('사이즈 별로 다른 클래스를 적용한다', () => {
     const { rerender } = render(<Spinner size="sm" />);
-    expect(screen.getByRole('status').className).toContain('h-4');
-
+    const sm = screen.getByRole('status').className;
     rerender(<Spinner size="lg" />);
-    expect(screen.getByRole('status').className).toContain('h-12');
+    expect(screen.getByRole('status').className).not.toBe(sm);
   });
 });

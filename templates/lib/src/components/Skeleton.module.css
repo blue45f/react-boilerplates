@@ -1,0 +1,25 @@
+.skeleton {
+  display: block;
+  background: linear-gradient(
+    90deg,
+    var(--rl-color-bg-muted) 0%,
+    var(--rl-color-border) 50%,
+    var(--rl-color-bg-muted) 100%
+  );
+  background-size: 200% 100%;
+  animation: rl-skeleton 1.4s ease-in-out infinite;
+  border-radius: var(--rl-radius-sm);
+}
+
+.circle {
+  border-radius: var(--rl-radius-full);
+}
+
+@keyframes rl-skeleton {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

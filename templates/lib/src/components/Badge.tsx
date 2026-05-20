@@ -1,36 +1,24 @@
+import { forwardRef } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
 
 import { cn } from '../utils/cn';
+import styles from './Badge.module.css';
+
+export type BadgeVariant = 'default' | 'success' | 'warning' | 'error' | 'info';
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
-  variant?: 'default' | 'success' | 'warning' | 'error' | 'info';
+  variant?: BadgeVariant;
   children: ReactNode;
 }
 
-const variantStyles = {
-  default: 'bg-gray-100 text-gray-700',
-  success: 'bg-green-100 text-green-700',
-  warning: 'bg-yellow-100 text-yellow-700',
-  error: 'bg-red-100 text-red-700',
-  info: 'bg-blue-100 text-blue-700',
-};
-
-export function Badge({
-  variant = 'default',
-  className,
-  children,
-  ...props
-}: BadgeProps) {
+/** 상태 표시용 작은 라벨 */
+export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(function Badge(
+  { variant = 'default', className, children, ...props },
+  ref
+) {
   return (
-    <span
-      className={cn(
-        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
-        variantStyles[variant],
-        className
-      )}
-      {...props}
-    >
+    <span ref={ref} className={cn(styles.badge, styles[variant], className)} {...props}>
       {children}
     </span>
   );
-}
+});

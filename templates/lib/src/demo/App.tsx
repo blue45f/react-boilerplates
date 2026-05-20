@@ -2,22 +2,67 @@ import { useState } from 'react';
 
 import {
   Alert,
+  Avatar,
   Badge,
   Button,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
+  Checkbox,
+  Divider,
   Input,
+  Modal,
+  Progress,
+  Radio,
+  RadioGroup,
+  Select,
+  Skeleton,
   Spinner,
+  Switch,
+  Tabs,
+  Tag,
+  ToastProvider,
+  Tooltip,
   useClickOutside,
   useDebounce,
   useLocalStorage,
   useMediaQuery,
+  useTheme,
+  useToast,
   useToggle,
 } from '../index';
 
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section style={{ marginTop: 32 }}>
+      <h2 style={{ marginBottom: 12, fontSize: 18 }}>{title}</h2>
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+        {children}
+      </div>
+    </section>
+  );
+}
+
+function ToastDemo() {
+  const { toast } = useToast();
+  return (
+    <Button
+      onClick={() =>
+        toast({
+          title: '저장 완료',
+          description: '데이터가 안전하게 저장되었습니다.',
+          variant: 'success',
+        })
+      }
+    >
+      토스트 띄우기
+    </Button>
+  );
+}
+
 function App() {
+  const { theme, toggleTheme } = useTheme();
   const [isOpen, toggle] = useToggle(false);
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearch = useDebounce(searchTerm, 300);
@@ -26,137 +71,209 @@ function App() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showAlert, setShowAlert] = useState(true);
   const dropdownRef = useClickOutside<HTMLDivElement>(() => setShowDropdown(false));
+  const [modalOpen, setModalOpen] = useState(false);
+  const [tags, setTags] = useState(['React', 'TypeScript', 'Vite']);
 
   return (
-    <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif', maxWidth: 800, margin: '0 auto' }}>
-      <h1>React Library Demo</h1>
-
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Button</h2>
-        <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', flexWrap: 'wrap' }}>
-          <Button variant="primary">Primary</Button>
-          <Button variant="secondary">Secondary</Button>
-          <Button variant="outline">Outline</Button>
-          <Button disabled>Disabled</Button>
-        </div>
-        <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-          <Button size="sm">Small</Button>
-          <Button size="md">Medium</Button>
-          <Button size="lg">Large</Button>
-        </div>
-      </section>
-
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Input</h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem', maxWidth: 400 }}>
-          <Input label="이름" placeholder="이름을 입력하세요" />
-          <Input label="이메일" type="email" helperText="example@mail.com 형식" />
-          <Input label="비밀번호" type="password" error="8자 이상 입력하세요" />
-        </div>
-      </section>
-
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Card</h2>
-        <Card style={{ marginTop: '1rem', maxWidth: 400 }}>
-          <CardHeader><strong>카드 제목</strong></CardHeader>
-          <CardBody>카드 본문 내용입니다.</CardBody>
-          <CardFooter>
-            <Button size="sm">확인</Button>
-          </CardFooter>
-        </Card>
-      </section>
-
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Badge</h2>
-        <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem', flexWrap: 'wrap' }}>
-          <Badge>Default</Badge>
-          <Badge variant="success">Success</Badge>
-          <Badge variant="warning">Warning</Badge>
-          <Badge variant="error">Error</Badge>
-          <Badge variant="info">Info</Badge>
-        </div>
-      </section>
-
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Spinner</h2>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginTop: '1rem' }}>
-          <Spinner size="sm" />
-          <Spinner size="md" />
-          <Spinner size="lg" />
-        </div>
-      </section>
-
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Alert</h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1rem' }}>
-          {showAlert && (
-            <Alert variant="info" title="안내" onClose={() => setShowAlert(false)}>
-              닫기 버튼이 있는 Alert입니다.
-            </Alert>
-          )}
-          {!showAlert && (
-            <Button size="sm" onClick={() => setShowAlert(true)}>Alert 다시 보기</Button>
-          )}
-          <Alert variant="success">작업이 완료되었습니다.</Alert>
-          <Alert variant="warning" title="주의">이 작업은 되돌릴 수 없습니다.</Alert>
-          <Alert variant="error">오류가 발생했습니다.</Alert>
-        </div>
-      </section>
-
-      <section style={{ marginTop: '2rem' }}>
-        <h2>useToggle</h2>
-        <p>상태: {isOpen ? '열림' : '닫힘'}</p>
-        <Button onClick={toggle}>토글</Button>
-      </section>
-
-      <section style={{ marginTop: '2rem' }}>
-        <h2>useDebounce</h2>
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="검색어를 입력하세요..."
-          style={{ padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px', width: '300px' }}
-        />
-        <p>입력값: {searchTerm}</p>
-        <p>디바운스된 값: {debouncedSearch}</p>
-      </section>
-
-      <section style={{ marginTop: '2rem' }}>
-        <h2>useLocalStorage</h2>
-        <input
-          type="text"
-          value={savedName}
-          onChange={(e) => setSavedName(e.target.value)}
-          placeholder="localStorage에 저장됩니다"
-          style={{ padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px', width: '300px' }}
-        />
-        <p>저장된 값: {savedName || '(없음)'}</p>
-      </section>
-
-      <section style={{ marginTop: '2rem' }}>
-        <h2>useMediaQuery</h2>
-        <p>현재 뷰포트: {isMobile ? '모바일 (≤768px)' : '데스크톱 (>768px)'}</p>
-      </section>
-
-      <section style={{ marginTop: '2rem' }}>
-        <h2>useClickOutside</h2>
-        <div ref={dropdownRef} style={{ position: 'relative', display: 'inline-block' }}>
-          <Button onClick={() => setShowDropdown(!showDropdown)}>
-            드롭다운 {showDropdown ? '닫기' : '열기'}
+    <ToastProvider>
+      <div
+        style={{
+          minHeight: '100vh',
+          background: 'var(--rl-color-bg)',
+          color: 'var(--rl-color-fg)',
+        }}
+      >
+        <header
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '16px 24px',
+            borderBottom: '1px solid var(--rl-color-border)',
+          }}
+        >
+          <strong>React Lib Demo</strong>
+          <Button variant="outline" size="sm" onClick={toggleTheme}>
+            {theme === 'dark' ? '라이트' : '다크'} 모드
           </Button>
-          {showDropdown && (
-            <div style={{
-              position: 'absolute', top: '100%', left: 0, marginTop: 4,
-              background: 'white', border: '1px solid #ccc', borderRadius: 4,
-              padding: '0.5rem 1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-            }}>
-              외부를 클릭하면 닫힙니다
+        </header>
+
+        <main style={{ maxWidth: 960, margin: '0 auto', padding: '24px' }}>
+          <Section title="Button">
+            <Button>Primary</Button>
+            <Button variant="secondary">Secondary</Button>
+            <Button variant="outline">Outline</Button>
+            <Button variant="ghost">Ghost</Button>
+            <Button variant="destructive">Destructive</Button>
+            <Button loading>Loading</Button>
+            <Button disabled>Disabled</Button>
+          </Section>
+
+          <Section title="Input">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: 360 }}>
+              <Input label="이름" placeholder="이름" />
+              <Input label="URL" leftAddon="https://" rightAddon=".com" placeholder="example" />
+              <Input label="비밀번호" type="password" error="8자 이상 입력하세요" />
             </div>
-          )}
-        </div>
-      </section>
-    </div>
+          </Section>
+
+          <Section title="Card">
+            <Card style={{ width: 280 }}>
+              <CardHeader>
+                <strong>일반 카드</strong>
+              </CardHeader>
+              <CardBody>본문</CardBody>
+              <CardFooter>
+                <Button size="sm">확인</Button>
+              </CardFooter>
+            </Card>
+            <Card interactive style={{ width: 280 }}>
+              <CardBody>인터랙티브 카드</CardBody>
+            </Card>
+          </Section>
+
+          <Section title="Badge / Tag">
+            <Badge>Default</Badge>
+            <Badge variant="success">Success</Badge>
+            <Badge variant="warning">Warning</Badge>
+            <Badge variant="error">Error</Badge>
+            <Badge variant="info">Info</Badge>
+            {tags.map((t) => (
+              <Tag key={t} onRemove={() => setTags((prev) => prev.filter((p) => p !== t))}>
+                {t}
+              </Tag>
+            ))}
+          </Section>
+
+          <Section title="Spinner / Progress / Skeleton">
+            <Spinner size="sm" />
+            <Spinner size="md" />
+            <Progress value={60} max={100} style={{ width: 240 }} />
+            <Progress indeterminate style={{ width: 240 }} />
+            <Skeleton width={120} height={16} />
+            <Skeleton width={40} circle />
+          </Section>
+
+          <Section title="Alert">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: '100%' }}>
+              {showAlert && (
+                <Alert variant="info" title="안내" onClose={() => setShowAlert(false)}>
+                  닫기 가능한 Alert입니다.
+                </Alert>
+              )}
+              <Alert variant="success">성공!</Alert>
+              <Alert variant="warning" title="주의">
+                돌이킬 수 없습니다.
+              </Alert>
+              <Alert variant="error">오류 발생</Alert>
+            </div>
+          </Section>
+
+          <Section title="Modal & Tooltip & Toast">
+            <Button onClick={() => setModalOpen(true)}>모달 열기</Button>
+            <Tooltip content="설명 텍스트">
+              <Button variant="outline">툴팁</Button>
+            </Tooltip>
+            <ToastDemo />
+            <Modal
+              open={modalOpen}
+              onClose={() => setModalOpen(false)}
+              title="확인"
+              footer={
+                <>
+                  <Button variant="ghost" onClick={() => setModalOpen(false)}>
+                    취소
+                  </Button>
+                  <Button onClick={() => setModalOpen(false)}>확인</Button>
+                </>
+              }
+            >
+              ESC 키, 백드롭 클릭, 닫기 버튼 모두 닫힘을 트리거합니다.
+            </Modal>
+          </Section>
+
+          <Section title="Tabs">
+            <Tabs defaultValue="info" style={{ width: '100%' }}>
+              <Tabs.List>
+                <Tabs.Trigger value="info">정보</Tabs.Trigger>
+                <Tabs.Trigger value="settings">설정</Tabs.Trigger>
+              </Tabs.List>
+              <Tabs.Content value="info">정보 패널</Tabs.Content>
+              <Tabs.Content value="settings">설정 패널</Tabs.Content>
+            </Tabs>
+          </Section>
+
+          <Section title="Switch / Checkbox / Radio">
+            <Switch defaultChecked />
+            <Checkbox label="동의합니다" />
+            <RadioGroup name="size" defaultValue="m">
+              <Radio value="s" label="S" />
+              <Radio value="m" label="M" />
+              <Radio value="l" label="L" />
+            </RadioGroup>
+          </Section>
+
+          <Section title="Select / Avatar / Divider">
+            <Select
+              label="과일"
+              defaultValue="apple"
+              options={[
+                { value: 'apple', label: '사과' },
+                { value: 'banana', label: '바나나' },
+              ]}
+            />
+            <Avatar name="홍 길동" />
+            <Avatar size="lg" name="Jane Doe" />
+            <Divider label="또는" />
+          </Section>
+
+          <Section title="Hooks">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div>
+                useToggle: {isOpen ? '열림' : '닫힘'}
+                <Button size="sm" onClick={toggle} style={{ marginLeft: 8 }}>
+                  토글
+                </Button>
+              </div>
+              <Input
+                label="useDebounce"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="검색어"
+              />
+              <div>디바운스됨: {debouncedSearch}</div>
+              <Input
+                label="useLocalStorage"
+                value={savedName}
+                onChange={(e) => setSavedName(e.target.value)}
+              />
+              <div>useMediaQuery (≤768): {String(isMobile)}</div>
+              <div ref={dropdownRef} style={{ position: 'relative' }}>
+                <Button size="sm" onClick={() => setShowDropdown((p) => !p)}>
+                  드롭다운
+                </Button>
+                {showDropdown && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      marginTop: 4,
+                      padding: '8px 12px',
+                      background: 'var(--rl-color-bg)',
+                      border: '1px solid var(--rl-color-border)',
+                      borderRadius: 6,
+                    }}
+                  >
+                    외부 클릭하면 닫힘
+                  </div>
+                )}
+              </div>
+            </div>
+          </Section>
+        </main>
+      </div>
+    </ToastProvider>
   );
 }
 

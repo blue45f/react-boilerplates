@@ -1,0 +1,27 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rl-space-1);
+  padding: 2px var(--rl-space-2);
+  background-color: var(--rl-color-bg-muted);
+  color: var(--rl-color-fg-muted);
+  border-radius: var(--rl-radius-md);
+  font-size: var(--rl-font-size-xs);
+  font-weight: var(--rl-font-weight-medium);
+}
+
+.close {
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  font-size: var(--rl-font-size-xs);
+  line-height: 1;
+  opacity: 0.7;
+  border-radius: var(--rl-radius-sm);
+}
+
+.close:hover {
+  opacity: 1;
+}

@@ -1,29 +1,28 @@
-import { cn } from '../utils/cn';
+import { forwardRef } from 'react';
+import type { HTMLAttributes } from 'react';
 
-export interface SpinnerProps {
+import { cn } from '../utils/cn';
+import styles from './Spinner.module.css';
+
+export interface SpinnerProps extends HTMLAttributes<HTMLDivElement> {
   size?: 'sm' | 'md' | 'lg';
-  className?: string;
   label?: string;
 }
 
-const sizeStyles = {
-  sm: 'h-4 w-4 border-2',
-  md: 'h-8 w-8 border-3',
-  lg: 'h-12 w-12 border-4',
-};
-
-export function Spinner({ size = 'md', className, label = '로딩 중' }: SpinnerProps) {
+/** 접근성 라벨이 포함된 로딩 스피너 */
+export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(function Spinner(
+  { size = 'md', className, label = '로딩 중', ...props },
+  ref
+) {
   return (
     <div
+      ref={ref}
       role="status"
       aria-label={label}
-      className={cn(
-        'inline-block animate-spin rounded-full border-solid border-blue-500 border-t-transparent',
-        sizeStyles[size],
-        className
-      )}
+      className={cn(styles.spinner, styles[size], className)}
+      {...props}
     >
-      <span className="sr-only">{label}</span>
+      <span className={styles.srOnly}>{label}</span>
     </div>
   );
-}
+});

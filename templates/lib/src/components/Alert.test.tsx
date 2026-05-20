@@ -15,14 +15,13 @@ describe('Alert', () => {
     expect(screen.getByText('주의')).toBeInTheDocument();
   });
 
-  it.each([
-    ['info', 'bg-blue-50'],
-    ['success', 'bg-green-50'],
-    ['warning', 'bg-yellow-50'],
-    ['error', 'bg-red-50'],
-  ] as const)('%s variant를 적용한다', (variant, expectedClass) => {
-    render(<Alert variant={variant}>메시지</Alert>);
-    expect(screen.getByRole('alert').className).toContain(expectedClass);
+  it('variant 별로 클래스가 변경된다', () => {
+    const { rerender } = render(<Alert variant="info">기본</Alert>);
+    const info = screen.getByRole('alert').className;
+    for (const v of ['success', 'warning', 'error'] as const) {
+      rerender(<Alert variant={v}>{v}</Alert>);
+      expect(screen.getByRole('alert').className).not.toBe(info);
+    }
   });
 
   it('닫기 버튼을 클릭하면 onClose를 호출한다', async () => {

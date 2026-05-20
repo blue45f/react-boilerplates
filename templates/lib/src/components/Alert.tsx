@@ -1,63 +1,44 @@
+import { forwardRef } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
 
 import { cn } from '../utils/cn';
+import styles from './Alert.module.css';
+
+export type AlertVariant = 'info' | 'success' | 'warning' | 'error';
 
 export interface AlertProps extends HTMLAttributes<HTMLDivElement> {
-  variant?: 'info' | 'success' | 'warning' | 'error';
+  variant?: AlertVariant;
   title?: string;
   children: ReactNode;
   onClose?: () => void;
 }
 
-const variantStyles = {
-  info: 'bg-blue-50 border-blue-200 text-blue-800',
-  success: 'bg-green-50 border-green-200 text-green-800',
-  warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
-  error: 'bg-red-50 border-red-200 text-red-800',
-};
-
-const iconMap = {
+const iconMap: Record<AlertVariant, string> = {
   info: 'ℹ',
   success: '✓',
   warning: '⚠',
   error: '✕',
 };
 
-export function Alert({
-  variant = 'info',
-  title,
-  children,
-  onClose,
-  className,
-  ...props
-}: AlertProps) {
+/** 알림 메시지 박스 (info/success/warning/error) */
+export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  { variant = 'info', title, children, onClose, className, ...props },
+  ref
+) {
   return (
-    <div
-      role="alert"
-      className={cn(
-        'flex items-start gap-3 rounded-lg border p-4',
-        variantStyles[variant],
-        className
-      )}
-      {...props}
-    >
-      <span className="text-lg flex-shrink-0" aria-hidden="true">
+    <div ref={ref} role="alert" className={cn(styles.alert, styles[variant], className)} {...props}>
+      <span className={styles.icon} aria-hidden="true">
         {iconMap[variant]}
       </span>
-      <div className="flex-1 min-w-0">
-        {title && <p className="font-medium mb-1">{title}</p>}
-        <div className="text-sm">{children}</div>
+      <div className={styles.content}>
+        {title && <p className={styles.title}>{title}</p>}
+        <div className={styles.body}>{children}</div>
       </div>
       {onClose && (
-        <button
-          type="button"
-          onClick={onClose}
-          className="flex-shrink-0 opacity-70 hover:opacity-100 transition-opacity"
-          aria-label="닫기"
-        >
+        <button type="button" onClick={onClose} className={styles.close} aria-label="닫기">
           ✕
         </button>
       )}
     </div>
   );
-}
+});

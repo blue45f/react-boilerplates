@@ -1,52 +1,80 @@
-import { forwardRef } from 'react';
-import type { InputHTMLAttributes } from 'react';
+import { forwardRef, useId } from 'react';
+import type { InputHTMLAttributes, ReactNode } from 'react';
 
 import { cn } from '../utils/cn';
+import styles from './Input.module.css';
 
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string;
   error?: string;
   helperText?: string;
+  size?: 'sm' | 'md' | 'lg';
+  leftAddon?: ReactNode;
+  rightAddon?: ReactNode;
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, helperText, className, id, ...props }, ref) => {
-    const inputId = id ?? (label ? label.replace(/\s+/g, '-').toLowerCase() : undefined);
+/** label/error/helperText, size, addon을 지원하는 입력 컴포넌트 */
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+  {
+    label,
+    error,
+    helperText,
+    className,
+    id,
+    disabled,
+    size = 'md',
+    leftAddon,
+    rightAddon,
+    ...props
+  },
+  ref
+) {
+  const reactId = useId();
+  const inputId = id ?? `rl-input-${reactId}`;
+  const sizeKey = `size${size.charAt(0).toUpperCase() + size.slice(1)}` as
+    | 'sizeSm'
+    | 'sizeMd'
+    | 'sizeLg';
 
-    return (
-      <div className="flex flex-col gap-1">
-        {label && (
-          <label htmlFor={inputId} className="text-sm font-medium text-gray-700">
-            {label}
-          </label>
+  return (
+    <div className={styles.wrapper}>
+      {label && (
+        <label htmlFor={inputId} className={styles.label}>
+          {label}
+        </label>
+      )}
+      <div
+        className={cn(
+          styles.field,
+          styles[sizeKey],
+          error && styles.fieldError,
+          disabled && styles.disabled
         )}
+      >
+        {leftAddon && <span className={cn(styles.addon, styles.leftAddon)}>{leftAddon}</span>}
         <input
           ref={ref}
           id={inputId}
-          aria-invalid={!!error}
-          aria-describedby={error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined}
-          className={cn(
-            'rounded border px-3 py-2 text-base transition-colors',
-            'focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-1',
-            'disabled:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50',
-            error ? 'border-red-500 focus:ring-red-300' : 'border-gray-300',
-            className
-          )}
+          disabled={disabled}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={
+            error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
+          }
+          className={cn(styles.input, className)}
           {...props}
         />
-        {error && (
-          <p id={`${inputId}-error`} className="text-sm text-red-500" role="alert">
-            {error}
-          </p>
-        )}
-        {!error && helperText && (
-          <p id={`${inputId}-helper`} className="text-sm text-gray-500">
-            {helperText}
-          </p>
-        )}
+        {rightAddon && <span className={cn(styles.addon, styles.rightAddon)}>{rightAddon}</span>}
       </div>
-    );
-  }
-);
-
-Input.displayName = 'Input';
+      {error && (
+        <p id={`${inputId}-error`} className={styles.error} role="alert">
+          {error}
+        </p>
+      )}
+      {!error && helperText && (
+        <p id={`${inputId}-helper`} className={styles.helper}>
+          {helperText}
+        </p>
+      )}
+    </div>
+  );
+});

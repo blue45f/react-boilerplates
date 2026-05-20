@@ -12,12 +12,19 @@ export default defineConfig({
       rollupTypes: true,
     }),
   ],
+  css: {
+    modules: {
+      generateScopedName: 'rl-[name]-[local]-[hash:base64:5]',
+    },
+  },
   build: {
+    cssCodeSplit: false,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'ReactLib',
       formats: ['es', 'cjs'],
       fileName: (format) => `index.${format === 'es' ? 'mjs' : 'cjs'}`,
+      cssFileName: 'style',
     },
     rollupOptions: {
       external: ['react', 'react-dom', 'react/jsx-runtime'],
@@ -26,6 +33,10 @@ export default defineConfig({
           react: 'React',
           'react-dom': 'ReactDOM',
           'react/jsx-runtime': 'jsxRuntime',
+        },
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === 'style.css') return 'style.css';
+          return assetInfo.name ?? 'asset';
         },
       },
     },

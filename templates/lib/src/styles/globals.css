@@ -1,0 +1,78 @@
+/* 글로벌 기본 스타일 (리셋 + 기본 타이포) */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: var(--rl-font-sans);
+  font-size: var(--rl-font-size-md);
+  line-height: var(--rl-line-height-normal);
+  color: var(--rl-color-fg);
+  background-color: var(--rl-color-bg);
+  transition:
+    background-color var(--rl-transition-base),
+    color var(--rl-transition-base);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: var(--rl-font-weight-semibold);
+  line-height: var(--rl-line-height-tight);
+  color: var(--rl-color-fg);
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--rl-color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--rl-shadow-focus);
+  border-radius: var(--rl-radius-sm);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--rl-color-border-strong);
+  border-radius: var(--rl-radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--rl-color-fg-subtle);
+}

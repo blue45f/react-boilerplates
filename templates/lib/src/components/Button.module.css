@@ -1,0 +1,101 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--rl-space-2);
+  border: 1px solid transparent;
+  border-radius: var(--rl-radius-md);
+  font-family: inherit;
+  font-weight: var(--rl-font-weight-medium);
+  cursor: pointer;
+  transition:
+    background-color var(--rl-transition-fast),
+    color var(--rl-transition-fast),
+    border-color var(--rl-transition-fast),
+    box-shadow var(--rl-transition-fast);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.button:focus-visible {
+  outline: none;
+  box-shadow: var(--rl-shadow-focus);
+}
+
+.button:disabled,
+.button[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* variants */
+.primary {
+  background-color: var(--rl-color-primary);
+  color: var(--rl-color-primary-fg);
+}
+.primary:hover:not(:disabled):not([aria-disabled='true']) {
+  background-color: var(--rl-color-primary-hover);
+}
+
+.secondary {
+  background-color: var(--rl-color-secondary);
+  color: var(--rl-color-secondary-fg);
+}
+.secondary:hover:not(:disabled):not([aria-disabled='true']) {
+  background-color: var(--rl-color-secondary-hover);
+}
+
+.outline {
+  background-color: transparent;
+  color: var(--rl-color-primary);
+  border-color: var(--rl-color-primary);
+}
+.outline:hover:not(:disabled):not([aria-disabled='true']) {
+  background-color: var(--rl-color-info-bg);
+}
+
+.ghost {
+  background-color: transparent;
+  color: var(--rl-color-fg);
+}
+.ghost:hover:not(:disabled):not([aria-disabled='true']) {
+  background-color: var(--rl-color-bg-muted);
+}
+
+.destructive {
+  background-color: var(--rl-color-danger);
+  color: #ffffff;
+}
+.destructive:hover:not(:disabled):not([aria-disabled='true']) {
+  filter: brightness(1.1);
+}
+
+/* sizes */
+.sm {
+  padding: var(--rl-space-1) var(--rl-space-3);
+  font-size: var(--rl-font-size-sm);
+  min-height: 28px;
+}
+.md {
+  padding: var(--rl-space-2) var(--rl-space-4);
+  font-size: var(--rl-font-size-md);
+  min-height: 36px;
+}
+.lg {
+  padding: var(--rl-space-3) var(--rl-space-6);
+  font-size: var(--rl-font-size-lg);
+  min-height: 44px;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.spinner {
+  display: inline-flex;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+}

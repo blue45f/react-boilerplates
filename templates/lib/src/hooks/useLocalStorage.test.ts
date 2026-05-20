@@ -56,9 +56,7 @@ describe('useLocalStorage', () => {
   });
 
   it('객체 타입도 지원한다', () => {
-    const { result } = renderHook(() =>
-      useLocalStorage('obj-key', { name: 'test', count: 0 })
-    );
+    const { result } = renderHook(() => useLocalStorage('obj-key', { name: 'test', count: 0 }));
 
     act(() => {
       result.current[1]({ name: 'updated', count: 1 });
