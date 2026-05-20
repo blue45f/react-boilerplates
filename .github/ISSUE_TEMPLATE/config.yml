@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 디스커션
+    url: https://github.com/blue45f/react-boilerplates/discussions
+    about: 질문/아이디어는 디스커션에서 먼저 이야기해 주세요

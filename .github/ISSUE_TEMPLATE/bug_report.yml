@@ -1,0 +1,47 @@
+name: 🐛 버그 리포트
+description: 동작 이상이나 오류를 신고합니다
+labels: [bug]
+body:
+  - type: dropdown
+    id: scope
+    attributes:
+      label: 영향 범위
+      options:
+        - templates/app
+        - templates/admin
+        - templates/lib
+        - packages/configs
+        - packages/cli (create-react-bp / create-react-lib)
+        - apps/docs
+        - 루트 인프라
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: 무엇이 잘못됐나요?
+      placeholder: 기대한 동작과 실제 동작
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 재현 단계
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: 환경 (Node/pnpm/OS)
+      placeholder: 'Node 22.x / pnpm 10.x / macOS 15'
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 로그 / 스크린샷
+      render: shell
