@@ -1,37 +1,44 @@
 import {
+  BellOutlined,
   DashboardOutlined,
+  LineChartOutlined,
+  MenuFoldOutlined,
+  MenuOutlined,
+  MenuUnfoldOutlined,
+  MoonOutlined,
   SettingOutlined,
+  SunOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import type { CSSProperties } from 'react';
-import { Layout, Menu, theme } from 'antd';
-import { useEffect, useState } from 'react';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import type { CSSProperties, ReactNode } from 'react';
+import { Badge, Button, Drawer, Dropdown, Input, Layout, Menu, theme as antdTheme } from 'antd';
+import type { InputRef, MenuProps } from 'antd';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import { useAuthStore } from '@/stores/useAuthStore';
+import { useIsMobile } from '@/hooks/useMediaQuery';
+import { appRoutes } from '@/lib/routes';
+import { useUiStore } from '@/stores/useUiStore';
 
 import Breadcrumb from './Breadcrumb';
 import HeaderUserInfo from './HeaderUserInfo';
 
 const { Header, Sider, Content } = Layout;
 
-const menuItems = [
-  {
-    key: '/',
-    icon: <DashboardOutlined />,
-    label: '대시보드',
-  },
-  {
-    key: '/users',
-    icon: <UserOutlined />,
-    label: '사용자 관리',
-  },
-  {
-    key: '/settings',
-    icon: <SettingOutlined />,
-    label: '설정',
-  },
-];
+const iconMap: Record<string, ReactNode> = {
+  dashboard: <DashboardOutlined />,
+  users: <UserOutlined />,
+  analytics: <LineChartOutlined />,
+  settings: <SettingOutlined />,
+};
+
+const menuItems = appRoutes
+  .filter((r) => r.showInNav)
+  .map((r) => ({
+    key: r.path,
+    icon: r.iconKey ? iconMap[r.iconKey] : undefined,
+    label: r.label,
+  }));
 
 const logoStyle: CSSProperties = {
   height: 32,
@@ -54,21 +61,75 @@ const skipLinkStyle: CSSProperties = {
   overflow: 'hidden',
 };
 
+const notifications = [
+  { key: 'n1', title: '신규 사용자 가입', detail: '5분 전' },
+  { key: 'n2', title: '결제 완료', detail: '15분 전' },
+  { key: 'n3', title: '시스템 백업 완료', detail: '1시간 전' },
+];
+
 function AdminLayout() {
-  const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuthenticated, login } = useAuthStore();
+  const isMobile = useIsMobile();
+  const { sidebarCollapsed, setSidebarCollapsed, toggleTheme, theme } = useUiStore();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const searchRef = useRef<InputRef | null>(null);
   const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
+    token: { colorBgContainer, borderRadiusLG, colorBorderSecondary },
+  } = antdTheme.useToken();
 
-  // 데모용: 인증되지 않은 경우 mock 사용자로 로그인
   useEffect(() => {
-    if (!isAuthenticated) {
-      login({ id: '1', name: '관리자', email: 'admin@example.com', role: 'admin' });
-    }
-  }, [isAuthenticated, login]);
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        searchRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  const notificationItems: MenuProps['items'] = useMemo(
+    () => [
+      ...notifications.map((n) => ({
+        key: n.key,
+        label: (
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <span style={{ fontWeight: 500 }}>{n.title}</span>
+            <span style={{ fontSize: 12, color: '#999' }}>{n.detail}</span>
+          </div>
+        ),
+      })),
+      { type: 'divider' },
+      { key: 'all', label: '모든 알림 보기' },
+    ],
+    []
+  );
+
+  const selectedKey = (() => {
+    const exact = menuItems.find((m) => m.key === location.pathname);
+    if (exact) return [exact.key];
+    const segment = '/' + location.pathname.split('/').filter(Boolean)[0];
+    const partial = menuItems.find((m) => m.key === segment);
+    return partial ? [partial.key] : [];
+  })();
+
+  const themeIsDark = theme === 'dark';
+  const handleMenuClick = (key: string) => {
+    navigate(key);
+    if (isMobile) setDrawerOpen(false);
+  };
+
+  const sidebarMenu = (
+    <Menu
+      theme="dark"
+      selectedKeys={selectedKey}
+      mode="inline"
+      items={menuItems}
+      onClick={({ key }) => handleMenuClick(String(key))}
+      aria-label="관리자 메뉴"
+    />
+  );
 
   return (
     <>
@@ -96,34 +157,84 @@ function AdminLayout() {
         본문으로 건너뛰기
       </a>
       <Layout style={{ minHeight: '100vh' }}>
-        <Sider
-          collapsible
-          collapsed={collapsed}
-          onCollapse={setCollapsed}
-          aria-label="사이드바 네비게이션"
-        >
-          <div style={logoStyle} role="img" aria-label="Admin 로고">
-            {collapsed ? 'A' : 'Admin'}
-          </div>
-          <Menu
-            theme="dark"
-            selectedKeys={[location.pathname]}
-            mode="inline"
-            items={menuItems}
-            onClick={({ key }) => navigate(key)}
-            aria-label="관리자 메뉴"
-          />
-        </Sider>
+        {!isMobile && (
+          <Sider
+            collapsible
+            collapsed={sidebarCollapsed}
+            onCollapse={setSidebarCollapsed}
+            aria-label="사이드바 네비게이션"
+          >
+            <div style={logoStyle} role="img" aria-label="Admin 로고">
+              {sidebarCollapsed ? 'A' : 'Admin'}
+            </div>
+            {sidebarMenu}
+          </Sider>
+        )}
+        {isMobile && (
+          <Drawer
+            placement="left"
+            onClose={() => setDrawerOpen(false)}
+            open={drawerOpen}
+            width={240}
+            styles={{ body: { padding: 0, background: '#001529' } }}
+            closable={false}
+          >
+            <div style={logoStyle} role="img" aria-label="Admin 로고">
+              Admin
+            </div>
+            {sidebarMenu}
+          </Drawer>
+        )}
         <Layout>
           <Header
             style={{
               padding: '0 16px',
               background: colorBgContainer,
               display: 'flex',
-              justifyContent: 'flex-end',
               alignItems: 'center',
+              gap: 12,
+              borderBottom: `1px solid ${colorBorderSecondary}`,
             }}
           >
+            {isMobile && (
+              <Button
+                type="text"
+                aria-label="메뉴 열기"
+                icon={<MenuOutlined />}
+                onClick={() => setDrawerOpen(true)}
+              />
+            )}
+            {!isMobile && (
+              <Button
+                type="text"
+                aria-label={sidebarCollapsed ? '사이드바 펼치기' : '사이드바 접기'}
+                icon={sidebarCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              />
+            )}
+            <Input
+              ref={searchRef}
+              placeholder="검색 (⌘K)"
+              allowClear
+              aria-label="전역 검색"
+              style={{ maxWidth: 320 }}
+            />
+            <div style={{ flex: 1 }} />
+            <Button
+              type="text"
+              aria-label={themeIsDark ? '라이트 모드' : '다크 모드'}
+              icon={themeIsDark ? <SunOutlined /> : <MoonOutlined />}
+              onClick={toggleTheme}
+            />
+            <Dropdown
+              menu={{ items: notificationItems }}
+              placement="bottomRight"
+              trigger={['click']}
+            >
+              <Badge count={notifications.length} size="small" offset={[-4, 4]}>
+                <Button type="text" icon={<BellOutlined />} aria-label="알림" />
+              </Badge>
+            </Dropdown>
             <HeaderUserInfo />
           </Header>
           <Content style={{ margin: 16 }}>

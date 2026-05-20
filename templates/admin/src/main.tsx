@@ -1,15 +1,18 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { ConfigProvider } from 'antd';
-import koKR from 'antd/locale/ko_KR';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 
 import App from './App';
+import ThemedProviders from './providers/ThemedProviders';
 
 import './styles/global.css';
+
+dayjs.locale('ko');
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,11 +33,11 @@ createRoot(rootElement).render(
   <StrictMode>
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
-        <ConfigProvider locale={koKR}>
+        <ThemedProviders>
           <BrowserRouter>
             <App />
           </BrowserRouter>
-        </ConfigProvider>
+        </ThemedProviders>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </HelmetProvider>

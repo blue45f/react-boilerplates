@@ -2,11 +2,7 @@ import { Breadcrumb as AntBreadcrumb } from 'antd';
 import { HomeOutlined } from '@ant-design/icons';
 import { Link, useLocation } from 'react-router-dom';
 
-const routeNameMap: Record<string, string> = {
-  '/': '대시보드',
-  '/users': '사용자 관리',
-  '/settings': '설정',
-};
+import { routeLabelMap } from '@/lib/routes';
 
 function Breadcrumb() {
   const location = useLocation();
@@ -15,14 +11,14 @@ function Breadcrumb() {
   const items = [
     {
       title: (
-        <Link to="/">
+        <Link to="/" aria-label="홈으로">
           <HomeOutlined />
         </Link>
       ),
     },
     ...pathSegments.map((_, index) => {
       const path = `/${pathSegments.slice(0, index + 1).join('/')}`;
-      const name = routeNameMap[path] ?? pathSegments[index];
+      const name = routeLabelMap[path] ?? pathSegments[index];
       const isLast = index === pathSegments.length - 1;
 
       return {
