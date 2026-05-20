@@ -38,11 +38,13 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Create Release PR or Publish
+      # Publish is enabled only when NPM_TOKEN repository secret is set.
+      # Without it, changesets only opens/updates the "Version Packages" PR.
+      - name: Create Release PR (or Publish if NPM_TOKEN set)
         uses: changesets/action@v1
         with:
           version: pnpm changeset:version
-          publish: pnpm changeset:publish
+          publish: ${{ secrets.NPM_TOKEN && 'pnpm changeset:publish' || '' }}
           commit: 'chore: release packages'
           title: 'chore: release packages'
         env:

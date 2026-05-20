@@ -25,9 +25,10 @@ test.describe('인증', () => {
     await expect(page.getByRole('heading', { name: '사용자 관리' })).toBeVisible();
 
     await page.getByRole('button', { name: '새 사용자 추가' }).click();
-    await page.getByLabel('이름').fill('e2e테스터');
-    await page.getByLabel('이메일').fill('e2e@example.com');
-    await page.getByRole('button', { name: '저장' }).click();
+    const dialog = page.getByRole('dialog');
+    await dialog.getByLabel('이름').fill('e2e테스터');
+    await dialog.getByLabel('이메일').fill('e2e@example.com');
+    await dialog.getByRole('button', { name: '저장' }).click();
 
     await expect(page.getByText('e2e테스터')).toBeVisible();
   });
