@@ -1,10 +1,18 @@
 {
   "name": "create-react-bp",
-  "version": "1.0.0",
-  "description": "React 앱 생성 CLI",
+  "version": "1.1.0",
+  "description": "React 앱 생성 CLI (Chakra UI 또는 Ant Design Admin 템플릿)",
   "license": "MIT",
   "type": "module",
-  "keywords": ["react", "boilerplate", "scaffold", "generator", "cli", "vite", "typescript"],
+  "keywords": [
+    "react",
+    "boilerplate",
+    "scaffold",
+    "generator",
+    "cli",
+    "vite",
+    "typescript"
+  ],
   "engines": {
     "node": ">=20.0.0"
   },
@@ -16,10 +24,15 @@
   "bin": {
     "create-react-bp": "./dist/index.js"
   },
-  "files": ["dist", "templates"],
+  "files": [
+    "dist",
+    "templates"
+  ],
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts --clean",
     "dev": "tsup src/index.ts --format esm --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "clean": "rm -rf dist"
   },
   "dependencies": {
@@ -30,10 +43,12 @@
     "prompts": "^2.4.2"
   },
   "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.14.0",
     "@types/prompts": "^2.4.9",
     "tsup": "^8.4.0",
-    "typescript": "^5.8.0"
+    "typescript": "^5.8.0",
+    "vitest": "^3.0.0"
   }
 }
