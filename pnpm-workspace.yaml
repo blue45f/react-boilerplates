@@ -31,12 +31,12 @@ catalog:
   '@playwright/test': ^1.56.0
 
   # 린트
-  eslint: ^9.38.0
-  '@eslint/js': ^9.38.0
+  eslint: ^10.4.0
+  '@eslint/js': ^10.0.1
   typescript-eslint: ^8.46.0
-  eslint-plugin-react-hooks: ^5.2.0
-  eslint-plugin-react-refresh: ^0.4.21
-  eslint-plugin-storybook: ^0.11.6
+  eslint-plugin-react-hooks: ^7.1.1
+  eslint-plugin-react-refresh: ^0.5.2
+  eslint-plugin-storybook: ^10.4.0
   globals: ^17.0.0
 
   # 상태/데이터
