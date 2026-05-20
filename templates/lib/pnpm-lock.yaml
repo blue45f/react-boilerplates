@@ -16,7 +16,7 @@ importers:
         specifier: ^9.24.0
         version: 9.39.4
       '@storybook/addon-a11y':
-        specifier: ^8.6.0
+        specifier: ^8.6.18
         version: 8.6.18(storybook@8.6.18)
       '@storybook/addon-essentials':
         specifier: ^8.6.0
