@@ -7,5 +7,6 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["react-app", "react-admin", "react-lib", "docs"]
+  "ignore": ["@repo/docs"],
+  "privatePackages": { "version": false, "tag": false }
 }
