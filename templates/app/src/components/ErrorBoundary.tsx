@@ -1,4 +1,4 @@
-import { Box, Button, Container, Heading, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Container, HStack, Heading, Stack, Text } from '@chakra-ui/react';
 import { Component } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
 
@@ -10,24 +10,32 @@ interface Props {
 interface State {
   hasError: boolean;
   error: Error | null;
+  errorInfo: ErrorInfo | null;
 }
 
 class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { hasError: false, error: null };
+    this.state = { hasError: false, error: null, errorInfo: null };
   }
 
-  static getDerivedStateFromError(error: Error): State {
+  static getDerivedStateFromError(error: Error): Partial<State> {
     return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('ErrorBoundary caught:', error, errorInfo);
+    if (import.meta.env.DEV) {
+      console.error('ErrorBoundary caught:', error, errorInfo);
+    }
+    this.setState({ errorInfo });
   }
 
   handleReset = () => {
-    this.setState({ hasError: false, error: null });
+    this.setState({ hasError: false, error: null, errorInfo: null });
+  };
+
+  handleGoHome = () => {
+    window.location.href = '/';
   };
 
   render() {
@@ -36,33 +44,70 @@ class ErrorBoundary extends Component<Props, State> {
         return this.props.fallback;
       }
 
+      const isDev = import.meta.env.DEV;
+
       return (
-        <Container maxW="container.md" py={16}>
-          <VStack gap={4} textAlign="center">
-            <Heading as="h1" size="xl" color="red.500">
-              문제가 발생했습니다
-            </Heading>
-            <Text color="gray.600">
-              예상치 못한 오류가 발생했습니다. 페이지를 새로고침하거나 다시 시도해 주세요.
-            </Text>
-            {this.state.error && (
+        <Container maxW="2xl" py={16}>
+          <Stack gap="6" textAlign="center" align="center">
+            <Box
+              boxSize="16"
+              borderRadius="full"
+              bg="red.subtle"
+              color="red.fg"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              fontSize="3xl"
+              aria-hidden="true"
+            >
+              !
+            </Box>
+            <Stack gap="2">
+              <Heading as="h1" size="xl">
+                문제가 발생했습니다
+              </Heading>
+              <Text color="fg.muted">
+                예상치 못한 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.
+              </Text>
+            </Stack>
+
+            {isDev && this.state.error && (
               <Box
-                as="pre"
+                w="full"
                 p={4}
-                bg="gray.100"
+                bg="bg.muted"
                 borderRadius="md"
-                fontSize="sm"
-                maxW="100%"
-                overflow="auto"
+                borderWidth="1px"
+                borderColor="border"
                 textAlign="left"
               >
-                {this.state.error.message}
+                <Text fontSize="xs" color="fg.muted" mb="2" fontWeight="bold">
+                  DEBUG (개발 모드에서만 표시)
+                </Text>
+                <Box
+                  as="pre"
+                  fontSize="xs"
+                  fontFamily="mono"
+                  whiteSpace="pre-wrap"
+                  wordBreak="break-word"
+                  maxH="60"
+                  overflow="auto"
+                >
+                  {this.state.error.message}
+                  {this.state.errorInfo?.componentStack ?? ''}
+                </Box>
               </Box>
             )}
-            <Button colorScheme="blue" onClick={this.handleReset}>
-              다시 시도
-            </Button>
-          </VStack>
+
+            <HStack gap="3">
+              <Button colorPalette="brand" onClick={this.handleReset}>
+                다시 시도
+              </Button>
+              <Button variant="outline" onClick={this.handleGoHome}>
+                홈으로
+              </Button>
+            </HStack>
+          </Stack>
         </Container>
       );
     }

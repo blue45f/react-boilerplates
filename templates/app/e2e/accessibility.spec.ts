@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 
+const routes = ['/', '/posts', '/about', '/contact', '/settings'];
+
 test.describe('접근성', () => {
   test('skip link이 존재한다', async ({ page }) => {
     await page.goto('/');
@@ -15,7 +17,9 @@ test.describe('접근성', () => {
 
   test('현재 페이지에 aria-current가 설정된다', async ({ page }) => {
     await page.goto('/');
-    const homeLink = page.getByRole('link', { name: '홈' });
+    const homeLink = page
+      .getByRole('navigation', { name: '메인 네비게이션' })
+      .getByRole('link', { name: '홈' });
     await expect(homeLink).toHaveAttribute('aria-current', 'page');
   });
 
@@ -24,4 +28,12 @@ test.describe('접근성', () => {
     const main = page.locator('#main-content');
     await expect(main).toBeVisible();
   });
+
+  for (const route of routes) {
+    test(`${route} 페이지에 h1이 존재한다`, async ({ page }) => {
+      await page.goto(route);
+      const heading = page.getByRole('heading', { level: 1 });
+      await expect(heading.first()).toBeVisible();
+    });
+  }
 });
