@@ -23,7 +23,7 @@ catalog:
   '@rolldown/plugin-babel': ^0.2.3
   '@types/babel__core': ^7.20.5
   babel-plugin-react-compiler: ^1.0.0
-  vite-plugin-dts: ^4.5.4
+  vite-plugin-dts: ^5.0.1
 
   # 테스트
   vitest: ^4.1.7
