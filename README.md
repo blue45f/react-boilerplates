@@ -11,18 +11,18 @@
 
 ## 한눈에
 
-- 🟢 **Node 22 LTS · pnpm 10 · TypeScript 5.8 · Vite 6**
+- 🟢 **Node 22 LTS · pnpm 10 · TypeScript 6 · Vite 8**
 - 📦 **pnpm workspace + pnpm catalog** 로 의존성 버전을 한곳에서 관리 (Turborepo 의존 제거)
-- 🎨 **다크 모드/디자인 토큰** 기본 탑재 — `lib` 템플릿은 CSS 변수 기반 토큰 시스템
-- 🧪 **Vitest 3 + Testing Library + Playwright + MSW** 사전 구성
-- 📚 **Storybook 8** (a11y / interactions / themes / viewport addon) 포함
+- 🎨 **CSS Modules/다크 모드/디자인 토큰** 기본 탑재 — `lib` 템플릿은 CSS 변수 기반 토큰 시스템
+- 🧪 **Vitest 4 + Testing Library + Playwright + i18n/a11y 테스트** 사전 구성
+- 📚 **Storybook 10** (a11y / themes addon) 포함
 - 🤖 **CI: 매트릭스 빌드 + Playwright + Storybook 빌드 + CodeQL + Dependabot**
 - 🧷 **Husky + lint-staged + Commitlint (Conventional Commits) + Changesets**
 
 ## 빠른 시작
 
 ```bash
-# React App 생성 (Chakra UI 기반)
+# React App 생성 (CSS Modules + Data Router 기반)
 npx create-react-bp my-app
 
 # React Admin Dashboard 생성 (Ant Design 기반)
@@ -34,11 +34,11 @@ npx create-react-lib my-lib
 
 ## 템플릿
 
-| 템플릿      | 기술 스택                                             | 용도                        |
-| ----------- | ----------------------------------------------------- | --------------------------- |
-| **App**     | React 19 + Chakra UI 3 + React Router 7 + React Query | 일반 웹 애플리케이션        |
-| **Admin**   | React 18 + Ant Design 5 + React Router 7 + recharts   | 관리자 대시보드             |
-| **Library** | React 18/19 peer + Vite library mode + Storybook 8    | 디자인 시스템·UI 라이브러리 |
+| 템플릿      | 기술 스택                                                       | 용도                        |
+| ----------- | --------------------------------------------------------------- | --------------------------- |
+| **App**     | React 19 + CSS Modules + React Router Data Router + React Query | 일반 웹 애플리케이션        |
+| **Admin**   | React 19 + Ant Design 5 + React Router 7 + recharts             | 관리자 대시보드             |
+| **Library** | React 18/19 peer + Vite library mode + Storybook 10             | 디자인 시스템·UI 라이브러리 |
 
 각 템플릿은 **워크스페이스에서 분리**되어 있어서 `npx create-*`로 받자마자 그대로 독립 실행됩니다.
 
@@ -98,19 +98,19 @@ pnpm changeset                  # 변경 사항 기록
 
 | 분류              | 기술                                                                                                                 |
 | ----------------- | -------------------------------------------------------------------------------------------------------------------- |
-| 빌드              | [Vite 6](https://vite.dev), [pnpm 10 workspace + catalog](https://pnpm.io)                                           |
-| 언어              | [TypeScript 5.8](https://www.typescriptlang.org)                                                                     |
-| UI 프레임워크     | [Chakra UI 3](https://chakra-ui.com), [Ant Design 5](https://ant.design), 자체 디자인 토큰                           |
+| 빌드              | [Vite 8](https://vite.dev), [pnpm 10 workspace + catalog](https://pnpm.io)                                           |
+| 언어              | [TypeScript 6](https://www.typescriptlang.org)                                                                       |
+| UI 프레임워크     | CSS Modules, [Ant Design 5](https://ant.design), 자체 디자인 토큰                                                    |
 | 라우팅            | [React Router 7](https://reactrouter.com)                                                                            |
 | 서버 상태         | [TanStack Query 5](https://tanstack.com/query)                                                                       |
 | 클라이언트 상태   | [Zustand 5](https://zustand.docs.pmnd.rs)                                                                            |
 | HTTP              | [ky](https://github.com/sindresorhus/ky) (대안: [ofetch](https://github.com/unjs/ofetch))                            |
 | 폼                | [react-hook-form](https://react-hook-form.com) + [zod](https://zod.dev)                                              |
-| 모킹              | [MSW 2](https://mswjs.io)                                                                                            |
+| i18n/접근성       | [i18next](https://www.i18next.com), Playwright a11y/keyboard/responsive checks                                       |
 | 차트              | [recharts](https://recharts.org) (admin)                                                                             |
-| 컴포넌트 카탈로그 | [Storybook 8](https://storybook.js.org) + a11y/interactions/themes addon                                             |
-| 테스트            | [Vitest 3](https://vitest.dev), [Playwright](https://playwright.dev), [Testing Library](https://testing-library.com) |
-| 코드 품질         | [ESLint 9 flat config](https://eslint.org), [Prettier 3](https://prettier.io), Commitlint                            |
+| 컴포넌트 카탈로그 | [Storybook 10](https://storybook.js.org) + a11y/themes addon                                                         |
+| 테스트            | [Vitest 4](https://vitest.dev), [Playwright](https://playwright.dev), [Testing Library](https://testing-library.com) |
+| 코드 품질         | [ESLint 10 flat config](https://eslint.org), React Compiler, Prettier 3, Commitlint                                  |
 | 릴리스            | [Changesets](https://github.com/changesets/changesets) (Provenance 지원)                                             |
 | 보안              | CodeQL, Dependabot grouped updates                                                                                   |
 

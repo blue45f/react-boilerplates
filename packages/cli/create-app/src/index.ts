@@ -19,7 +19,7 @@ export interface ParsedArgs {
 }
 
 export const TEMPLATES: Record<TemplateName, string> = {
-  app: 'React App (Chakra UI + React Router + Tanstack Query + Zustand)',
+  app: 'React App (CSS Modules + React Router Data Router + Tanstack Query + Zustand)',
   admin: 'Admin Dashboard (Ant Design + React Router + Tanstack Query + Zustand)',
 };
 
@@ -49,7 +49,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
         'Create a new React project from a curated boilerplate.',
         '',
         '템플릿 (Templates):',
-        '  app    - 일반 웹 앱 (Chakra UI 기반, 다크모드 포함)',
+        '  app    - 일반 웹 앱 (CSS Modules 기반, 다크모드/i18n/테스트 포함)',
         '  admin  - 관리자 대시보드 (Ant Design 기반, 보호 라우트/차트/사용자 관리 포함)',
       ].join('\n')
     )

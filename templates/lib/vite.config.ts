@@ -1,12 +1,14 @@
 import { resolve } from 'path';
 
-import react from '@vitejs/plugin-react';
+import babel from '@rolldown/plugin-babel';
+import react, { reactCompilerPreset } from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
 export default defineConfig({
   plugins: [
     react(),
+    babel({ presets: [reactCompilerPreset()] }),
     dts({
       insertTypesEntry: true,
       rollupTypes: true,
@@ -17,7 +19,17 @@ export default defineConfig({
       generateScopedName: 'rl-[name]-[local]-[hash:base64:5]',
     },
   },
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src'),
+      '@components': resolve(__dirname, 'src/components'),
+      '@hooks': resolve(__dirname, 'src/hooks'),
+      '@styles': resolve(__dirname, 'src/styles'),
+      '@utils': resolve(__dirname, 'src/utils'),
+    },
+  },
   build: {
+    target: 'es2022',
     cssCodeSplit: false,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
@@ -54,7 +66,7 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3000,
+    port: 5173,
     open: true,
   },
 });

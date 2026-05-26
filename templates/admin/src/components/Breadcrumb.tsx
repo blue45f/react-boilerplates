@@ -1,5 +1,5 @@
-import { Breadcrumb as AntBreadcrumb } from 'antd';
 import { HomeOutlined } from '@ant-design/icons';
+import { Breadcrumb as AntBreadcrumb } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 
 import { routeLabelMap } from '@/lib/routes';

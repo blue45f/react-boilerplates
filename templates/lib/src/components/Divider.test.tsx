@@ -7,7 +7,7 @@ describe('Divider', () => {
   it('horizontal separator role을 가진다', () => {
     render(<Divider />);
     const sep = screen.getByRole('separator');
-    expect(sep).toHaveAttribute('aria-orientation', 'horizontal');
+    expect(sep.tagName).toBe('HR');
   });
 
   it('label이 있으면 텍스트를 표시한다', () => {

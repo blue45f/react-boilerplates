@@ -1,0 +1,88 @@
+{
+  "common": {
+    "appName": "React App",
+    "skipToContent": "Skip to main content",
+    "loading": "Loading...",
+    "error": "Something went wrong.",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "save": "Save",
+    "add": "Add",
+    "search": "Search",
+    "language": "Language"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "todos": "Todos"
+  },
+  "home": {
+    "title": "Kickstart your React project",
+    "description": "A modern React scaffolding with TypeScript, Vite and React Router preconfigured.",
+    "getStarted": "Get started",
+    "learnMore": "Learn more",
+    "featuresTitle": "Key features",
+    "newsletterTitle": "Newsletter",
+    "newsletterDesc": "Get the latest updates and tips.",
+    "emailPlaceholder": "Enter your email",
+    "subscribe": "Subscribe",
+    "subscribeSuccess": "Subscription complete!",
+    "errors": {
+      "emailRequired": "Please enter your email.",
+      "emailInvalid": "Invalid email format."
+    }
+  },
+  "about": {
+    "title": "About",
+    "intro": "React Scaffolding is a starter template that helps you launch modern React apps quickly.",
+    "techStackTitle": "Tech stack",
+    "teamTitle": "Team",
+    "structureTitle": "Project structure"
+  },
+  "todos": {
+    "title": "Todos",
+    "subtitle": "TanStack Query · React Hook Form · Zod integration sample",
+    "addPlaceholder": "What needs to be done?",
+    "addButton": "Add",
+    "empty": "No todos yet.",
+    "completed": "Completed",
+    "pending": "Pending",
+    "all": "All",
+    "remaining": "{{count}} left",
+    "errors": {
+      "titleRequired": "Please enter a title.",
+      "titleMin": "Title must be at least 1 character.",
+      "titleMax": "Title must be 80 characters or fewer."
+    },
+    "actions": {
+      "toggle": "Toggle completed",
+      "delete": "Delete",
+      "edit": "Edit"
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you requested does not exist or has been moved.",
+    "goHome": "Go home"
+  },
+  "header": {
+    "primaryNav": "Primary navigation",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "footer": {
+    "copyright": "© {{year}} React App. All rights reserved.",
+    "privacy": "Privacy policy",
+    "terms": "Terms of service",
+    "contact": "Contact"
+  },
+  "theme": {
+    "toLight": "Switch to light mode",
+    "toDark": "Switch to dark mode",
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode"
+  }
+}

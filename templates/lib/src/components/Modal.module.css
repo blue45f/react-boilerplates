@@ -11,6 +11,8 @@
 }
 
 .dialog {
+  position: relative;
+  z-index: 1;
   background-color: var(--rl-color-bg);
   color: var(--rl-color-fg);
   border-radius: var(--rl-radius-lg);
@@ -23,6 +25,15 @@
   overflow: hidden;
   outline: none;
   animation: rl-modal-in 180ms ease;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: default;
 }
 
 .sm {

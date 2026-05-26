@@ -13,31 +13,31 @@ sidebar_position: 1
 
 - **빠른 프로젝트 생성** - `npx` 한 줄로 즉시 프로젝트 시작, 복잡한 설정 불필요
 - **3가지 템플릿** - 웹 앱, 관리자 대시보드, 컴포넌트 라이브러리 용도별 제공
-- **최신 기술 스택** - React 19, Vite 6, TypeScript 5, Tanstack Query 5, Zustand 5
+- **최신 기술 스택** - React 19, Vite 8, TypeScript 6, Tanstack Query 5, Zustand 5
 - **디자인 토큰 + 다크 모드** - 라이트/다크 테마, CSS 커스텀 프로퍼티 기반 토큰
 - **폼 검증** - react-hook-form + zod 사전 구성 (App: Contact, Admin: Login/Users 등)
-- **API Mocking** - MSW 브라우저 워커 (App), 노드 서버 (Vitest)
+- **i18n + 접근성 테스트** - App 템플릿에 ko/en 로케일 동기화, a11y, keyboard, responsive 테스트 포함
 - **차트** - recharts 기반 대시보드 (Admin)
 - **컴포넌트 카탈로그** - 모든 라이브러리 컴포넌트에 Storybook 스토리 포함
 - **서버/클라이언트 상태 관리** - Tanstack Query (데이터 페칭) + Zustand (UI 상태)
 - **테스트** - Vitest 단위 테스트 + Playwright E2E 테스트 사전 구성
 - **라이브러리 빌드** - ES Module / CommonJS 듀얼 빌드 및 타입 자동 생성
-- **SEO** - react-helmet-async 페이지별 메타 태그 관리
+- **문서 타이틀 관리** - App/Admin 템플릿 모두 hook 기반 타이틀 관리 제공
 
 ## 템플릿
 
-| 템플릿                        | 기술 스택                                | 용도                     |
-| ----------------------------- | ---------------------------------------- | ------------------------ |
-| **[App](/templates/app)**     | React 19 + Chakra UI 3 + React Router 7  | 일반 웹 애플리케이션     |
-| **[Admin](/templates/admin)** | React 18 + Ant Design 5 + React Router 7 | 관리자 대시보드          |
-| **[Library](/templates/lib)** | React 18+ + Vite library mode            | 컴포넌트 라이브러리 개발 |
+| 템플릿                        | 기술 스택                                         | 용도                     |
+| ----------------------------- | ------------------------------------------------- | ------------------------ |
+| **[App](/templates/app)**     | React 19 + CSS Modules + React Router Data Router | 일반 웹 애플리케이션     |
+| **[Admin](/templates/admin)** | React 19 + Ant Design 5 + React Router 7          | 관리자 대시보드          |
+| **[Library](/templates/lib)** | React 18/19 peer + Vite library mode              | 컴포넌트 라이브러리 개발 |
 
 ## 빠른 시작
 
 ### 요구사항
 
-- **Node.js** 20 이상
-- **pnpm** 9 이상 ([설치 가이드](https://pnpm.io/installation))
+- **Node.js** 22 이상
+- **pnpm** 10 이상 ([설치 가이드](https://pnpm.io/installation))
 
 ### App / Admin 생성
 

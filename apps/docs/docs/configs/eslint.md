@@ -4,14 +4,14 @@ sidebar_position: 2
 
 # ESLint 설정
 
-`@repo/eslint-config` 패키지는 ESLint 9 flat config 기반의 공유 설정을 제공합니다.
+`@repo/eslint-config` 패키지는 ESLint 10 flat config 기반의 공유 설정을 제공합니다.
 
 ## Exports
 
 | Export                          | 용도                                                      |
 | ------------------------------- | --------------------------------------------------------- |
-| `@repo/eslint-config`           | base (TS + import 순서)                                   |
-| `@repo/eslint-config/react`     | base + React + React Hooks                                |
+| `@repo/eslint-config`           | base (TS + import-x + security + vitest)                  |
+| `@repo/eslint-config/react`     | base + React Hooks + React Refresh + React Compiler       |
 | `@repo/eslint-config/node`      | base + Node globals                                       |
 | `@repo/eslint-config/storybook` | react + `eslint-plugin-storybook` 권장 룰 (`*.stories.*`) |
 | `@repo/eslint-config/prettier`  | Prettier와 충돌하는 룰 비활성 (가장 마지막에 spread)      |
@@ -23,11 +23,13 @@ sidebar_position: 2
 TypeScript 프로젝트용 기본 설정:
 
 - `@typescript-eslint` 룰 (no-unused-vars, no-explicit-any, consistent-type-imports)
-- `eslint-plugin-import` (그룹별 순서 정렬, 중복 import 방지)
+- `eslint-plugin-import-x` (그룹별 순서 정렬, 중복 import 방지)
+- `eslint-plugin-security` (기본 보안 규칙)
+- `@vitest/eslint-plugin` (테스트 파일 권장 규칙)
 
 ### React (react.js)
 
-위 + React, React Hooks 룰.
+React Hooks, React Refresh, React Compiler 룰을 추가합니다.
 
 ### Node.js (node.js)
 
@@ -81,11 +83,10 @@ export default [...nodeConfig, ...prettierOff];
 | `@typescript-eslint/no-unused-vars`          | error   | 미사용 변수 금지 (`_` 접두사 제외) |
 | `@typescript-eslint/no-explicit-any`         | warn    | `any` 타입 사용 경고               |
 | `@typescript-eslint/consistent-type-imports` | error   | `import type` 일관성               |
-| `import/order`                               | error   | import 그룹별 자동 정렬            |
-| `import/no-duplicates`                       | error   | 중복 import 방지                   |
-| `react/jsx-key`                              | error   | 리스트 렌더링 시 key 필수          |
-| `react/self-closing-comp`                    | error   | 자식 없는 컴포넌트 자동 닫기       |
-| `react/no-deprecated`                        | error   | 더 이상 사용되지 않는 API 금지     |
+| `import-x/order`                             | warn    | import 그룹별 자동 정렬            |
+| `import-x/no-duplicates`                     | error   | 중복 import 방지                   |
+| `security/*`                                 | various | 기본 보안 정적 검사                |
+| `react-compiler/react-compiler`              | error   | React Compiler 호환성 검사         |
 | `react-hooks/rules-of-hooks`                 | error   | Hooks 규칙 준수                    |
 | `react-hooks/exhaustive-deps`                | warn    | 의존성 배열 검사                   |
 | `storybook/*` (recommended)                  | various | 스토리 파일 베스트 프랙티스        |

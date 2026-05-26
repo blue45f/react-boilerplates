@@ -1,8 +1,10 @@
 import { forwardRef, useCallback, useState } from 'react';
-import type { ButtonHTMLAttributes } from 'react';
 
 import { cn } from '../utils/cn';
+
 import styles from './Switch.module.css';
+
+import type { ButtonHTMLAttributes } from 'react';
 
 export interface SwitchProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> {
   checked?: boolean;

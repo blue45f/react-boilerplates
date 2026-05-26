@@ -1,9 +1,11 @@
 import { forwardRef } from 'react';
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
 import { cn } from '../utils/cn';
-import { Spinner } from './Spinner';
+
 import styles from './Button.module.css';
+import { Spinner } from './Spinner';
+
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
 export type ButtonSize = 'sm' | 'md' | 'lg';

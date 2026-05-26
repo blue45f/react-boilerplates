@@ -1,4 +1,5 @@
 import { describe, expect, it, beforeEach } from 'vitest';
+
 import { useAuthStore } from './useAuthStore';
 
 const mockUser = { id: '1', name: '관리자', email: 'admin@test.com', role: 'admin' as const };

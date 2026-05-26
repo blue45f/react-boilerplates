@@ -1,5 +1,5 @@
-import { Avatar, Descriptions, Drawer, Tag, Typography } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
+import { Avatar, Descriptions, Drawer, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 
 import type { AdminUser } from '@/lib/mock';

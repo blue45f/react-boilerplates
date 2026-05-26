@@ -7,11 +7,13 @@ import {
   useRef,
   useState,
 } from 'react';
-import type { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 
 import { cn } from '../utils/cn';
+
 import styles from './Toast.module.css';
+
+import type { ReactNode } from 'react';
 
 export type ToastVariant = 'info' | 'success' | 'warning' | 'error';
 

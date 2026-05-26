@@ -1,6 +1,6 @@
 import { Button, Card, Form, Input, Radio, Select, Switch, Tabs } from 'antd';
-import { Helmet } from 'react-helmet-async';
 
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useToast } from '@/lib/toast';
 import { useUiStore, type LanguageCode, type ThemeMode } from '@/stores/useUiStore';
 
@@ -195,11 +195,10 @@ function AppearanceTab() {
 }
 
 function Settings() {
+  useDocumentTitle('설정 - Admin');
+
   return (
     <div>
-      <Helmet>
-        <title>설정 - Admin</title>
-      </Helmet>
       <h1>설정</h1>
       <div style={{ marginTop: 24, maxWidth: 720 }}>
         <Tabs

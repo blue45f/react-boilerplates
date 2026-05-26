@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+
 import type { RefObject } from 'react';
 
 export interface UseIntersectionObserverOptions extends IntersectionObserverInit {
@@ -9,7 +10,7 @@ export interface UseIntersectionObserverOptions extends IntersectionObserverInit
 /** 요소의 뷰포트 진입 여부를 추적하는 훅 */
 export function useIntersectionObserver<T extends Element>(
   options: UseIntersectionObserverOptions = {}
-): [RefObject<T>, IntersectionObserverEntry | null] {
+): [RefObject<T | null>, IntersectionObserverEntry | null] {
   const { root = null, rootMargin = '0px', threshold = 0, freezeOnceVisible = false } = options;
   const ref = useRef<T>(null);
   const [entry, setEntry] = useState<IntersectionObserverEntry | null>(null);

@@ -1,8 +1,10 @@
 import { forwardRef, useId } from 'react';
-import type { InputHTMLAttributes, ReactNode } from 'react';
 
 import { cn } from '../utils/cn';
+
 import styles from './Input.module.css';
+
+import type { InputHTMLAttributes, ReactNode } from 'react';
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string;

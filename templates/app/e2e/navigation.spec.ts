@@ -1,57 +1,38 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test'
 
-test.describe('네비게이션', () => {
-  test('홈 페이지가 렌더링된다', async ({ page }) => {
-    await page.goto('/');
-    await expect(page).toHaveTitle(/React App/);
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('시작');
-  });
+test.describe('Navigation smoke tests', () => {
+  test('loads home page with hero heading', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.getByRole('heading', { name: /React 프로젝트를/ })).toBeVisible()
+  })
 
-  test('소개 페이지로 이동한다', async ({ page }) => {
-    await page.goto('/');
-    await page
-      .getByRole('navigation', { name: '메인 네비게이션' })
-      .getByRole('link', { name: '소개' })
-      .click();
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('소개');
-  });
+  test('navigates to About page via header link', async ({ page }) => {
+    await page.goto('/')
+    await page.getByRole('link', { name: '소개' }).click()
+    await expect(page).toHaveURL(/\/about$/)
+    await expect(page.getByRole('heading', { name: '기술 스택' })).toBeVisible()
+  })
 
-  test('게시글 페이지로 이동한다', async ({ page }) => {
-    await page.goto('/');
-    await page
-      .getByRole('navigation', { name: '메인 네비게이션' })
-      .getByRole('link', { name: '게시글' })
-      .click();
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('게시글');
-  });
+  test('renders 404 page on unknown route and links home', async ({ page }) => {
+    await page.goto('/non-existent-path')
+    await expect(page.getByText('페이지를 찾을 수 없습니다')).toBeVisible()
 
-  test('문의 페이지로 이동한다', async ({ page }) => {
-    await page.goto('/');
-    await page
-      .getByRole('navigation', { name: '메인 네비게이션' })
-      .getByRole('link', { name: '문의' })
-      .click();
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('문의');
-  });
+    await page.getByRole('link', { name: '홈으로 이동' }).click()
+    await expect(page).toHaveURL('http://localhost:5173/')
+  })
 
-  test('설정 페이지로 이동한다', async ({ page }) => {
-    await page.goto('/');
-    await page
-      .getByRole('navigation', { name: '메인 네비게이션' })
-      .getByRole('link', { name: '설정' })
-      .click();
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('설정');
-  });
+  test('navigates to Todos page and adds a todo', async ({ page }) => {
+    await page.goto('/')
+    await page.evaluate(() => localStorage.removeItem('react-app.todos'))
+    await page.getByRole('link', { name: '할 일' }).click()
+    await expect(page).toHaveURL(/\/todos$/)
 
-  test('존재하지 않는 페이지는 404를 표시한다', async ({ page }) => {
-    await page.goto('/nonexistent');
-    await expect(page.getByText('404')).toBeVisible();
-    await expect(page.getByText('페이지를 찾을 수 없습니다')).toBeVisible();
-  });
+    const input = page.getByPlaceholder('할 일을 입력하세요')
+    await input.fill('Playwright 시나리오 작성')
+    await page.getByRole('button', { name: '추가', exact: true }).click()
+    await expect(page.getByText('Playwright 시나리오 작성')).toBeVisible()
 
-  test('404 페이지에서 홈으로 돌아갈 수 있다', async ({ page }) => {
-    await page.goto('/nonexistent');
-    await page.getByRole('link', { name: '홈으로 돌아가기' }).click();
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('시작');
-  });
-});
+    await page.getByRole('button', { name: '삭제' }).first().click()
+    await expect(page.getByText('아직 할 일이 없습니다.')).toBeVisible()
+  })
+})

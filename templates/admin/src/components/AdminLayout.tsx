@@ -10,18 +10,19 @@ import {
   SunOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import type { CSSProperties, ReactNode } from 'react';
 import { Badge, Button, Drawer, Dropdown, Input, Layout, Menu, theme as antdTheme } from 'antd';
-import type { InputRef, MenuProps } from 'antd';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+
+import Breadcrumb from './Breadcrumb';
+import HeaderUserInfo from './HeaderUserInfo';
+
+import type { InputRef, MenuProps } from 'antd';
+import type { CSSProperties, ReactNode } from 'react';
 
 import { useIsMobile } from '@/hooks/useMediaQuery';
 import { appRoutes } from '@/lib/routes';
 import { useUiStore } from '@/stores/useUiStore';
-
-import Breadcrumb from './Breadcrumb';
-import HeaderUserInfo from './HeaderUserInfo';
 
 const { Header, Sider, Content } = Layout;
 

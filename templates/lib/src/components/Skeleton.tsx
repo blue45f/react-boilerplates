@@ -1,8 +1,10 @@
 import { forwardRef } from 'react';
-import type { CSSProperties, HTMLAttributes } from 'react';
 
 import { cn } from '../utils/cn';
+
 import styles from './Skeleton.module.css';
+
+import type { CSSProperties, HTMLAttributes } from 'react';
 
 export interface SkeletonProps extends HTMLAttributes<HTMLSpanElement> {
   width?: number | string;

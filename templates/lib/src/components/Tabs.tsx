@@ -7,10 +7,12 @@ import {
   useMemo,
   useState,
 } from 'react';
-import type { HTMLAttributes, KeyboardEvent, ReactNode } from 'react';
 
 import { cn } from '../utils/cn';
+
 import styles from './Tabs.module.css';
+
+import type { HTMLAttributes, KeyboardEvent, ReactNode } from 'react';
 
 interface TabsContextValue {
   value: string;

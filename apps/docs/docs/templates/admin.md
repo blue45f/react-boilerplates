@@ -10,16 +10,16 @@ Ant Design 5 기반의 관리자 대시보드 템플릿입니다. 보호 라우�
 
 | 기술                  | 버전  | 용도                            |
 | --------------------- | ----- | ------------------------------- |
-| React                 | 18    | UI 라이브러리                   |
-| Vite                  | 6     | 빌드 도구                       |
+| React                 | 19    | UI 라이브러리                   |
+| Vite                  | 8     | 빌드 도구                       |
 | Ant Design            | 5     | 엔터프라이즈 UI 컴포넌트        |
 | recharts              | 2     | 대시보드 차트                   |
 | React Router          | 7     | 클라이언트 라우팅 (보호 라우트) |
 | Tanstack Query        | 5     | 서버 상태 (API 데이터)          |
 | Zustand               | 5     | 인증/UI 상태                    |
-| react-hook-form + zod | 7 / 3 | 로그인/설정 폼 검증             |
-| TypeScript            | 5     | 타입 안전성                     |
-| Vitest                | 3     | 단위 테스트                     |
+| react-hook-form + zod | 7 / 4 | 로그인/설정 폼 검증             |
+| TypeScript            | 6     | 타입 안전성                     |
+| Vitest                | 4     | 단위 테스트                     |
 | Playwright            | 1     | E2E 테스트 (로그인 플로우 등)   |
 
 ## 생성 방법
@@ -135,3 +135,5 @@ const schema = z.object({
 | `pnpm test:e2e`    | Playwright E2E     |
 | `pnpm test:e2e:ui` | Playwright UI 모드 |
 | `pnpm lint`        | ESLint             |
+| `pnpm typecheck`   | TypeScript 검사    |
+| `pnpm verify`      | 전체 품질 게이트   |

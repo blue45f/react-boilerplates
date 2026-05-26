@@ -7,10 +7,12 @@ import {
   useMemo,
   useState,
 } from 'react';
-import type { HTMLAttributes, InputHTMLAttributes, ReactNode } from 'react';
 
 import { cn } from '../utils/cn';
+
 import styles from './Checkbox.module.css';
+
+import type { HTMLAttributes, InputHTMLAttributes, ReactNode } from 'react';
 
 interface RadioGroupContextValue {
   name: string;

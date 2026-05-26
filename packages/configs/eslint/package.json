@@ -16,17 +16,20 @@
     "src"
   ],
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "^8.46.0",
-    "@typescript-eslint/parser": "^8.46.0",
-    "eslint-config-prettier": "^10.1.0",
-    "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-storybook": "^0.11.6",
-    "globals": "^17.0.0"
+    "@eslint/js": "catalog:",
+    "@vitest/eslint-plugin": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-import-x": "catalog:",
+    "eslint-plugin-react-compiler": "catalog:",
+    "eslint-plugin-react-hooks": "catalog:",
+    "eslint-plugin-react-refresh": "catalog:",
+    "eslint-plugin-security": "catalog:",
+    "eslint-plugin-storybook": "catalog:",
+    "globals": "catalog:",
+    "typescript-eslint": "catalog:"
   },
   "peerDependencies": {
-    "eslint": "^9.0.0",
-    "typescript": "^5.0.0"
+    "eslint": "^10.0.0",
+    "typescript": "^6.0.0"
   }
 }

@@ -28,7 +28,7 @@ export function createVitestConfig({
       css,
       setupFiles: [resolve(__dirname, 'setup.js'), ...setupFiles],
       include,
-      exclude: ['node_modules', 'dist', '.storybook-out', 'storybook-static'],
+      exclude: ['node_modules', 'dist', 'coverage', '.storybook-out', 'storybook-static'],
       coverage: {
         provider: 'v8',
         reporter: ['text', 'json', 'html'],
@@ -42,6 +42,7 @@ export function createVitestConfig({
           '**/demo/**',
           '**/mocks/**',
           '**/.storybook/**',
+          '**/e2e/**',
         ],
       },
     },

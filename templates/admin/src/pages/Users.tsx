@@ -5,14 +5,15 @@ import {
   SearchOutlined,
 } from '@ant-design/icons';
 import { Button, Input, Modal, Space, Table, Tag } from 'antd';
-import type { TableColumnsType } from 'antd';
 import { useMemo, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+
+import type { AdminUser } from '@/lib/mock';
+import type { TableColumnsType } from 'antd';
 
 import UserDetailDrawer from '@/components/UserDetailDrawer';
 import UserFormModal, { type UserFormValues } from '@/components/UserFormModal';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useCreateUser, useDeleteUser, useUpdateUser, useUsers } from '@/hooks/useUsers';
-import type { AdminUser } from '@/lib/mock';
 import { useToast } from '@/lib/toast';
 
 const { confirm } = Modal;
@@ -37,6 +38,8 @@ const statusLabel: Record<AdminUser['status'], string> = {
 };
 
 function Users() {
+  useDocumentTitle('사용자 관리 - Admin');
+
   const { data: users, isFetching, refetch } = useUsers();
   const createMutation = useCreateUser();
   const updateMutation = useUpdateUser();
@@ -167,9 +170,6 @@ function Users() {
 
   return (
     <div>
-      <Helmet>
-        <title>사용자 관리 - Admin</title>
-      </Helmet>
       <div
         style={{
           display: 'flex',

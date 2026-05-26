@@ -1,7 +1,8 @@
-import { Avatar, Dropdown, Space, Typography } from 'antd';
 import { LogoutOutlined, ProfileOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
+import { Avatar, Dropdown, Space, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
+
+import type { MenuProps } from 'antd';
 
 import { useToast } from '@/lib/toast';
 import { useAuthStore } from '@/stores/useAuthStore';

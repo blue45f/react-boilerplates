@@ -8,15 +8,15 @@ React 컴포넌트 라이브러리 개발을 위한 템플릿입니다. Vite 라
 
 ## 기술 스택
 
-| 기술            | 버전                  | 용도                           |
-| --------------- | --------------------- | ------------------------------ |
-| React           | 18+ (peer dependency) | UI 라이브러리                  |
-| Vite            | 6                     | 라이브러리 빌드 모드           |
-| vite-plugin-dts | 4                     | TypeScript 선언 파일 자동 생성 |
-| TypeScript      | 5                     | 타입 안전성                    |
-| Vitest          | 3                     | 단위 테스트                    |
-| Testing Library | 16                    | 컴포넌트 테스트                |
-| Storybook       | 8                     | 컴포넌트 카탈로그 (있는 경우)  |
+| 기술            | 버전                    | 용도                           |
+| --------------- | ----------------------- | ------------------------------ |
+| React           | 18/19 (peer dependency) | UI 라이브러리                  |
+| Vite            | 8                       | 라이브러리 빌드 모드           |
+| vite-plugin-dts | 4                       | TypeScript 선언 파일 자동 생성 |
+| TypeScript      | 6                       | 타입 안전성                    |
+| Vitest          | 4                       | 단위 테스트                    |
+| Testing Library | 16                      | 컴포넌트 테스트                |
+| Storybook       | 10                      | 컴포넌트 카탈로그              |
 
 ## 생성 방법
 
@@ -169,7 +169,9 @@ pnpm build-storybook   # 정적 빌드 → storybook-static/
 
 ```bash
 pnpm test              # 단위 테스트
+pnpm test:run          # 단위 테스트 단일 실행
 pnpm test:coverage     # 커버리지 포함
+pnpm verify            # format/lint/typecheck/test/build
 ```
 
 ## 빌드
@@ -194,5 +196,5 @@ npm publish --access public
 ```
 
 :::tip Peer Dependencies
-`react`, `react-dom`은 peer dependency입니다. 소비자 프로젝트에 React 18 이상이 있어야 합니다.
+`react`, `react-dom`은 peer dependency입니다. 소비자 프로젝트에 React 18 또는 React 19가 있어야 합니다.
 :::

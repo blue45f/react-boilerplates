@@ -1,8 +1,10 @@
 import { forwardRef, useId, useState } from 'react';
-import type { HTMLAttributes, ReactNode } from 'react';
 
 import { cn } from '../utils/cn';
+
 import styles from './Tooltip.module.css';
+
+import type { HTMLAttributes, ReactNode } from 'react';
 
 export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 

@@ -1,5 +1,6 @@
 import { Button, Result } from 'antd';
 import { Component } from 'react';
+
 import type { ErrorInfo, ReactNode } from 'react';
 
 interface Props {

@@ -5,9 +5,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import { Card, Col, Row, Table, Tag } from 'antd';
-import type { TableColumnsType } from 'antd';
 import dayjs from 'dayjs';
-import { Helmet } from 'react-helmet-async';
 import {
   Bar,
   BarChart,
@@ -24,16 +22,21 @@ import {
   YAxis,
 } from 'recharts';
 
+import type { Activity } from '@/lib/mock';
+import type { TableColumnsType } from 'antd';
+
 import StatCard from '@/components/StatCard';
 import { useActivities } from '@/hooks/useActivities';
 import { useCategoryBreakdown, useChartSeries } from '@/hooks/useCharts';
 import { useDashboardStats } from '@/hooks/useDashboardStats';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useEffectiveTheme } from '@/hooks/useEffectiveTheme';
-import type { Activity } from '@/lib/mock';
 
 const PIE_COLORS = ['#1677ff', '#52c41a', '#faad14', '#eb2f96', '#722ed1'];
 
 function Dashboard() {
+  useDocumentTitle('대시보드 - Admin');
+
   const { data: stats, isLoading } = useDashboardStats({ refetchInterval: 15_000 });
   const { data: series } = useChartSeries(14);
   const { data: categories } = useCategoryBreakdown();
@@ -61,9 +64,6 @@ function Dashboard() {
 
   return (
     <div>
-      <Helmet>
-        <title>대시보드 - Admin</title>
-      </Helmet>
       <h1>대시보드</h1>
       <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
         <Col xs={24} sm={12} lg={6}>

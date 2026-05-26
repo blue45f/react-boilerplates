@@ -1,3 +1,4 @@
+import prettier from 'eslint-config-prettier/flat';
 import storybookPlugin from 'eslint-plugin-storybook';
 
 import reactConfig from './react.js';
@@ -27,8 +28,6 @@ export default [
     },
     rules: {
       ...(storybookPlugin.configs?.recommended?.rules ?? {}),
-      // 스토리 파일에서는 default export 사용이 요구되므로 import/no-default-export 같은 룰이 있다면 비활성
-      'import/no-default-export': 'off',
       // 스토리 args 타입은 자주 any로 처리되므로 경고 완화
       '@typescript-eslint/no-explicit-any': 'off',
     },
@@ -37,8 +36,8 @@ export default [
     // .storybook 설정 디렉토리 - main.ts / preview.ts 등은 default export + side effect 허용
     files: ['.storybook/**/*.@(ts|tsx|js|jsx|mjs|cjs)'],
     rules: {
-      'import/no-default-export': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
     },
   },
+  prettier,
 ];

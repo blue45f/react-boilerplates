@@ -1,5 +1,6 @@
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 import { Card, Skeleton, Statistic, Typography } from 'antd';
+
 import type { ReactNode } from 'react';
 
 interface Props {

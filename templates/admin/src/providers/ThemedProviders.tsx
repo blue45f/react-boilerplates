@@ -1,6 +1,8 @@
 import { App as AntdApp, ConfigProvider, theme as antdTheme } from 'antd';
 import enUS from 'antd/locale/en_US';
 import koKR from 'antd/locale/ko_KR';
+import { useEffect } from 'react';
+
 import type { ReactNode } from 'react';
 
 import { useEffectiveTheme } from '@/hooks/useEffectiveTheme';
@@ -26,9 +28,9 @@ function ThemedProviders({ children }: Props) {
   const language = useUiStore((s) => s.language);
   const isDark = effective === 'dark';
 
-  if (typeof document !== 'undefined') {
+  useEffect(() => {
     document.documentElement.dataset.theme = effective;
-  }
+  }, [effective]);
 
   return (
     <ConfigProvider

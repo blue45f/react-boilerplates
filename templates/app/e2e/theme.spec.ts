@@ -1,18 +1,33 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test'
 
-test.describe('다크모드 토글', () => {
-  test('토글 버튼이 클릭 시 html 클래스를 변경한다', async ({ page }) => {
-    await page.goto('/');
-    const html = page.locator('html');
-    const initialClass = (await html.getAttribute('class')) ?? '';
+test.describe('Theme toggle', () => {
+  test.beforeEach(async ({ context }) => {
+    await context.clearCookies()
+  })
 
-    const toggle = page.getByRole('button', { name: /다크모드|라이트모드/ }).first();
-    await toggle.click();
+  test('toggles theme from light to dark and persists across reload', async ({ page }) => {
+    await page.goto('/')
+    await page.evaluate(() => localStorage.clear())
+    await page.reload()
 
-    await expect
-      .poll(async () => (await html.getAttribute('class')) ?? '', {
-        timeout: 3000,
-      })
-      .not.toBe(initialClass);
-  });
-});
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+
+    const toggle = page.getByRole('button', { name: '다크 모드로 전환' })
+    await expect(toggle).toBeVisible()
+    await toggle.click()
+
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+
+    await expect(page.getByRole('button', { name: '라이트 모드로 전환' })).toBeVisible()
+
+    const stored = await page.evaluate(() => {
+      const raw = localStorage.getItem('app-store')
+      if (!raw) return null
+      return (JSON.parse(raw) as { state?: { theme?: string } }).state?.theme ?? null
+    })
+    expect(stored).toBe('dark')
+
+    await page.reload()
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+  })
+})

@@ -1,8 +1,10 @@
 import { forwardRef } from 'react';
-import type { HTMLAttributes, ReactNode } from 'react';
 
 import { cn } from '../utils/cn';
+
 import styles from './Divider.module.css';
+
+import type { HTMLAttributes, ReactNode } from 'react';
 
 export interface DividerProps extends HTMLAttributes<HTMLDivElement> {
   orientation?: 'horizontal' | 'vertical';
@@ -40,8 +42,6 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(function Divider
   return (
     <hr
       ref={ref as unknown as React.Ref<HTMLHRElement>}
-      role="separator"
-      aria-orientation="horizontal"
       className={cn(styles.horizontalBare, className)}
     />
   );

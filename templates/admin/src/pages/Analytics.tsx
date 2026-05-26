@@ -1,6 +1,5 @@
 import { Card, Col, Radio, Row } from 'antd';
 import { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import {
   Area,
   AreaChart,
@@ -20,11 +19,14 @@ import {
 } from 'recharts';
 
 import { useCategoryBreakdown, useChartSeries } from '@/hooks/useCharts';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useEffectiveTheme } from '@/hooks/useEffectiveTheme';
 
 const PIE_COLORS = ['#1677ff', '#52c41a', '#faad14', '#eb2f96', '#722ed1'];
 
 function Analytics() {
+  useDocumentTitle('분석 - Admin');
+
   const [range, setRange] = useState(30);
   const { data: series } = useChartSeries(range);
   const { data: categories } = useCategoryBreakdown();
@@ -34,9 +36,6 @@ function Analytics() {
 
   return (
     <div>
-      <Helmet>
-        <title>분석 - Admin</title>
-      </Helmet>
       <div
         style={{
           display: 'flex',

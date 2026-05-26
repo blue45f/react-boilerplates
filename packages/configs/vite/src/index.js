@@ -1,32 +1,74 @@
 import { resolve } from 'path';
 
-import react from '@vitejs/plugin-react';
+import babel from '@rolldown/plugin-babel';
+import react, { reactCompilerPreset } from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
-import tsconfigPaths from 'vite-tsconfig-paths';
+
+const createAlias = (root, aliases = {}) => ({
+  '@': resolve(root, 'src'),
+  '@components': resolve(root, 'src/components'),
+  '@pages': resolve(root, 'src/pages'),
+  '@hooks': resolve(root, 'src/hooks'),
+  '@services': resolve(root, 'src/services'),
+  '@utils': resolve(root, 'src/utils'),
+  '@types': resolve(root, 'src/types'),
+  '@store': resolve(root, 'src/store'),
+  '@assets': resolve(root, 'src/assets'),
+  '@features': resolve(root, 'src/features'),
+  '@router': resolve(root, 'src/router'),
+  '@i18n': resolve(root, 'src/i18n'),
+  ...aliases,
+});
+
+const createReactPlugins = ({ compiler = true } = {}) =>
+  compiler ? [react(), babel({ presets: [reactCompilerPreset()] })] : [react()];
 
 /**
  * React 앱을 위한 Vite 설정 생성 (SPA 모드)
  *
  * @param {Object} [options]
  * @param {string} [options.root]  - 프로젝트 루트 경로 (기본: process.cwd())
- * @param {number} [options.port]  - 개발 서버 포트 (기본: 3000)
+ * @param {number} [options.port]  - 개발 서버 포트 (기본: 5173)
  * @param {boolean} [options.open] - 개발 서버 자동 오픈 (기본: true)
  * @returns {import('vite').UserConfig}
  */
-export function createAppConfig({ root = process.cwd(), port = 3000, open = true } = {}) {
+export function createAppConfig({
+  root = process.cwd(),
+  port = 5173,
+  open = true,
+  aliases = {},
+  compiler = true,
+} = {}) {
   return {
-    plugins: [react(), tsconfigPaths()],
+    plugins: createReactPlugins({ compiler }),
     resolve: {
-      alias: {
-        '@': resolve(root, 'src'),
-      },
+      alias: createAlias(root, aliases),
     },
     build: {
+      target: 'es2022',
       sourcemap: true,
       rollupOptions: {
         output: {
-          manualChunks: {
-            vendor: ['react', 'react-dom'],
+          manualChunks(id) {
+            if (id.includes('node_modules/react-dom') || id.includes('node_modules/react/')) {
+              return 'vendor';
+            }
+            if (id.includes('node_modules/react-router')) {
+              return 'router';
+            }
+            if (id.includes('node_modules/@tanstack/react-query')) {
+              return 'query';
+            }
+            if (
+              id.includes('node_modules/react-hook-form') ||
+              id.includes('node_modules/@hookform/') ||
+              id.includes('node_modules/zod')
+            ) {
+              return 'form';
+            }
+            if (id.includes('node_modules/i18next') || id.includes('node_modules/react-i18next')) {
+              return 'i18n';
+            }
           },
         },
       },
@@ -53,16 +95,20 @@ export function createLibConfig({
   entry = 'src/index.ts',
   root = process.cwd(),
   external = [],
+  aliases = {},
+  compiler = true,
 } = {}) {
   return {
     plugins: [
-      react(),
-      tsconfigPaths(),
+      ...createReactPlugins({ compiler }),
       dts({
         insertTypesEntry: true,
         rollupTypes: true,
       }),
     ],
+    resolve: {
+      alias: createAlias(root, aliases),
+    },
     build: {
       lib: {
         entry: resolve(root, entry),

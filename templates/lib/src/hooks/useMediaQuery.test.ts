@@ -4,20 +4,22 @@ import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { useMediaQuery } from './useMediaQuery';
 
 describe('useMediaQuery', () => {
-  let listeners: Map<string, (event: MediaQueryListEvent) => void>;
+  let listeners: Map<string, () => void>;
+  let matches: Map<string, boolean>;
 
   beforeEach(() => {
     listeners = new Map();
+    matches = new Map();
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
       value: vi.fn().mockImplementation((query: string) => ({
-        matches: false,
+        matches: matches.get(query) ?? false,
         media: query,
         onchange: null,
         addEventListener: vi.fn((_, handler) => {
           listeners.set(query, handler);
         }),
-        removeEventListener: vi.fn((_, _handler) => {
+        removeEventListener: vi.fn(() => {
           listeners.delete(query);
         }),
         dispatchEvent: vi.fn(),
@@ -36,7 +38,8 @@ describe('useMediaQuery', () => {
     const handler = listeners.get('(min-width: 768px)');
     if (handler) {
       act(() => {
-        handler({ matches: true } as MediaQueryListEvent);
+        matches.set('(min-width: 768px)', true);
+        handler();
       });
     }
 

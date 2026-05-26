@@ -1,8 +1,10 @@
 import { forwardRef, useId } from 'react';
-import type { ReactNode, SelectHTMLAttributes } from 'react';
 
 import { cn } from '../utils/cn';
+
 import styles from './Select.module.css';
+
+import type { ReactNode, SelectHTMLAttributes } from 'react';
 
 export interface SelectOption {
   value: string;

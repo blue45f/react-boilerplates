@@ -21,7 +21,7 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.9.0",
     "@docusaurus/types": "^3.9.0",
-    "typescript": "^5.9.0"
+    "typescript": "catalog:"
   },
   "browserslist": {
     "production": [

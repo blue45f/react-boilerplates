@@ -1,36 +1,27 @@
-import { act, renderHook } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { renderHook, act } from '@testing-library/react'
+import { describe, it, expect, vi } from 'vitest'
 
-import { useDebounce } from './useDebounce';
+import useDebounce from './useDebounce'
 
 describe('useDebounce', () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
+  it('지정된 딜레이 후 값을 반환한다', () => {
+    vi.useFakeTimers()
 
-  afterEach(() => {
-    vi.useRealTimers();
-  });
+    const { result, rerender } = renderHook(({ value, delay }) => useDebounce(value, delay), {
+      initialProps: { value: 'initial', delay: 500 },
+    })
 
-  it('지정된 delay 이후에만 값이 갱신된다', () => {
-    const { result, rerender } = renderHook(
-      ({ value }: { value: string }) => useDebounce(value, 200),
-      { initialProps: { value: 'a' } }
-    );
+    expect(result.current).toBe('initial')
 
-    expect(result.current).toBe('a');
-
-    rerender({ value: 'ab' });
-    expect(result.current).toBe('a');
+    rerender({ value: 'updated', delay: 500 })
+    expect(result.current).toBe('initial')
 
     act(() => {
-      vi.advanceTimersByTime(199);
-    });
-    expect(result.current).toBe('a');
+      vi.advanceTimersByTime(500)
+    })
 
-    act(() => {
-      vi.advanceTimersByTime(1);
-    });
-    expect(result.current).toBe('ab');
-  });
-});
+    expect(result.current).toBe('updated')
+
+    vi.useRealTimers()
+  })
+})

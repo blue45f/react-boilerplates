@@ -1,8 +1,10 @@
 import { forwardRef } from 'react';
-import type { HTMLAttributes } from 'react';
 
 import { cn } from '../utils/cn';
+
 import styles from './Spinner.module.css';
+
+import type { HTMLAttributes } from 'react';
 
 export interface SpinnerProps extends HTMLAttributes<HTMLDivElement> {
   size?: 'sm' | 'md' | 'lg';

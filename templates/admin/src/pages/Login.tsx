@@ -3,10 +3,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Alert, Button, Card, Form, Input, Typography } from 'antd';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Helmet } from 'react-helmet-async';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { mockApi } from '@/lib/mock';
 import { useToast } from '@/lib/toast';
 import { useAuthStore } from '@/stores/useAuthStore';
@@ -23,6 +23,8 @@ interface LocationState {
 }
 
 function Login() {
+  useDocumentTitle('로그인 - Admin');
+
   const navigate = useNavigate();
   const location = useLocation();
   const toast = useToast();
@@ -68,9 +70,6 @@ function Login() {
         background: 'linear-gradient(135deg, #1677ff22 0%, #722ed122 100%)',
       }}
     >
-      <Helmet>
-        <title>로그인 - Admin</title>
-      </Helmet>
       <Card style={{ width: '100%', maxWidth: 400 }}>
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
           <Typography.Title level={3} style={{ marginBottom: 4 }}>

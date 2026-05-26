@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 
 import App from './App';
@@ -31,15 +30,13 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <HelmetProvider>
-      <QueryClientProvider client={queryClient}>
-        <ThemedProviders>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </ThemedProviders>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </HelmetProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemedProviders>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ThemedProviders>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   </StrictMode>
 );

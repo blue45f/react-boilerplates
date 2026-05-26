@@ -1,8 +1,10 @@
 import { forwardRef, useState } from 'react';
-import type { HTMLAttributes } from 'react';
 
 import { cn } from '../utils/cn';
+
 import styles from './Avatar.module.css';
+
+import type { HTMLAttributes } from 'react';
 
 export interface AvatarProps extends HTMLAttributes<HTMLSpanElement> {
   src?: string;

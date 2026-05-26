@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+
 import type { RefObject } from 'react';
 
 /** 전역(window/document) 또는 ref 요소에 이벤트 리스너를 등록하는 훅 */

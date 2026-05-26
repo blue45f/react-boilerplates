@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import { App as AntdApp } from 'antd';
-import { HelmetProvider } from 'react-helmet-async';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 
@@ -10,15 +9,13 @@ import Users from './Users';
 function renderUsers() {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
-    <HelmetProvider>
-      <QueryClientProvider client={qc}>
-        <AntdApp>
-          <MemoryRouter>
-            <Users />
-          </MemoryRouter>
-        </AntdApp>
-      </QueryClientProvider>
-    </HelmetProvider>
+    <QueryClientProvider client={qc}>
+      <AntdApp>
+        <MemoryRouter>
+          <Users />
+        </MemoryRouter>
+      </AntdApp>
+    </QueryClientProvider>
   );
 }
 

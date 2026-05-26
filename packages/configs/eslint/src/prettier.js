@@ -1,4 +1,4 @@
-import prettierConfig from 'eslint-config-prettier';
+import prettierConfig from 'eslint-config-prettier/flat';
 
 /**
  * Prettier와 충돌하는 ESLint 룰을 비활성화하는 설정.
@@ -11,10 +11,4 @@ import prettierConfig from 'eslint-config-prettier';
  *
  * @type {import('eslint').Linter.FlatConfig[]}
  */
-export default [
-  {
-    rules: {
-      ...prettierConfig.rules,
-    },
-  },
-];
+export default [prettierConfig];

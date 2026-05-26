@@ -1,8 +1,10 @@
 import { forwardRef } from 'react';
-import type { HTMLAttributes } from 'react';
 
 import { cn } from '../utils/cn';
+
 import styles from './Progress.module.css';
+
+import type { HTMLAttributes } from 'react';
 
 export interface ProgressProps extends HTMLAttributes<HTMLDivElement> {
   value?: number;

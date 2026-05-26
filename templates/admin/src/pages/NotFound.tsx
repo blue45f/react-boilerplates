@@ -1,15 +1,15 @@
 import { Button, Result } from 'antd';
-import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
+
 function NotFound() {
+  useDocumentTitle('404 - Admin');
+
   const navigate = useNavigate();
 
   return (
     <>
-      <Helmet>
-        <title>404 - Admin</title>
-      </Helmet>
       <Result
         status="404"
         title="404"

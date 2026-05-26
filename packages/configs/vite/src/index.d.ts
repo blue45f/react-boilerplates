@@ -3,10 +3,14 @@ import type { UserConfig } from 'vite';
 export interface AppConfigOptions {
   /** 프로젝트 루트 경로. 기본: process.cwd() */
   root?: string;
-  /** 개발 서버 포트. 기본: 3000 */
+  /** 개발 서버 포트. 기본: 5173 */
   port?: number;
   /** 개발 서버 자동 오픈. 기본: true */
   open?: boolean;
+  /** 기본 alias에 추가하거나 덮어쓸 alias */
+  aliases?: Record<string, string>;
+  /** React Compiler preset 활성화 여부. 기본: true */
+  compiler?: boolean;
 }
 
 export interface LibConfigOptions {
@@ -18,6 +22,10 @@ export interface LibConfigOptions {
   root?: string;
   /** 추가 external 의존성 */
   external?: string[];
+  /** 기본 alias에 추가하거나 덮어쓸 alias */
+  aliases?: Record<string, string>;
+  /** React Compiler preset 활성화 여부. 기본: true */
+  compiler?: boolean;
 }
 
 export function createAppConfig(options?: AppConfigOptions): UserConfig;

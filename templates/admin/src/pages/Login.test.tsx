@@ -2,25 +2,23 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { App as AntdApp } from 'antd';
-import { HelmetProvider } from 'react-helmet-async';
 import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import Login from './Login';
+
 import { useAuthStore } from '@/stores/useAuthStore';
 
 function renderLogin() {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
-    <HelmetProvider>
-      <QueryClientProvider client={qc}>
-        <AntdApp>
-          <MemoryRouter>
-            <Login />
-          </MemoryRouter>
-        </AntdApp>
-      </QueryClientProvider>
-    </HelmetProvider>
+    <QueryClientProvider client={qc}>
+      <AntdApp>
+        <MemoryRouter>
+          <Login />
+        </MemoryRouter>
+      </AntdApp>
+    </QueryClientProvider>
   );
 }
 

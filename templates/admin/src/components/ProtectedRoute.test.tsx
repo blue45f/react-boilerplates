@@ -1,9 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { App as AntdApp } from 'antd';
-import { beforeEach, describe, expect, it } from 'vitest';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import ProtectedRoute from './ProtectedRoute';
+
 import { useAuthStore } from '@/stores/useAuthStore';
 
 function renderApp(initialEntry: string) {

@@ -1,7 +1,7 @@
 {
   "name": "create-react-bp",
   "version": "1.1.0",
-  "description": "React 앱 생성 CLI (Chakra UI 또는 Ant Design Admin 템플릿)",
+  "description": "React 앱 생성 CLI (App 또는 Ant Design Admin 템플릿)",
   "license": "MIT",
   "type": "module",
   "keywords": [
@@ -48,7 +48,7 @@
     "@types/node": "^24.0.0",
     "@types/prompts": "^2.4.9",
     "tsup": "^8.5.0",
-    "typescript": "^5.9.0",
-    "vitest": "^3.2.0"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

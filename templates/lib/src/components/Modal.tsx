@@ -1,10 +1,12 @@
-import { forwardRef, useCallback, useEffect, useId } from 'react';
-import type { HTMLAttributes, ReactNode } from 'react';
+import { forwardRef, useEffect, useId, useImperativeHandle } from 'react';
 import { createPortal } from 'react-dom';
 
-import { cn } from '../utils/cn';
 import { useFocusTrap } from '../hooks/useFocusTrap';
+import { cn } from '../utils/cn';
+
 import styles from './Modal.module.css';
+
+import type { HTMLAttributes, ReactNode } from 'react';
 
 export interface ModalProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   open: boolean;
@@ -34,10 +36,11 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
     children,
     ...props
   },
-  _ref
+  ref
 ) {
   const trapRef = useFocusTrap<HTMLDivElement>(open);
   const titleId = useId();
+  useImperativeHandle(ref, () => trapRef.current as HTMLDivElement, [trapRef]);
 
   useEffect(() => {
     if (!open || !closeOnEsc) return;
@@ -60,19 +63,20 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
     };
   }, [open]);
 
-  const handleOverlayClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!closeOnBackdrop) return;
-      if (e.target === e.currentTarget) onClose();
-    },
-    [closeOnBackdrop, onClose]
-  );
-
   if (!open || typeof document === 'undefined') return null;
   const target = container ?? document.body;
 
   return createPortal(
-    <div className={styles.overlay} onClick={handleOverlayClick} data-testid="modal-overlay">
+    <div className={styles.overlay}>
+      {closeOnBackdrop && (
+        <button
+          type="button"
+          className={styles.backdrop}
+          aria-label="모달 닫기"
+          onClick={onClose}
+          data-testid="modal-overlay"
+        />
+      )}
       <div
         ref={trapRef}
         role="dialog"

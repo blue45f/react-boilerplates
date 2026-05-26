@@ -55,7 +55,7 @@ function UserFormModal({ open, title, initialValues, confirmLoading, onCancel, o
           label="이름"
           rules={[{ required: true, message: '이름을 입력하세요' }]}
         >
-          <Input placeholder="홍길동" autoFocus />
+          <Input placeholder="홍길동" />
         </Form.Item>
         <Form.Item
           name="email"

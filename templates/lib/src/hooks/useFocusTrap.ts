@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+
 import type { RefObject } from 'react';
 
 const FOCUSABLE_SELECTOR = [
@@ -11,7 +12,7 @@ const FOCUSABLE_SELECTOR = [
 ].join(',');
 
 /** 컨테이너 내부로 포커스 이동을 가두는 훅 (Modal 등에서 사용) */
-export function useFocusTrap<T extends HTMLElement>(active: boolean): RefObject<T> {
+export function useFocusTrap<T extends HTMLElement>(active: boolean): RefObject<T | null> {
   const ref = useRef<T>(null);
 
   useEffect(() => {

@@ -4,22 +4,25 @@ sidebar_position: 1
 
 # App 템플릿
 
-Chakra UI 3 + React Router 7 기반의 일반 웹 앱 템플릿입니다. 다크모드, react-hook-form + zod 폼 검증, MSW 브라우저 워커가 사전 구성되어 있습니다.
+`react-scaffolding`의 앱 아키텍처를 기준으로 정렬한 일반 웹 앱 템플릿입니다. CSS Modules, React Router 7 Data Router, TanStack Query, Zustand, i18next, React Compiler, Storybook, Vitest, Playwright 테스트가 함께 구성됩니다.
 
 ## 기술 스택
 
-| 기술                  | 버전  | 용도                         |
-| --------------------- | ----- | ---------------------------- |
-| React                 | 19    | UI 라이브러리                |
-| Vite                  | 6     | 빌드 도구                    |
-| Chakra UI             | 3     | UI 컴포넌트 + 디자인 토큰    |
-| React Router          | 7     | 클라이언트 라우팅            |
-| Tanstack Query        | 5     | 서버 상태 (데이터 페칭/캐싱) |
-| Zustand               | 5     | 클라이언트 상태              |
-| react-hook-form + zod | 7 / 3 | 폼 상태 + 스키마 검증        |
-| MSW                   | 2     | API mocking (브라우저/노드)  |
-| Vitest                | 3     | 단위 테스트                  |
-| Playwright            | 1     | E2E 테스트                   |
+| 기술                     | 버전  | 용도                       |
+| ------------------------ | ----- | -------------------------- |
+| React                    | 19    | UI 라이브러리              |
+| TypeScript               | 6     | 엄격한 타입 안전성         |
+| Vite                     | 8     | Rolldown 기반 빌드/HMR     |
+| React Router Data Router | 7     | lazy route module 라우팅   |
+| CSS Modules              | -     | 컴포넌트 스코프 스타일링   |
+| TanStack Query           | 5     | 서버 상태                  |
+| Zustand                  | 5     | 클라이언트 상태            |
+| i18next + react-i18next  | 26/17 | 다국어 처리                |
+| react-hook-form + zod    | 7/4   | 폼 상태 + 스키마 검증      |
+| React Compiler           | 1     | 렌더링 최적화 컴파일러     |
+| Vitest                   | 4     | 단위/통합 테스트           |
+| Playwright               | 1     | E2E, 접근성, 반응형 테스트 |
+| Storybook                | 10    | 컴포넌트 카탈로그          |
 
 ## 생성 방법
 
@@ -28,133 +31,92 @@ npx create-react-bp my-app
 npx create-react-bp my-app --template app
 ```
 
-## 디렉토리 구조 (요약)
+## 디렉토리 구조
 
 ```
 my-app/
 ├── src/
-│   ├── main.tsx              # Providers (Chakra / Query / Router) 설정
-│   ├── App.tsx               # 라우트 (코드 스플리팅)
-│   ├── components/           # Layout, ErrorBoundary 등
-│   ├── pages/                # Home, About, Posts, Contact, Settings, NotFound
-│   ├── hooks/                # usePosts 등 query 훅
-│   ├── stores/               # Zustand (useAppStore)
-│   ├── theme/                # 디자인 토큰, 다크모드 설정
-│   ├── mocks/                # MSW handlers + browser worker
-│   └── lib/                  # api 클라이언트 등
-├── e2e/                      # Playwright 스펙
-├── public/                   # 정적 자산
-├── index.html
+│   ├── app/                 # AppProviders, QueryClient factory
+│   ├── assets/              # 글로벌 스타일과 정적 자원
+│   ├── components/
+│   │   ├── common/          # Button, Input, Modal, Toast 등 범용 컴포넌트
+│   │   ├── layout/          # Header, Footer
+│   │   └── route/           # ProtectedRoute
+│   ├── features/            # 도메인 모듈 (schema, api, queries, store)
+│   ├── hooks/               # 커스텀 훅
+│   ├── i18n/                # i18next 설정과 ko/en 로케일
+│   ├── pages/               # 라우트 단위 화면
+│   ├── router/              # Data Router route object
+│   ├── services/            # API 클라이언트
+│   ├── store/               # Zustand 전역 상태
+│   ├── test/                # Vitest setup
+│   ├── types/               # 공유 타입
+│   └── utils/               # 순수 유틸리티
+├── e2e/                     # Playwright 테스트
+├── .storybook/              # Storybook 설정
+├── docs/                    # 아키텍처/기여 문서
 ├── vite.config.ts
-└── playwright.config.ts
+├── playwright.config.ts
+└── package.json
 ```
 
-## 페이지
+## 아키텍처 원칙
 
-| 경로        | 페이지   | 설명                                           |
-| ----------- | -------- | ---------------------------------------------- |
-| `/`         | Home     | 인트로                                         |
-| `/about`    | About    | 소개                                           |
-| `/posts`    | Posts    | Tanstack Query 데이터 페칭 예시 (MSW로 mocked) |
-| `/contact`  | Contact  | **react-hook-form + zod** 폼 검증 예시         |
-| `/settings` | Settings | 사용자 설정 (테마 토글 포함)                   |
-| `*`         | NotFound | 404                                            |
+| 영역            | 원칙                                                                                      |
+| --------------- | ----------------------------------------------------------------------------------------- |
+| 앱 조립         | `src/main.tsx`는 mount만 담당하고 Provider 조립은 `src/app/AppProviders.tsx`에 둡니다.    |
+| 라우팅          | React Router Data Router의 route object와 `lazy` route module을 사용합니다.               |
+| 서버 상태       | query key, query hook, mutation hook은 도메인별 `features/<domain>/queries.ts`에 둡니다.  |
+| 클라이언트 상태 | 앱 전역 상태는 `src/store`, 도메인 UI 상태는 해당 feature 안의 작은 store로 분리합니다.   |
+| 다국어          | ko/en 로케일 키 동기화를 `src/i18n/locales.test.ts`로 검증합니다.                         |
+| 품질 게이트     | format, lint, typecheck, test, build, security audit을 `verify`/`verify:push`로 묶습니다. |
 
-## 다크모드
+## 라우트
 
-Chakra UI 3의 color mode를 사용합니다.
+| 경로     | 페이지   | 설명                                           |
+| -------- | -------- | ---------------------------------------------- |
+| `/`      | Home     | 인트로와 주요 기능                             |
+| `/about` | About    | 템플릿 구조 설명                               |
+| `/todos` | Todos    | TanStack Query, zod schema, feature store 예시 |
+| `*`      | NotFound | 404                                            |
 
-```tsx
-import { useColorMode } from '@chakra-ui/react';
+## 테스트 자산
 
-const { colorMode, toggleColorMode } = useColorMode();
-```
+App 템플릿은 테스트 코드를 최대한 포함합니다.
 
-테마 토큰은 `src/theme/`에서 확장합니다. 사용자 선택은 localStorage에 보존됩니다.
-
-## react-hook-form + zod
-
-`/contact` 페이지에 입력 검증을 위한 패턴이 포함되어 있습니다.
-
-```tsx
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-
-const schema = z.object({
-  email: z.string().email('올바른 이메일을 입력하세요'),
-  message: z.string().min(1, '내용은 필수입니다'),
-});
-type FormValues = z.infer<typeof schema>;
-
-const {
-  register,
-  handleSubmit,
-  formState: { errors },
-} = useForm<FormValues>({
-  resolver: zodResolver(schema),
-});
-```
-
-스키마는 단일 소스로 두어 클라이언트 검증과 서버 응답 파싱 모두에 재사용할 수 있습니다.
-
-## MSW (API Mocking)
-
-`src/mocks/` 디렉토리에 핸들러와 워커가 정의되어 있습니다.
-
-- **브라우저(개발용)**: `src/mocks/browser.ts` — `worker.start()`로 dev에서 네트워크 가로채기
-- **노드(테스트용)**: `src/mocks/server.ts` — Vitest setup에서 `server.listen()`
-
-```bash
-# MSW 서비스 워커 (한 번만 실행)
-npx msw init public/ --save
-```
-
-`main.tsx`에서 dev 모드일 때만 워커를 시작합니다.
-
-```ts
-if (import.meta.env.DEV) {
-  const { worker } = await import('@/mocks/browser');
-  await worker.start({ onUnhandledRequest: 'bypass' });
-}
-```
-
-## 데이터 페칭 (Tanstack Query)
-
-```ts
-// src/hooks/usePosts.ts
-import { useQuery } from '@tanstack/react-query';
-
-export function usePosts() {
-  return useQuery({
-    queryKey: ['posts'],
-    queryFn: () => fetch('/api/posts').then((r) => r.json()),
-  });
-}
-```
-
-`QueryClientProvider`는 `main.tsx`에 이미 구성되어 있습니다.
+| 범위     | 예시                                                                      |
+| -------- | ------------------------------------------------------------------------- |
+| 컴포넌트 | Button, Input, Modal, Toast, Header, Footer 등                            |
+| 훅       | useDebounce, useLocalStorage, useMediaQuery, useTheme, useFetch 등        |
+| 앱 조립  | QueryClient factory, AppProviders, 라우터                                 |
+| 도메인   | todos api/schema/query/store                                              |
+| i18n     | ko/en 로케일 키 동기화                                                    |
+| E2E      | navigation, theme, accessibility, keyboard, responsive, visual regression |
 
 ## 명령어
 
-| 명령어               | 설명                                 |
-| -------------------- | ------------------------------------ |
-| `pnpm dev`           | 개발 서버 (포트 3000, MSW 자동 시작) |
-| `pnpm build`         | 프로덕션 빌드                        |
-| `pnpm preview`       | 빌드 미리보기                        |
-| `pnpm test`          | 단위 테스트 (Vitest)                 |
-| `pnpm test:coverage` | 커버리지                             |
-| `pnpm test:e2e`      | E2E (Playwright headless)            |
-| `pnpm test:e2e:ui`   | Playwright UI 모드                   |
-| `pnpm lint`          | ESLint                               |
+| 명령어                 | 설명                                 |
+| ---------------------- | ------------------------------------ |
+| `pnpm dev`             | Vite 개발 서버                       |
+| `pnpm build`           | 타입 체크 후 프로덕션 빌드           |
+| `pnpm preview`         | 빌드 미리보기                        |
+| `pnpm lint`            | ESLint 검사                          |
+| `pnpm lint:security`   | ESLint 보안 규칙 + dependency audit  |
+| `pnpm typecheck`       | TypeScript 타입 검사                 |
+| `pnpm test`            | Vitest watch 모드                    |
+| `pnpm test:run`        | Vitest 단일 실행                     |
+| `pnpm test:coverage`   | 커버리지                             |
+| `pnpm test:i18n`       | 로케일 키 동기화 테스트              |
+| `pnpm test:e2e`        | Playwright E2E                       |
+| `pnpm storybook`       | Storybook 개발 서버                  |
+| `pnpm build-storybook` | Storybook 정적 빌드                  |
+| `pnpm verify`          | format, lint, typecheck, test, build |
+| `pnpm verify:push`     | verify + 보안 검사                   |
 
 ## 환경 변수
 
-`.env`로 관리하며 `VITE_` 접두사가 붙은 변수만 클라이언트에서 노출됩니다.
-
 ```bash
 VITE_API_URL=http://localhost:8080/api
-VITE_APP_TITLE=My App
 ```
 
-`src/vite-env.d.ts`에 `ImportMetaEnv` 타입을 선언해 타입 안전하게 사용하세요.
+`src/services/api.ts`의 기본 API URL로 사용됩니다. 값이 없으면 `/api`를 사용합니다.
