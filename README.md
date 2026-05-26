@@ -82,10 +82,13 @@ pnpm lint
 pnpm test
 pnpm test:coverage
 pnpm storybook                  # react-lib 스토리북
-pnpm e2e                        # 템플릿 Playwright 테스트
+pnpm install:templates         # 템플릿 의존성 설치 (워크스페이스 제외)
+pnpm e2e                        # 템플릿 E2E 테스트 실행(기존 템플릿 node_modules가 존재할 때)
 pnpm e2e:app                    # App 템플릿 E2E만 실행
 pnpm e2e:admin                  # Admin 템플릿 E2E만 실행
-pnpm verify:templates           # 템플릿(App/Admin/Lib) 전체 품질 게이트
+pnpm e2e:bootstrap              # App/Admin E2E 실행 전 템플릿 의존성 설치 포함
+pnpm verify:templates           # 템플릿(App/Admin/Lib) 전체 품질 게이트(의존성 선행 가정)
+pnpm verify:templates:bootstrap  # 템플릿 의존성 설치 + 품질 게이트
 pnpm verify                     # 워크스페이스 + 템플릿 전체 품질 게이트
 pnpm verify:push                # verify + 템플릿 보안 감사
 pnpm format                     # prettier

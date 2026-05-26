@@ -114,7 +114,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Install template deps
         working-directory: templates/${{ matrix.template }}
-        run: pnpm install --ignore-workspace --no-frozen-lockfile
+        run: pnpm install --ignore-workspace --frozen-lockfile
       - name: Install Playwright browsers
         working-directory: templates/${{ matrix.template }}
         run: pnpm run test:e2e:install
@@ -127,3 +127,30 @@ jobs:
           name: playwright-report-${{ matrix.template }}
           path: templates/${{ matrix.template }}/playwright-report
           retention-days: 7
+
+  template-verify:
+    name: Templates Verify (${{ matrix.template }})
+    runs-on: ubuntu-latest
+    needs: [build]
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        template: [app, admin, lib]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install root deps
+        run: pnpm install --frozen-lockfile
+      - name: Install template deps
+        working-directory: templates/${{ matrix.template }}
+        run: pnpm install --ignore-workspace --frozen-lockfile
+      - name: Run template verify
+        working-directory: templates/${{ matrix.template }}
+        run: pnpm run verify
