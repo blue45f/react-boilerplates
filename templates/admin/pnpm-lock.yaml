@@ -24,7 +24,7 @@ importers:
         specifier: ^1.11.18
         version: 1.11.20
       ky:
-        specifier: ^1.11.0
+        specifier: ^1.14.3
         version: 1.14.3
       react:
         specifier: ^19.2.6
