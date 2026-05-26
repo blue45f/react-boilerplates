@@ -36,7 +36,7 @@
     "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm verify:templates:bootstrap",
     "verify:push": "pnpm verify && pnpm audit:security:templates",
     "audit:security:templates": "pnpm --dir templates/app run lint:security && pnpm --dir templates/admin run lint:security && pnpm --dir templates/lib run lint:security",
-    "clean": "pnpm -r run clean && rm -rf node_modules",
+    "clean": "pnpm -r run clean && rm -rf node_modules templates/app/node_modules templates/admin/node_modules templates/lib/node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml,css}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml,css}\"",
     "changeset": "changeset",
