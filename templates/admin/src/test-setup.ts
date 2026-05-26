@@ -32,6 +32,20 @@ beforeAll(() => {
   if (typeof window !== 'undefined' && typeof window.getComputedStyle === 'function') {
     const original = window.getComputedStyle.bind(window);
     window.getComputedStyle = ((el: Element, pseudo?: string | null) => {
+      if (pseudo) {
+        return {
+          getPropertyValue: () => '',
+          getPropertyPriority: () => '',
+          item: () => '',
+          removeProperty: () => '',
+          setProperty: () => {},
+          getPropertyValueAsString: () => '',
+          getPropertyShorthand: () => '',
+          setPropertyPriority: () => '',
+          length: 0,
+        } as unknown as CSSStyleDeclaration;
+      }
+
       try {
         return original(el, pseudo ?? undefined);
       } catch {
