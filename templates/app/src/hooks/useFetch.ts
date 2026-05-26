@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import api from '@services/api'
+import { useQuery } from '@tanstack/react-query'
 
 import type { AsyncStatus } from '@/types/index'
 
@@ -10,64 +11,40 @@ interface UseFetchResult<T> {
   data: T | null
   status: AsyncStatus
   error: string | null
-  refetch: () => void
+  refetch: () => Promise<void>
 }
 
 function useFetch<T>(url: string, options: UseFetchOptions = {}): UseFetchResult<T> {
   const { enabled = true, ...fetchOptions } = options
-  const [data, setData] = useState<T | null>(null)
-  const [status, setStatus] = useState<AsyncStatus>('idle')
-  const [error, setError] = useState<string | null>(null)
-  const abortRef = useRef<AbortController | null>(null)
-  const fetchOptionsRef = useRef(fetchOptions)
-
-  useEffect(() => {
-    fetchOptionsRef.current = fetchOptions
+  const query = useQuery({
+    queryKey: ['fetch', url, fetchOptions],
+    enabled,
+    queryFn: ({ signal }) => api.get<T>(url, { ...fetchOptions, signal }).then((res) => res.data),
+    retry: false,
+    staleTime: 0,
+    gcTime: 0,
   })
 
-  const fetchData = useCallback(async () => {
-    if (!enabled) return
+  const isLoading = query.fetchStatus === 'fetching' && query.isPending
+  const status: AsyncStatus = query.isError
+    ? 'error'
+    : query.isSuccess
+      ? 'success'
+      : isLoading
+        ? 'loading'
+        : 'idle'
 
-    // Abort any in-flight request before starting a new one
-    abortRef.current?.abort()
-    const controller = new AbortController()
-    abortRef.current = controller
+  const errorMessage =
+    query.error instanceof Error ? query.error.message : query.error ? String(query.error) : null
 
-    setStatus('loading')
-    setError(null)
-
-    try {
-      const response = await fetch(url, { ...fetchOptionsRef.current, signal: controller.signal })
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
-      }
-
-      const json = (await response.json()) as T
-      setData(json)
-      setStatus('success')
-    } catch (err) {
-      if (err instanceof DOMException && err.name === 'AbortError') {
-        return
-      }
-      const message = err instanceof Error ? err.message : '요청 중 오류가 발생했습니다.'
-      setError(message)
-      setStatus('error')
-    }
-  }, [url, enabled])
-
-  useEffect(() => {
-    const handle = queueMicrotask(() => {
-      void fetchData()
-    })
-    return () => {
-      // queueMicrotask is not cancelable; the abort handles in-flight requests
-      void handle
-      abortRef.current?.abort()
-    }
-  }, [fetchData])
-
-  return { data, status, error, refetch: fetchData }
+  return {
+    data: query.data ?? null,
+    status,
+    error: errorMessage,
+    refetch: async () => {
+      await query.refetch({ cancelRefetch: true })
+    },
+  }
 }
 
 export default useFetch

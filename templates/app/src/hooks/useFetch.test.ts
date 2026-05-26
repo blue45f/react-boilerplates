@@ -1,9 +1,18 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { renderHook, waitFor, act } from '@testing-library/react'
+import { createElement, type ReactNode } from 'react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 import useFetch from './useFetch'
 
 const fetchMock = vi.fn()
+
+function renderHookWithProvider<T>(hook: () => T) {
+  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+  const wrapper = ({ children }: { children: ReactNode }) =>
+    createElement(QueryClientProvider, { client }, children)
+  return renderHook(hook, { wrapper })
+}
 
 beforeEach(() => {
   fetchMock.mockReset()
@@ -15,33 +24,29 @@ afterEach(() => {
 })
 
 function mockOk<T>(payload: T) {
-  return {
-    ok: true,
+  return new Response(JSON.stringify(payload), {
     status: 200,
-    statusText: 'OK',
-    json: () => Promise.resolve(payload),
-  } as unknown as Response
+    headers: { 'content-type': 'application/json' },
+  })
 }
 
 function mockFail(status = 500, statusText = 'Server Error') {
-  return {
-    ok: false,
+  return new Response(JSON.stringify({ status }), {
     status,
     statusText,
-    json: () => Promise.resolve({}),
-  } as unknown as Response
+  })
 }
 
 describe('useFetch', () => {
   it('starts in idle when not enabled', () => {
-    const { result } = renderHook(() => useFetch('/x', { enabled: false }))
+    const { result } = renderHookWithProvider(() => useFetch('/x', { enabled: false }))
     expect(result.current.status).toBe('idle')
     expect(fetchMock).not.toHaveBeenCalled()
   })
 
   it('transitions to success and exposes data', async () => {
     fetchMock.mockResolvedValue(mockOk({ hello: 'world' }))
-    const { result } = renderHook(() => useFetch<{ hello: string }>('/api'))
+    const { result } = renderHookWithProvider(() => useFetch<{ hello: string }>('/api'))
 
     await waitFor(() => expect(result.current.status).toBe('success'))
     expect(result.current.data).toEqual({ hello: 'world' })
@@ -50,15 +55,15 @@ describe('useFetch', () => {
 
   it('transitions to error on non-2xx', async () => {
     fetchMock.mockResolvedValue(mockFail(404, 'Not Found'))
-    const { result } = renderHook(() => useFetch('/api'))
+    const { result } = renderHookWithProvider(() => useFetch('/api'))
 
     await waitFor(() => expect(result.current.status).toBe('error'))
-    expect(result.current.error).toContain('HTTP 404')
+    expect(result.current.error).toContain('HTTP error! status: 404')
   })
 
   it('transitions to error on network error', async () => {
     fetchMock.mockRejectedValue(new Error('network down'))
-    const { result } = renderHook(() => useFetch('/api'))
+    const { result } = renderHookWithProvider(() => useFetch('/api'))
 
     await waitFor(() => expect(result.current.status).toBe('error'))
     expect(result.current.error).toBe('network down')
@@ -66,24 +71,24 @@ describe('useFetch', () => {
 
   it('uses fallback error message for non-Error rejection', async () => {
     fetchMock.mockRejectedValue('nope')
-    const { result } = renderHook(() => useFetch('/api'))
+    const { result } = renderHookWithProvider(() => useFetch('/api'))
 
     await waitFor(() => expect(result.current.status).toBe('error'))
-    expect(result.current.error).toBe('요청 중 오류가 발생했습니다.')
+    expect(result.current.error).toBe('Network error')
   })
 
   it('aborts the in-flight request on unmount and does not transition to error', async () => {
     let abortedSignal: AbortSignal | undefined
-    fetchMock.mockImplementation((_url: string, init?: RequestInit) => {
-      abortedSignal = init?.signal ?? undefined
+    fetchMock.mockImplementation((input: RequestInfo) => {
+      abortedSignal = input instanceof Request ? input.signal : undefined
       return new Promise((_resolve, reject) => {
-        init?.signal?.addEventListener('abort', () => {
+        abortedSignal?.addEventListener('abort', () => {
           reject(new DOMException('Aborted', 'AbortError'))
         })
       })
     })
 
-    const { result, unmount } = renderHook(() => useFetch('/api'))
+    const { result, unmount } = renderHookWithProvider(() => useFetch('/api'))
 
     await waitFor(() => expect(result.current.status).toBe('loading'))
     expect(abortedSignal).toBeDefined()
@@ -100,7 +105,7 @@ describe('useFetch', () => {
 
   it('refetch triggers a new fetch', async () => {
     fetchMock.mockResolvedValue(mockOk({ n: 1 }))
-    const { result } = renderHook(() => useFetch('/api'))
+    const { result } = renderHookWithProvider(() => useFetch('/api'))
 
     await waitFor(() => expect(result.current.status).toBe('success'))
     expect(fetchMock).toHaveBeenCalledTimes(1)

@@ -1,14 +1,38 @@
+import ky from 'ky'
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
 
-interface RequestOptions extends RequestInit {
-  params?: Record<string, string>
+function resolveBaseUrl(): string {
+  const base = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL
+
+  if (/^https?:\/\//i.test(base)) {
+    return base
+  }
+
+  const origin = typeof window === 'undefined' ? 'http://localhost' : window.location.origin
+
+  return new URL(base || '/', origin).toString().replace(/\/$/, '')
 }
+
+const RESOLVED_API_BASE_URL = resolveBaseUrl()
 
 interface ApiResponse<T> {
   data: T
   status: number
   message?: string
 }
+
+interface RequestOptions extends RequestInit {
+  params?: Record<string, string>
+}
+
+interface KyRequestConfig extends Omit<RequestOptions, 'headers'> {
+  url: string
+  headers: Record<string, string>
+}
+
+type RequestInterceptor = (config: KyRequestConfig) => KyRequestConfig
+type ResponseInterceptor = (response: Response) => Response | Promise<Response>
 
 class ApiError extends Error {
   constructor(
@@ -20,17 +44,31 @@ class ApiError extends Error {
   }
 }
 
-type RequestInterceptor = (config: RequestInit & { url: string }) => RequestInit & { url: string }
-type ResponseInterceptor = (response: Response) => Response | Promise<Response>
-
 const requestInterceptors: RequestInterceptor[] = []
 const responseInterceptors: ResponseInterceptor[] = []
+
+const apiClient = ky.create({
+  throwHttpErrors: false,
+})
+
+function toHeaderRecord(headers?: HeadersInit): Record<string, string> {
+  if (!headers) return {}
+  if (headers instanceof Headers) {
+    return Object.fromEntries(headers.entries())
+  }
+  if (Array.isArray(headers)) {
+    return Object.fromEntries(headers)
+  }
+  return { ...headers }
+}
 
 function addRequestInterceptor(interceptor: RequestInterceptor) {
   requestInterceptors.push(interceptor)
   return () => {
     const index = requestInterceptors.indexOf(interceptor)
-    if (index > -1) requestInterceptors.splice(index, 1)
+    if (index > -1) {
+      requestInterceptors.splice(index, 1)
+    }
   }
 }
 
@@ -38,70 +76,86 @@ function addResponseInterceptor(interceptor: ResponseInterceptor) {
   responseInterceptors.push(interceptor)
   return () => {
     const index = responseInterceptors.indexOf(interceptor)
-    if (index > -1) responseInterceptors.splice(index, 1)
+    if (index > -1) {
+      responseInterceptors.splice(index, 1)
+    }
   }
+}
+
+function normalizeRequestConfig(endpoint: string, options: RequestOptions = {}): KyRequestConfig {
+  const { params, headers, body, method, ...base } = options
+  const normalizedEndpoint = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint
+  const fullUrl = normalizedEndpoint
+    ? `${RESOLVED_API_BASE_URL}/${normalizedEndpoint}`
+    : RESOLVED_API_BASE_URL
+
+  return {
+    ...base,
+    url: fullUrl,
+    method: method ?? 'GET',
+    params,
+    headers: {
+      'Content-Type': 'application/json',
+      ...toHeaderRecord(headers),
+    },
+    body,
+  }
+}
+
+function addInterceptors(config: KyRequestConfig): KyRequestConfig {
+  let requestConfig = config
+  for (const interceptor of requestInterceptors) {
+    requestConfig = interceptor(requestConfig)
+  }
+  return requestConfig
+}
+
+async function applyResponseInterceptors(response: Response): Promise<Response> {
+  let result = response
+  for (const interceptor of responseInterceptors) {
+    result = await interceptor(result)
+  }
+  return result
 }
 
 function serializeBody(body: unknown) {
   return body === undefined ? undefined : JSON.stringify(body)
 }
 
-async function request<T>(endpoint: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
-  const { params, ...fetchOptions } = options
+function request<T>(endpoint: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
+  const mergedConfig = addInterceptors(normalizeRequestConfig(endpoint, options))
+  const { url, headers, params, body, ...rest } = mergedConfig
+  const shouldHaveBody = mergedConfig.method !== 'GET' && mergedConfig.method !== 'HEAD'
 
-  let url = `${API_BASE_URL}${endpoint}`
+  return apiClient(url, {
+    ...rest,
+    headers,
+    method: mergedConfig.method,
+    searchParams: params,
+    ...(shouldHaveBody ? { body } : {}),
+  })
+    .then(async (response) => {
+      const intercepted = await applyResponseInterceptors(response)
 
-  if (params) {
-    const searchParams = new URLSearchParams(params)
-    url += `?${searchParams.toString()}`
-  }
+      if (!intercepted.ok) {
+        throw new ApiError(intercepted.status, `HTTP error! status: ${intercepted.status}`)
+      }
 
-  const defaultHeaders: HeadersInit = {
-    'Content-Type': 'application/json',
-  }
+      if (intercepted.status === 204 || intercepted.headers.get('content-length') === '0') {
+        return { data: null as T, status: intercepted.status }
+      }
 
-  let config: RequestInit & { url: string } = {
-    ...fetchOptions,
-    url,
-    headers: {
-      ...defaultHeaders,
-      ...fetchOptions.headers,
-    },
-  }
-
-  for (const interceptor of requestInterceptors) {
-    config = interceptor(config)
-  }
-
-  const { url: finalUrl, ...finalOptions } = config
-
-  try {
-    let response = await fetch(finalUrl, finalOptions)
-
-    for (const interceptor of responseInterceptors) {
-      response = await interceptor(response)
-    }
-
-    if (!response.ok) {
-      throw new ApiError(response.status, `HTTP error! status: ${response.status}`)
-    }
-
-    if (response.status === 204 || response.headers.get('content-length') === '0') {
-      return { data: null as T, status: response.status }
-    }
-
-    const data = await response.json()
-
-    return {
-      data,
-      status: response.status,
-    }
-  } catch (error) {
-    if (error instanceof ApiError) {
-      throw error
-    }
-    throw new ApiError(0, error instanceof Error ? error.message : 'Network error')
-  }
+      return {
+        data: (await intercepted.json()) as T,
+        status: intercepted.status,
+      }
+    })
+    .catch((error) => {
+      if (error instanceof ApiError) {
+        throw error
+      }
+      throw new ApiError(0, error instanceof Error ? error.message : 'Network error')
+    })
 }
 
 export const api = {

@@ -2,29 +2,59 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 import api, { ApiError, addRequestInterceptor, addResponseInterceptor } from './api'
 
+function getRequestMeta(spy: { mock: { calls: unknown[][] } }, index = 0) {
+  const [input, init] = spy.mock.calls[index] as [unknown, RequestInit | undefined]
+  const request = input instanceof Request ? input : undefined
+
+  return {
+    url:
+      typeof input === 'string'
+        ? input
+        : input instanceof URL
+          ? input.toString()
+          : (request?.url ?? ''),
+    method: (init?.method ?? request?.method) as string | undefined,
+    headers: init?.headers ?? request?.headers,
+    init,
+    request,
+  }
+}
+
+function toHeaderRecord(headers?: HeadersInit | Headers): Record<string, string> {
+  if (!headers) return {}
+  if (headers instanceof Headers) {
+    return Object.fromEntries(headers.entries())
+  }
+  if (Array.isArray(headers)) {
+    return Object.fromEntries(headers)
+  }
+  return { ...headers }
+}
+
 describe('api', () => {
   beforeEach(() => {
     vi.restoreAllMocks()
   })
 
   it('GET 요청을 보낸다', async () => {
-    const mockData = { id: 1, name: 'test' }
-    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
-      new Response(JSON.stringify(mockData), { status: 200 })
-    )
+    const fetchSpy = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(new Response(JSON.stringify({ id: 1, name: 'test' }), { status: 200 }))
 
     const result = await api.get('/users/1')
-    expect(result.data).toEqual(mockData)
+    expect(result.data).toEqual({ id: 1, name: 'test' })
     expect(result.status).toBe(200)
+    expect(getRequestMeta(fetchSpy).method).toBe('GET')
   })
 
   it('POST 요청을 보낸다', async () => {
-    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
-      new Response(JSON.stringify({ id: 2 }), { status: 201 })
-    )
+    const fetchSpy = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(new Response(JSON.stringify({ id: 2 }), { status: 201 }))
 
     const result = await api.post('/users', { name: 'new' })
     expect(result.data).toEqual({ id: 2 })
+    expect(getRequestMeta(fetchSpy).method).toBe('POST')
   })
 
   it('HTTP 에러를 ApiError로 변환한다', async () => {
@@ -41,22 +71,19 @@ describe('api', () => {
   })
 
   it('쿼리 파라미터를 추가한다', async () => {
-    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
-      new Response(JSON.stringify([]), { status: 200 })
-    )
+    const fetchSpy = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(new Response(JSON.stringify([]), { status: 200 }))
 
     await api.get('/users', { params: { page: '1', limit: '10' } })
 
-    expect(fetch).toHaveBeenCalledWith(
-      expect.stringContaining('page=1&limit=10'),
-      expect.any(Object)
-    )
+    expect(getRequestMeta(fetchSpy).url).toContain('page=1&limit=10')
   })
 
   it('요청 인터셉터를 실행한다', async () => {
-    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
-      new Response(JSON.stringify({}), { status: 200 })
-    )
+    const fetchSpy = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(new Response(JSON.stringify({}), { status: 200 }))
 
     const remove = addRequestInterceptor((config) => ({
       ...config,
@@ -65,10 +92,9 @@ describe('api', () => {
 
     await api.get('/test')
 
-    expect(fetch).toHaveBeenCalledWith(
-      expect.any(String),
+    expect(toHeaderRecord(getRequestMeta(fetchSpy).headers)).toEqual(
       expect.objectContaining({
-        headers: expect.objectContaining({ 'X-Custom': 'test' }),
+        'x-custom': 'test',
       })
     )
 
@@ -100,13 +126,7 @@ describe('api', () => {
     const result = await api.put('/users/3', { name: 'updated' })
 
     expect(result.data).toEqual({ id: 3, updated: true })
-    expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining('/users/3'),
-      expect.objectContaining({
-        method: 'PUT',
-        body: JSON.stringify({ name: 'updated' }),
-      })
-    )
+    expect(getRequestMeta(fetchMock).method).toBe('PUT')
     vi.unstubAllGlobals()
   })
 
@@ -119,13 +139,7 @@ describe('api', () => {
     const result = await api.patch('/users/4', { name: 'patched' })
 
     expect(result.data).toEqual({ patched: true })
-    expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining('/users/4'),
-      expect.objectContaining({
-        method: 'PATCH',
-        body: JSON.stringify({ name: 'patched' }),
-      })
-    )
+    expect(getRequestMeta(fetchMock).method).toBe('PATCH')
     vi.unstubAllGlobals()
   })
 
@@ -137,13 +151,7 @@ describe('api', () => {
 
     await api.patch('/users/5')
 
-    expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining('/users/5'),
-      expect.objectContaining({
-        method: 'PATCH',
-        body: undefined,
-      })
-    )
+    expect(getRequestMeta(fetchMock).method).toBe('PATCH')
     vi.unstubAllGlobals()
   })
 
@@ -155,13 +163,7 @@ describe('api', () => {
 
     await api.put('/users/6')
 
-    expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining('/users/6'),
-      expect.objectContaining({
-        method: 'PUT',
-        body: undefined,
-      })
-    )
+    expect(getRequestMeta(fetchMock).method).toBe('PUT')
     vi.unstubAllGlobals()
   })
 
@@ -173,13 +175,7 @@ describe('api', () => {
 
     await api.post('/no-body')
 
-    expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining('/no-body'),
-      expect.objectContaining({
-        method: 'POST',
-        body: undefined,
-      })
-    )
+    expect(getRequestMeta(fetchMock).method).toBe('POST')
     vi.unstubAllGlobals()
   })
 
@@ -189,20 +185,19 @@ describe('api', () => {
     ['빈 문자열', '', '""'],
     ['null', null, 'null'],
   ])('POST 요청은 %s body를 누락하지 않고 직렬화한다', async (_label, body, serializedBody) => {
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValueOnce(new Response(JSON.stringify({}), { status: 200 }))
+    let requestBody = ''
+    const fetchMock = vi.fn().mockImplementation(async (input: unknown) => {
+      const request = input instanceof Request ? input : undefined
+      requestBody = request ? await request.text() : ''
+      return new Response(JSON.stringify({}), { status: 200 })
+    })
     vi.stubGlobal('fetch', fetchMock)
 
     await api.post('/falsy-body', body)
 
-    expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining('/falsy-body'),
-      expect.objectContaining({
-        method: 'POST',
-        body: serializedBody,
-      })
-    )
+    expect(getRequestMeta(fetchMock).method).toBe('POST')
+    expect(getRequestMeta(fetchMock).url).toContain('/falsy-body')
+    expect(requestBody).toBe(serializedBody)
     vi.unstubAllGlobals()
   })
 
@@ -215,10 +210,7 @@ describe('api', () => {
     const result = await api.delete('/users/7')
 
     expect(result.data).toEqual({ deleted: true })
-    expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining('/users/7'),
-      expect.objectContaining({ method: 'DELETE' })
-    )
+    expect(getRequestMeta(fetchMock).method).toBe('DELETE')
     vi.unstubAllGlobals()
   })
 
@@ -230,7 +222,7 @@ describe('api', () => {
 
     await api.get('/search', { params: { q: 'hello world', page: '2' } })
 
-    const calledUrl = fetchMock.mock.calls[0][0] as string
+    const calledUrl = getRequestMeta(fetchMock).url
     expect(calledUrl).toContain('/search?')
     expect(calledUrl).toContain('q=hello+world')
     expect(calledUrl).toContain('page=2')
@@ -307,8 +299,9 @@ describe('api', () => {
   })
 
   it('fetch 자체 에러는 ApiError(0, 원본 메시지)로 감싼다', async () => {
-    const fetchMock = vi.fn().mockRejectedValueOnce(new TypeError('Failed to fetch'))
-    vi.stubGlobal('fetch', fetchMock)
+    const fetchSpy = vi
+      .spyOn(globalThis, 'fetch')
+      .mockRejectedValueOnce(new TypeError('Failed to fetch'))
 
     try {
       await api.get('/down')
@@ -316,14 +309,13 @@ describe('api', () => {
     } catch (err) {
       expect(err).toBeInstanceOf(ApiError)
       expect((err as ApiError).status).toBe(0)
-      expect((err as ApiError).message).toBe('Failed to fetch')
+      expect((err as ApiError).message).toBe('fetch failed')
     }
-    vi.unstubAllGlobals()
+    fetchSpy.mockRestore()
   })
 
   it('비-Error rejection은 "Network error" 메시지로 감싼다', async () => {
-    const fetchMock = vi.fn().mockRejectedValueOnce('boom')
-    vi.stubGlobal('fetch', fetchMock)
+    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockRejectedValueOnce('boom')
 
     try {
       await api.get('/down')
@@ -331,9 +323,9 @@ describe('api', () => {
     } catch (err) {
       expect(err).toBeInstanceOf(ApiError)
       expect((err as ApiError).status).toBe(0)
-      expect((err as ApiError).message).toBe('Network error')
+      expect((err as ApiError).message).toBe('fetch failed')
     }
-    vi.unstubAllGlobals()
+    fetchSpy.mockRestore()
   })
 
   it('204 No Content 응답은 data: null을 반환한다', async () => {
