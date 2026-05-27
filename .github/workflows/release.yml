@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository == 'blue45f/react-boilerplates'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
