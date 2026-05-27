@@ -1,8 +1,12 @@
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
-import { afterEach, beforeAll } from 'vitest';
+import { afterAll, afterEach, beforeAll } from 'vitest';
+
+import { server } from './test/mocks/server';
 
 beforeAll(() => {
+  server.listen({ onUnhandledRequest: 'error' });
+
   if (typeof window !== 'undefined' && typeof window.matchMedia !== 'function') {
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
@@ -58,5 +62,10 @@ beforeAll(() => {
 });
 
 afterEach(() => {
+  server.resetHandlers();
   cleanup();
+});
+
+afterAll(() => {
+  server.close();
 });

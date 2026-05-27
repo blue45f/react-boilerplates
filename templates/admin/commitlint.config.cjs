@@ -6,7 +6,21 @@ module.exports = {
     'scope-enum': [
       2,
       'always',
-      ['app', 'components', 'config', 'deps', 'docs', 'hooks', 'security', 'tests', 'theme'],
+      [
+        'admin',
+        'analytics',
+        'auth',
+        'config',
+        'dashboard',
+        'deps',
+        'docs',
+        'hooks',
+        'security',
+        'settings',
+        'tests',
+        'theme',
+        'users',
+      ],
     ],
     'subject-case': [0],
     'type-enum': [
@@ -27,4 +41,4 @@ module.exports = {
       ],
     ],
   },
-}
+};

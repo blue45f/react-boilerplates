@@ -2,7 +2,12 @@
   "name": "react-lib",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.4.1",
   "type": "module",
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=10"
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -25,7 +30,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "lint:security": "eslint . --max-warnings=0 && pnpm audit:security",
+    "lint:secrets": "secretlint \"**/*\"",
+    "lint:security": "eslint . --max-warnings=0 && pnpm lint:secrets && pnpm audit:security",
     "lint:fix": "eslint . --fix",
     "test": "vitest",
     "test:run": "vitest run",
@@ -37,7 +43,19 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "prepare": "node scripts/prepare-husky.mjs"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write",
+      "secretlint"
+    ],
+    "*.{json,md,css,html,yml,yaml}": [
+      "prettier --write",
+      "secretlint"
+    ]
   },
   "dependencies": {
     "clsx": "^2.1.1"
@@ -48,8 +66,11 @@
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
+    "@commitlint/cli": "^21.0.1",
+    "@commitlint/config-conventional": "^21.0.1",
     "@eslint/js": "^10.0.1",
     "@rolldown/plugin-babel": "^0.2.3",
+    "@secretlint/secretlint-rule-preset-recommend": "^13.0.2",
     "@storybook/addon-a11y": "^10.4.1",
     "@storybook/addon-themes": "^10.4.1",
     "@storybook/react": "^10.4.1",
@@ -73,10 +94,13 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "eslint-plugin-security": "^4.0.0",
     "globals": "^17.6.0",
+    "husky": "^9.1.7",
     "jsdom": "^29.1.1",
+    "lint-staged": "^17.0.5",
     "prettier": "^3.8.3",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
+    "secretlint": "^13.0.2",
     "storybook": "^10.4.1",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.60.0",

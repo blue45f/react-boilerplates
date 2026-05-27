@@ -83,6 +83,9 @@ pnpm typecheck
 pnpm lint
 pnpm test
 pnpm test:coverage
+pnpm lint:secrets              # secretlint 전체 시크릿 스캔
+pnpm commitlint:check --from HEAD~1 --to HEAD
+pnpm build:react               # App/Admin/Lib 템플릿 React 빌드
 pnpm storybook                  # templates/lib 스토리북
 pnpm build-storybook:bootstrap  # templates/lib 의존성 설치 + 정적 Storybook 빌드
 pnpm install:templates         # 템플릿 의존성 설치 (워크스페이스 제외)

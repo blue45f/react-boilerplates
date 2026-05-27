@@ -1,0 +1,79 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: ko-KR
+early_access: false
+
+reviews:
+  profile: chill
+  request_changes_workflow: false
+  high_level_summary: true
+  review_status: true
+  review_details: true
+  collapse_walkthrough: false
+  poem: false
+  auto_review:
+    enabled: true
+    drafts: false
+    auto_incremental_review: true
+    auto_pause_after_reviewed_commits: 10
+    ignore_title_keywords:
+      - WIP
+      - '[skip review]'
+    ignore_usernames:
+      - dependabot[bot]
+      - renovate[bot]
+  path_filters:
+    - '!**/node_modules/**'
+    - '!**/dist/**'
+    - '!**/build/**'
+    - '!**/coverage/**'
+    - '!**/storybook-static/**'
+    - '!**/playwright-report/**'
+    - '!**/test-results/**'
+    - '!**/.docusaurus/**'
+    - '!**/.pnpm-store/**'
+    - '!**/pnpm-lock.yaml'
+  path_instructions:
+    - path: 'templates/**'
+      instructions: >
+        Templates are copied into standalone projects by the CLI. Review whether
+        package scripts, lockfiles, hooks, test setup, and config files still work
+        outside the root workspace. Do not recommend catalog: dependencies inside
+        template package.json files.
+    - path: 'templates/**/src/**/*.{ts,tsx}'
+      instructions: >
+        Prefer user-observable React behavior, Testing Library role queries, MSW
+        network boundaries for API flows, and React Compiler-compatible code.
+        Flag unnecessary effects, unstable dependencies, and direct network mocks
+        where an MSW integration test would better preserve the contract.
+    - path: 'packages/cli/**'
+      instructions: >
+        Review generated project completeness: new template files, dotfiles,
+        package scripts, lockfiles, and post-generation names must be copied
+        consistently. CLI tests should assert generated output, not only argument parsing.
+    - path: 'packages/configs/**'
+      instructions: >
+        Shared config changes affect every template. Check backward compatibility,
+        ESM/CJS boundaries, peer assumptions, and whether App/Admin/Library
+        template verification covers the changed rule or build setting.
+    - path: '.github/workflows/**'
+      instructions: >
+        Apply the build-once, frozen-install, quality-gate, secret-scan, and
+        artifact evidence principles from the development guide. CI should fail
+        before merge for formatting, lint, type, unit/integration, build, E2E,
+        and security regressions.
+    - path: 'apps/docs/**'
+      instructions: >
+        Documentation must match real file paths, package scripts, Node/pnpm
+        requirements, and generated-template behavior. Flag formal prose that
+        does not give a concrete command, file, or verification path.
+
+chat:
+  auto_reply: true
+
+knowledge_base:
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - apps/docs/docs/guides/development-guide.md
+      - apps/docs/docs/concepts/scaffolding-vs-boilerplates.md
+      - templates/app/docs/ARCHITECTURE.md

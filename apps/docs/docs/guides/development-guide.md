@@ -61,6 +61,7 @@ pnpm build-storybook:bootstrap
 | 의존성 버전 정렬                     | `pnpm-workspace.yaml`, 각 템플릿 lockfile | `pnpm install`, `pnpm outdated`, security audit |
 | 사용자 문서 개선                     | `apps/docs/docs/*`, `README.md`           | `pnpm --filter @repo/docs run build`            |
 | CI에서 빠진 검증 추가                | `.github/workflows/ci.yml`, root scripts  | 로컬에서 같은 명령을 먼저 실행                  |
+| PR 리뷰 기준 조정                    | `.coderabbit.yaml`                        | 경로별 리뷰 지침과 개발가이드 링크              |
 
 템플릿은 루트 workspace에 직접 포함하지 않습니다.
 `templates/**`는 CLI가 복사할 원본이므로, 독립 프로젝트처럼 설치되고 빌드되어야 합니다.
@@ -162,7 +163,7 @@ Storybook에서만 필요한 설정은 `.storybook` 안에 두고, 라이브러�
 | ---------------------------- | ------------------------------------------------- |
 | 순수 함수, schema, formatter | Vitest unit test                                  |
 | 컴포넌트 상태와 이벤트       | Testing Library component test                    |
-| Query/mutation hook          | mock API + QueryClient test                       |
+| Query/mutation hook          | MSW handler + QueryClient test                    |
 | i18n 문구 추가               | locale key sync test                              |
 | 라우팅, 인증, 테마, 반응형   | Playwright E2E                                    |
 | Library public API           | component/hook test + Storybook story             |
@@ -179,6 +180,7 @@ pnpm --dir templates/lib run test:run
 마무리 전에는 넓게 실행합니다.
 
 ```bash
+pnpm lint:secrets
 pnpm verify:push
 pnpm e2e:bootstrap
 pnpm build-storybook:bootstrap
@@ -202,15 +204,16 @@ pnpm build-storybook:bootstrap
 
 ## 자주 막히는 지점
 
-| 증상                                      | 먼저 볼 것                                                             |
-| ----------------------------------------- | ---------------------------------------------------------------------- |
-| `pnpm install`에서 Node 버전 오류         | `node -v`, `corepack enable`, Node 22 이상 사용 여부                   |
-| 템플릿 명령이 workspace package를 못 찾음 | 템플릿은 workspace 제외 대상이므로 `pnpm --dir templates/app ...` 사용 |
-| Storybook build가 아무 것도 하지 않음     | root script가 `templates/lib`를 직접 가리키는지 확인                   |
-| Playwright 브라우저가 없다고 나옴         | `pnpm --dir templates/app run test:e2e:install` 실행                   |
-| Docusaurus 링크 오류                      | sidebar id와 실제 `apps/docs/docs/**.md` 경로 일치 여부 확인           |
-| Vite chunk 경고                           | 실제 사용자 chunk인지, Storybook/테스트 런타임 chunk인지 먼저 구분     |
-| security audit 실패                       | 취약 패키지가 직접 의존성인지 transitive인지 보고 override 범위 결정   |
+| 증상                                      | 먼저 볼 것                                                                                        |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `pnpm install`에서 Node 버전 오류         | `node -v`, `corepack enable`, Node 22 이상 사용 여부                                              |
+| 템플릿 명령이 workspace package를 못 찾음 | 템플릿은 workspace 제외 대상이므로 `pnpm --dir templates/app ...` 사용                            |
+| Storybook build가 아무 것도 하지 않음     | root script가 `templates/lib`를 직접 가리키는지 확인                                              |
+| Playwright 브라우저가 없다고 나옴         | `pnpm --dir templates/app run test:e2e:install` 실행                                              |
+| Docusaurus 링크 오류                      | sidebar id와 실제 `apps/docs/docs/**.md` 경로 일치 여부 확인                                      |
+| secretlint가 fixture를 오탐함             | 실제 secret인지 먼저 확인하고, fixture라면 `.secretlintignore`보다 테스트 데이터 구조를 우선 수정 |
+| Vite chunk 경고                           | 실제 사용자 chunk인지, Storybook/테스트 런타임 chunk인지 먼저 구분                                |
+| security audit 실패                       | 취약 패키지가 직접 의존성인지 transitive인지 보고 override 범위 결정                              |
 
 ## 변경 전 체크리스트
 
@@ -226,6 +229,7 @@ PR이나 푸시 전에 아래 순서로 확인합니다.
 
 ```bash
 pnpm format:check
+pnpm lint:secrets
 pnpm verify:push
 pnpm e2e:bootstrap
 pnpm build-storybook:bootstrap

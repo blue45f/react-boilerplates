@@ -22,9 +22,13 @@
     "typecheck": "pnpm -r --if-present run typecheck",
     "test": "pnpm -r --if-present run test",
     "test:coverage": "pnpm -r --if-present run test:coverage",
+    "lint:secrets": "secretlint \"**/*\"",
+    "commitlint:check": "commitlint --verbose",
     "storybook": "pnpm --dir templates/lib run storybook",
     "build-storybook": "pnpm --dir templates/lib run build-storybook",
     "build-storybook:bootstrap": "pnpm --dir templates/lib install --ignore-workspace --frozen-lockfile --ignore-scripts && pnpm --dir templates/lib run build-storybook",
+    "build:react": "pnpm --dir templates/app run build && pnpm --dir templates/admin run build && pnpm --dir templates/lib run build",
+    "build:react:bootstrap": "pnpm install:templates && pnpm build:react",
     "install:templates": "pnpm --dir templates/app install --ignore-workspace --frozen-lockfile --ignore-scripts && pnpm --dir templates/admin install --ignore-workspace --frozen-lockfile --ignore-scripts && pnpm --dir templates/lib install --ignore-workspace --frozen-lockfile --ignore-scripts",
     "e2e:app": "pnpm --dir templates/app run test:e2e",
     "e2e:app:bootstrap": "pnpm --dir templates/app install --ignore-workspace --frozen-lockfile --ignore-scripts && pnpm --dir templates/app run test:e2e",
@@ -35,7 +39,7 @@
     "verify:templates:bootstrap": "pnpm install:templates && pnpm --dir templates/app run verify && pnpm --dir templates/admin run verify && pnpm --dir templates/lib run verify",
     "verify:templates": "pnpm --dir templates/app run verify && pnpm --dir templates/admin run verify && pnpm --dir templates/lib run verify",
     "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm verify:templates:bootstrap",
-    "verify:push": "pnpm verify && pnpm audit:security:templates",
+    "verify:push": "pnpm verify && pnpm lint:secrets && pnpm audit:security:templates",
     "audit:security:templates": "pnpm --dir templates/app run lint:security && pnpm --dir templates/admin run lint:security && pnpm --dir templates/lib run lint:security",
     "clean": "pnpm -r run clean && rm -rf node_modules templates/app/node_modules templates/admin/node_modules templates/lib/node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml,css}\"",
@@ -56,14 +60,17 @@
     "@changesets/cli": "^2.31.0",
     "@commitlint/cli": "^21.0.1",
     "@commitlint/config-conventional": "^21.0.1",
+    "@secretlint/secretlint-rule-preset-recommend": "^13.0.2",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.5",
     "prettier": "^3.8.3",
+    "secretlint": "^13.0.2",
     "typescript": "^6.0.3"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,json,md,yml,yaml,css}": [
-      "prettier --write"
+      "prettier --write",
+      "secretlint"
     ]
   }
 }
