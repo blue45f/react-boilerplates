@@ -6,6 +6,13 @@ packages:
   - '!**/node_modules/**'
   - '!templates/**'
 
+onlyBuiltDependencies:
+  - esbuild
+  - unrs-resolver
+
+ignoredBuiltDependencies:
+  - core-js
+
 # pnpm catalog: 워크스페이스 전체에서 공통으로 쓰는 의존성 버전을 한곳에서 관리한다.
 # 각 패키지 package.json에서 "catalog:" 프로토콜로 참조한다. (pnpm 9.5+ 정식 지원, pnpm 10 권장)
 catalog:
@@ -23,7 +30,7 @@ catalog:
   '@rolldown/plugin-babel': ^0.2.3
   '@types/babel__core': ^7.20.5
   babel-plugin-react-compiler: ^1.0.0
-  vite-plugin-dts: ^4.5.4
+  vite-plugin-dts: ^5.0.1
 
   # 테스트
   vitest: ^4.1.7

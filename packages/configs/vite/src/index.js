@@ -117,6 +117,9 @@ export function createLibConfig({
         fileName: (format) => `index.${format === 'es' ? 'mjs' : 'cjs'}`,
       },
       rollupOptions: {
+        checks: {
+          pluginTimings: false,
+        },
         external: ['react', 'react-dom', 'react/jsx-runtime', ...external],
         output: {
           globals: {

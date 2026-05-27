@@ -14,6 +14,11 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: '개념',
+      items: ['concepts/scaffolding-vs-boilerplates'],
+    },
+    {
+      type: 'category',
       label: '템플릿',
       items: ['templates/app', 'templates/admin', 'templates/lib'],
     },

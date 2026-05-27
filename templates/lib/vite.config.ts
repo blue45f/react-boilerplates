@@ -39,6 +39,9 @@ export default defineConfig({
       cssFileName: 'style',
     },
     rollupOptions: {
+      checks: {
+        pluginTimings: false,
+      },
       external: ['react', 'react-dom', 'react/jsx-runtime'],
       output: {
         globals: {

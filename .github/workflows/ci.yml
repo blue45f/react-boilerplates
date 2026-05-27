@@ -84,7 +84,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm build-storybook
+      - run: pnpm build-storybook:bootstrap
       - uses: actions/upload-artifact@v4
         with:
           name: storybook-static
@@ -114,7 +114,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Install template deps
         working-directory: templates/${{ matrix.template }}
-        run: pnpm install --ignore-workspace --frozen-lockfile
+        run: pnpm install --ignore-workspace --frozen-lockfile --ignore-scripts
       - name: Install Playwright browsers
         working-directory: templates/${{ matrix.template }}
         run: pnpm run test:e2e:install
@@ -150,7 +150,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Install template deps
         working-directory: templates/${{ matrix.template }}
-        run: pnpm install --ignore-workspace --frozen-lockfile
+        run: pnpm install --ignore-workspace --frozen-lockfile --ignore-scripts
       - name: Run template verify
         working-directory: templates/${{ matrix.template }}
         run: pnpm run verify

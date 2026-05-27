@@ -21,14 +21,21 @@
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:i18n": "vitest run src/i18n/locales.test.ts",
-    "test:e2e": "playwright test",
+    "test:e2e": "node scripts/playwright.mjs test",
+    "test:e2e:install": "node scripts/playwright.mjs install --with-deps chromium",
     "typecheck": "tsc -b --noEmit",
     "audit:security": "pnpm audit --audit-level high",
     "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test:run && pnpm build",
     "verify:push": "pnpm verify && pnpm lint:security",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "prepare": "husky"
+    "prepare": "node scripts/prepare-husky.mjs"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "unrs-resolver"
+    ]
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [

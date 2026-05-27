@@ -9,6 +9,8 @@
 
 > **[Documentation](https://github.com/blue45f/react-boilerplates)** · **[Issues](https://github.com/blue45f/react-boilerplates/issues)** · **[Discussions](https://github.com/blue45f/react-boilerplates/discussions)**
 
+`react-scaffolding`은 App 템플릿의 기준 아키텍처이고, `react-boilerplates`는 App/Admin/Library 템플릿과 CLI, 공유 설정, 검증 파이프라인을 함께 운영하는 상위 보일러플레이트 플랫폼입니다.
+
 ## 한눈에
 
 - 🟢 **Node 22 LTS · pnpm 10 · TypeScript 6 · Vite 8**
@@ -81,7 +83,8 @@ pnpm typecheck
 pnpm lint
 pnpm test
 pnpm test:coverage
-pnpm storybook                  # react-lib 스토리북
+pnpm storybook                  # templates/lib 스토리북
+pnpm build-storybook:bootstrap  # templates/lib 의존성 설치 + 정적 Storybook 빌드
 pnpm install:templates         # 템플릿 의존성 설치 (워크스페이스 제외)
 pnpm e2e                        # 템플릿 E2E 테스트 실행(기존 템플릿 node_modules가 존재할 때)
 pnpm e2e:app                    # App 템플릿 E2E만 실행

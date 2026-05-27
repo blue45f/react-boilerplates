@@ -39,9 +39,6 @@ export default defineConfig({
           ) {
             return 'form';
           }
-          if (id.includes('node_modules/antd')) {
-            return 'antd';
-          }
           if (id.includes('node_modules/recharts')) {
             return 'charts';
           }
