@@ -94,7 +94,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build-storybook:bootstrap
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: storybook-static
           path: templates/lib/storybook-static
@@ -130,7 +130,7 @@ jobs:
       - name: Run E2E
         working-directory: templates/${{ matrix.template }}
         run: pnpm run test:e2e
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: playwright-report-${{ matrix.template }}
@@ -159,7 +159,7 @@ jobs:
         run: pnpm --dir apps/react-scaffolding run test:e2e:install
       - name: Run E2E
         run: pnpm --dir apps/react-scaffolding run test:e2e
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: playwright-report-react-scaffolding
