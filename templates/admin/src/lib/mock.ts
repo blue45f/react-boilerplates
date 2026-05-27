@@ -66,6 +66,7 @@ const FIRST_NAMES = [
 const LAST_NAMES = ['김', '이', '박', '최', '정', '강', '조', '윤', '장', '임'];
 const ROLES: AdminUser['role'][] = ['admin', 'user', 'editor', 'viewer'];
 const STATUSES: AdminUser['status'][] = ['active', 'active', 'active', 'inactive', 'pending'];
+const DAY_IN_MS = 86_400_000;
 
 function pick<T>(arr: T[], idx: number): T {
   return arr[idx % arr.length];
@@ -76,9 +77,14 @@ function pad(n: number): string {
 }
 
 function isoDaysAgo(days: number, seed: number): string {
-  const base = new Date('2026-05-21T09:00:00Z').getTime();
-  const ms = base - days * 86_400_000 - (seed % 86_400_000);
+  const base = Date.now();
+  const ms = base - days * DAY_IN_MS - (seed % DAY_IN_MS);
   return new Date(ms).toISOString();
+}
+
+function utcStartOfToday(): Date {
+  const now = new Date();
+  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
 }
 
 function delay<T>(value: T, ms = 350): Promise<T> {
@@ -151,10 +157,10 @@ export const mockApi = {
   },
 
   async getChartSeries(rangeDays: number): Promise<ChartPoint[]> {
-    const today = new Date('2026-05-21T00:00:00Z');
+    const today = utcStartOfToday();
     const out: ChartPoint[] = [];
     for (let i = rangeDays - 1; i >= 0; i -= 1) {
-      const d = new Date(today.getTime() - i * 86_400_000);
+      const d = new Date(today.getTime() - i * DAY_IN_MS);
       const date = `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`;
       const wave = Math.sin(i / 3) * 200 + 800;
       out.push({
@@ -192,7 +198,7 @@ export const mockApi = {
   },
 
   async createUser(input: Omit<AdminUser, 'id' | 'createdAt' | 'lastLoginAt'>): Promise<AdminUser> {
-    const now = new Date('2026-05-21T09:00:00Z').toISOString();
+    const now = new Date().toISOString();
     const created: AdminUser = {
       ...input,
       id: nextId(),

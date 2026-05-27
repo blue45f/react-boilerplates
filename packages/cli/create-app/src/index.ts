@@ -19,8 +19,8 @@ export interface ParsedArgs {
 }
 
 export const TEMPLATES: Record<TemplateName, string> = {
-  app: 'React App (CSS Modules + React Router Data Router + Tanstack Query + Zustand)',
-  admin: 'Admin Dashboard (Ant Design + React Router + Tanstack Query + Zustand)',
+  app: 'React App (CSS Modules + React Router Data Router + TanStack Query + Zustand)',
+  admin: 'Admin Dashboard (Ant Design + React Router + TanStack Query + Zustand)',
 };
 
 export function isValidProjectName(name: string): boolean {

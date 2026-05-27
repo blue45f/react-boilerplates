@@ -8,6 +8,7 @@ const sidebars: SidebarsConfig = {
       label: '시작하기',
       items: [
         'getting-started/installation',
+        'guides/development-guide',
         'getting-started/create-app',
         'getting-started/create-lib',
       ],

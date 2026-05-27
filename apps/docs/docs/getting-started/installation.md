@@ -8,8 +8,8 @@ sidebar_position: 1
 
 | 도구    | 최소 버전 | 확인 명령어 |
 | ------- | --------- | ----------- |
-| Node.js | 20 이상   | `node -v`   |
-| pnpm    | 9 이상    | `pnpm -v`   |
+| Node.js | 22 이상   | `node -v`   |
+| pnpm    | 10 이상   | `pnpm -v`   |
 
 ## CLI 도구 설치
 
@@ -59,8 +59,8 @@ corepack prepare pnpm@latest --activate
 
 ```bash
 # 버전 확인
-node -v    # v20.x.x 이상
-pnpm -v    # 9.x.x 이상
+node -v    # v22.x.x 이상
+pnpm -v    # 10.x.x 이상
 ```
 
 ## 공통 명령어
@@ -98,8 +98,8 @@ Library 추가:
 [nvm](https://github.com/nvm-sh/nvm)을 사용하여 Node.js 버전을 관리할 수 있습니다:
 
 ```bash
-nvm install 20
-nvm use 20
+nvm install 22
+nvm use 22
 ```
 
 ### npx 실행 시 캐시 문제

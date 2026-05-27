@@ -12,7 +12,7 @@ React 컴포넌트 라이브러리 개발을 위한 템플릿입니다. Vite 라
 | --------------- | ----------------------- | ------------------------------ |
 | React           | 18/19 (peer dependency) | UI 라이브러리                  |
 | Vite            | 8                       | 라이브러리 빌드 모드           |
-| vite-plugin-dts | 4                       | TypeScript 선언 파일 자동 생성 |
+| vite-plugin-dts | 5                       | TypeScript 선언 파일 자동 생성 |
 | TypeScript      | 6                       | 타입 안전성                    |
 | Vitest          | 4                       | 단위 테스트                    |
 | Testing Library | 16                      | 컴포넌트 테스트                |

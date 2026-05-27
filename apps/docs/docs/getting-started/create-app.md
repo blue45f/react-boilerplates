@@ -73,7 +73,7 @@ VITE_API_URL=http://localhost:8080/api
 
 `VITE_` 접두사가 붙은 변수만 클라이언트에 노출됩니다. 타입은 `src/vite-env.d.ts`에 선언하세요.
 
-## 데이터 페칭 (Tanstack Query)
+## 데이터 페칭 (TanStack Query)
 
 ```tsx
 // src/features/todos/queries.ts

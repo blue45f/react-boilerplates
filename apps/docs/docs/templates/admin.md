@@ -15,7 +15,7 @@ Ant Design 5 기반의 관리자 대시보드 템플릿입니다. 보호 라우�
 | Ant Design            | 5     | 엔터프라이즈 UI 컴포넌트        |
 | recharts              | 2     | 대시보드 차트                   |
 | React Router          | 7     | 클라이언트 라우팅 (보호 라우트) |
-| Tanstack Query        | 5     | 서버 상태 (API 데이터)          |
+| TanStack Query        | 5     | 서버 상태 (API 데이터)          |
 | Zustand               | 5     | 인증/UI 상태                    |
 | react-hook-form + zod | 7 / 4 | 로그인/설정 폼 검증             |
 | TypeScript            | 6     | 타입 안전성                     |
