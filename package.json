@@ -44,7 +44,7 @@
     "e2e:react-scaffolding": "pnpm --dir apps/react-scaffolding run test:e2e",
     "verify:templates:bootstrap": "pnpm install:templates && pnpm --dir templates/app run verify && pnpm --dir templates/admin run verify && pnpm --dir templates/lib run verify",
     "verify:templates": "pnpm --dir templates/app run verify && pnpm --dir templates/admin run verify && pnpm --dir templates/lib run verify",
-    "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm verify:templates:bootstrap",
+    "verify": "pnpm run ci && pnpm verify:templates:bootstrap",
     "verify:push": "pnpm verify && pnpm lint:secrets && pnpm audit:security:templates",
     "audit:security:templates": "pnpm --dir templates/app run lint:security && pnpm --dir templates/admin run lint:security && pnpm --dir templates/lib run lint:security",
     "clean": "pnpm -r run clean && rm -rf node_modules apps/react-scaffolding/node_modules templates/app/node_modules templates/admin/node_modules templates/lib/node_modules",
