@@ -49,7 +49,8 @@ npx create-react-lib my-lib
 ```
 react-boilerplates/
 ├── apps/
-│   └── docs/                 # Docusaurus 문서 사이트
+│   ├── docs/                 # Docusaurus 문서 사이트
+│   └── react-scaffolding/    # 독립 실행형 React 스캐폴딩 앱 소스
 ├── packages/
 │   ├── configs/              # 공유 설정 (npm 게시 대상)
 │   │   ├── eslint/
@@ -79,6 +80,10 @@ pnpm install
 
 pnpm dev                        # 모든 워크스페이스 dev 병렬 실행
 pnpm build                      # 워크스페이스 토폴로지 빌드
+pnpm dev:react-scaffolding      # react-scaffolding 개발 서버 실행
+pnpm build:react-scaffolding    # react-scaffolding 번들 빌드
+pnpm test:react-scaffolding     # react-scaffolding 단일 테스트 실행
+pnpm e2e:react-scaffolding      # react-scaffolding E2E 실행
 pnpm typecheck
 pnpm lint
 pnpm test
@@ -89,10 +94,12 @@ pnpm build:react               # App/Admin/Lib 템플릿 React 빌드
 pnpm storybook                  # templates/lib 스토리북
 pnpm build-storybook:bootstrap  # templates/lib 의존성 설치 + 정적 Storybook 빌드
 pnpm install:templates         # 템플릿 의존성 설치 (워크스페이스 제외)
-pnpm e2e                        # 템플릿 E2E 테스트 실행(기존 템플릿 node_modules가 존재할 때)
+pnpm e2e                        # 템플릿 + react-scaffolding E2E 테스트 실행
 pnpm e2e:app                    # App 템플릿 E2E만 실행
 pnpm e2e:admin                  # Admin 템플릿 E2E만 실행
-pnpm e2e:bootstrap              # App/Admin E2E 실행 전 템플릿 의존성 설치 포함
+pnpm e2e:react-scaffolding      # react-scaffolding E2E만 실행
+pnpm e2e:bootstrap              # App/Admin/react-scaffolding E2E 실행 전 의존성 설치 포함
+pnpm e2e:react-scaffolding:bootstrap # react-scaffolding E2E 실행 전 의존성 설치 포함
 pnpm verify:templates           # 템플릿(App/Admin/Lib) 전체 품질 게이트(의존성 선행 가정)
 pnpm verify:templates:bootstrap  # 템플릿 의존성 설치 + 품질 게이트
 pnpm verify                     # 워크스페이스 + 템플릿 전체 품질 게이트

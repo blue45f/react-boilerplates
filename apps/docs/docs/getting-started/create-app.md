@@ -76,13 +76,15 @@ VITE_API_URL=http://localhost:8080/api
 ## 데이터 페칭 (TanStack Query)
 
 ```tsx
-// src/features/todos/queries.ts
+// src/domains/todos/list/model/todosQueries.ts
 import { useQuery } from '@tanstack/react-query';
+
+import { fetchTodos } from '../api/todosApi';
 
 export function useTodos() {
   return useQuery({
     queryKey: ['todos'],
-    queryFn: () => fetch('/api/todos').then((r) => r.json()),
+    queryFn: fetchTodos,
   });
 }
 ```

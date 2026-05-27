@@ -71,26 +71,29 @@ pnpm build-storybook:bootstrap
 
 새 화면이나 도메인을 추가할 때는 "페이지부터 만들고 나중에 정리"하기보다 아래 순서를 권장합니다.
 
-1. `src/features/<domain>`에 도메인 타입, schema, API 함수, query hook을 둡니다.
-2. 화면은 `src/pages/<PageName>`에 만들고, UI가 커지면 `components`를 페이지 폴더 안에서 먼저 분리합니다.
-3. route는 `src/router/index.tsx`에 lazy route로 추가합니다.
-4. 서버 상태는 TanStack Query, 브라우저 UI 상태는 Zustand 또는 컴포넌트 상태로 나눕니다.
-5. 새 문구는 `src/i18n/locales/ko.json`, `en.json`에 같은 key로 추가합니다.
+1. `src/domains/<domain>/<feature>`를 만들고, 외부에서 쓸 항목은 public `index.ts`로만 노출합니다.
+2. 화면은 해당 feature의 `components`에 두고, API 함수와 query hook은 같은 feature의 `api`/`model`에 둡니다.
+3. route는 `src/app/routes/index.tsx`에 lazy route로 추가합니다.
+4. 서버 상태는 TanStack Query, 브라우저 앱 상태는 `src/infrastructure/storage`, 도메인 UI 상태는 feature `model`로 나눕니다.
+5. 새 문구는 `src/app/i18n/locales/ko.json`, `en.json`에 같은 key로 추가합니다.
 6. 컴포넌트/훅/도메인 로직 단위 테스트를 먼저 추가하고, 중요한 사용자 흐름은 `e2e`에 추가합니다.
 
 예를 들어 `orders` 기능을 만든다면 구조는 이렇게 시작합니다.
 
 ```text
-src/features/orders/
-├── api.ts
-├── queries.ts
-├── schema.ts
-└── store.ts
-
-src/pages/Orders/
-├── Orders.tsx
-├── Orders.module.css
-├── Orders.test.tsx
+src/domains/commerce/orders/
+├── api/
+│   └── ordersApi.ts
+├── components/
+│   ├── Orders.tsx
+│   ├── Orders.module.css
+│   └── Orders.test.tsx
+├── model/
+│   ├── orderSchema.ts
+│   ├── ordersQueries.ts
+│   └── ordersStore.ts
+├── tests/
+│   └── ordersApi.test.ts
 └── index.ts
 ```
 
@@ -99,7 +102,7 @@ src/pages/Orders/
 ```tsx
 {
   path: 'orders',
-  lazy: lazyPage(() => import('@pages/Orders')),
+  lazy: lazyPage(() => import('@/domains/commerce/orders')),
 }
 ```
 
@@ -113,7 +116,7 @@ Admin 템플릿은 Ant Design을 기반으로 하므로, 페이지 단위 작업
 1. 메뉴에 노출할 페이지인지 먼저 정합니다.
 2. 보호 페이지라면 `ProtectedRoute` 아래에 라우트를 추가합니다.
 3. 테이블, 폼, 모달은 AntD 컴포넌트를 사용하되 label, aria-label, loading, empty 상태를 빠뜨리지 않습니다.
-4. mock API를 바꿀 때는 실제 API 교체가 쉬운 형태로 `src/lib/mock.ts`와 hook 사이의 경계를 유지합니다.
+4. mock API를 바꿀 때는 실제 API 교체가 쉬운 형태로 `src/infrastructure/mock`와 domain hook 사이의 경계를 유지합니다.
 5. 로그인, 권한, 생성/수정/삭제처럼 실패 비용이 큰 흐름은 Playwright로 확인합니다.
 
 테이블을 추가할 때 최소로 챙길 항목은 다음과 같습니다.

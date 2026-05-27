@@ -34,20 +34,21 @@ npx create-react-bp my-admin --template admin
 my-admin/
 ├── src/
 │   ├── main.tsx                # Providers (AntD ConfigProvider / Query / Router)
-│   ├── App.tsx                 # 라우트 (보호 라우트 포함)
-│   ├── components/
-│   │   ├── AdminLayout.tsx     # 사이드바 + 헤더
-│   │   ├── ProtectedRoute.tsx  # 인증 가드
-│   │   └── ErrorBoundary.tsx
-│   ├── pages/
-│   │   ├── Login.tsx           # 로그인 페이지 (rhf + zod)
-│   │   ├── Dashboard.tsx       # 통계 카드 + recharts
-│   │   ├── Users.tsx           # 사용자 테이블 + 생성/수정 모달
-│   │   ├── Settings.tsx        # 시스템 설정
-│   │   └── NotFound.tsx
-│   ├── stores/                 # useAuthStore 등
-│   ├── styles/                 # global.css
-│   └── lib/                    # api 클라이언트
+│   ├── app/
+│   │   ├── model/              # UI store, effective theme
+│   │   ├── providers/          # Query/AntD/Router provider 조립
+│   │   ├── routes/             # 보호 라우트 포함 route tree
+│   │   ├── shell/              # AdminLayout, Breadcrumb, HeaderUserInfo
+│   │   └── styles/             # global.css
+│   ├── domains/
+│   │   ├── auth/login/         # 로그인 페이지, 인증 store, ProtectedRoute
+│   │   ├── dashboard/overview/ # 통계 카드 + recharts
+│   │   ├── users/list/         # 사용자 테이블 + 생성/수정 모달
+│   │   ├── analytics/overview/ # 분석 차트
+│   │   ├── settings/preferences/
+│   │   └── system/not-found/
+│   ├── infrastructure/         # HTTP client, MSW, mock API adapter
+│   └── shared/                 # 도메인 중립 config/hooks/ui
 ├── e2e/                        # Playwright (로그인 → 대시보드 시나리오)
 └── playwright.config.ts
 ```
@@ -57,20 +58,27 @@ my-admin/
 `ProtectedRoute` 컴포넌트가 `useAuthStore`를 확인하고, 인증되지 않은 경우 `/login`으로 리다이렉트합니다.
 
 ```tsx
-import { Navigate, Outlet } from 'react-router';
-import { useAuthStore } from '@/stores/useAuthStore';
+import { Navigate } from 'react-router-dom';
+import { useAuthStore } from '@/domains/auth/login';
 
-export function ProtectedRoute() {
-  const user = useAuthStore((s) => s.user);
-  if (!user) return <Navigate to="/login" replace />;
-  return <Outlet />;
+export function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  return <>{children}</>;
 }
 
-// App.tsx
-<Route element={<ProtectedRoute />}>
-  <Route path="/" element={<Dashboard />} />
-  <Route path="/users" element={<Users />} />
-  <Route path="/settings" element={<Settings />} />
+// src/app/routes/index.tsx
+<Route
+  path="/"
+  element={
+    <ProtectedRoute>
+      <AdminLayout />
+    </ProtectedRoute>
+  }
+>
+  <Route index element={<Dashboard />} />
+  <Route path="users" element={<Users />} />
+  <Route path="settings" element={<Settings />} />
 </Route>
 <Route path="/login" element={<Login />} />
 ```

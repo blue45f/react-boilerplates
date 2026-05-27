@@ -4,36 +4,36 @@
 
 ## 설계 원칙
 
-1. **앱 조립과 기능 구현 분리** - Provider, QueryClient, Router는 `src/app`과 `src/router`에서 조립하고 페이지/기능 코드는 도메인별로 둡니다.
+1. **앱 조립과 기능 구현 분리** - Provider, QueryClient, Router, Shell은 `src/app`에서 조립하고 화면/도메인 구현은 `src/domains`에 둡니다.
 2. **서버 상태와 클라이언트 상태 분리** - 비동기 서버 상태는 TanStack Query, 사용자/테마 같은 클라이언트 상태는 Zustand가 담당합니다.
 3. **Data Router 우선** - React Router 7의 Data Router 객체 라우팅과 route-level `lazy` module을 사용합니다.
 4. **검증 가능한 스캐폴딩** - lint, typecheck, test, build, i18n 키 동기화, security audit을 스크립트와 Husky 훅으로 고정합니다.
-5. **점진적 확장** - 기능이 커질 때 `features/<domain>` 안에 schema, api, queries, store를 함께 배치합니다.
+5. **점진적 확장** - 기능이 커질 때 `domains/<domain>/<feature>` 안에 `components`, `api`, `model`, `tests`를 함께 배치합니다.
 
 ## 디렉토리 구조
 
 ```
 src/
-├── app/             앱 조립 계층 (AppProviders, QueryClient factory)
-├── assets/          정적 자원 및 글로벌 스타일
-├── components/      재사용 가능한 UI 컴포넌트
-│   ├── common/      범용 컴포넌트
-│   └── layout/      레이아웃 컴포넌트
-├── features/        도메인 모듈 (예: todos)
-├── hooks/           커스텀 React 훅
-├── i18n/            i18next 설정, 로케일, 키 동기화 테스트
-├── pages/           라우트 단위 화면 컴포넌트
-├── router/          Data Router route object 정의
-├── services/        범용 API 클라이언트
-├── store/           Zustand 기반 앱 전역 상태
+├── app/             앱 조립 계층
+│   ├── i18n/        i18next 설정, 로케일, 키 동기화 테스트
+│   ├── providers/   AppProviders, QueryClient factory
+│   ├── routes/      Data Router route object 정의
+│   ├── shell/       앱 프레임, Header, Footer
+│   └── styles/      글로벌 스타일
+├── domains/         도메인/기능별 구현
+│   ├── marketing/   Home 화면
+│   ├── content/     About 화면
+│   ├── todos/       Todo list api/model/components/tests
+│   └── system/      NotFound 등 시스템 화면
+├── infrastructure/  HTTP 클라이언트, MSW, browser storage adapter
+├── shared/          도메인 중립 UI, hooks, config, 순수 유틸리티
 ├── test/            Vitest setup
-├── types/           공유 타입
-└── utils/           순수 유틸리티
+└── types/           공유 타입
 ```
 
 ## 앱 부트스트랩
 
-`main.tsx`는 DOM mount와 `StrictMode`만 담당합니다. 실제 앱 조립은 `src/app/AppProviders.tsx`에 모읍니다.
+`main.tsx`는 DOM mount와 `StrictMode`만 담당합니다. 실제 앱 조립은 `src/app/providers/AppProviders.tsx`에 모읍니다.
 
 ```
 main.tsx
@@ -44,7 +44,7 @@ main.tsx
       └─ ReactQueryDevtools (DEV only)
 ```
 
-TanStack Query의 `QueryClient`는 `src/app/queryClient.ts`에서 factory와 브라우저용 singleton을 함께 제공합니다. 테스트나 Storybook에서 별도 client가 필요하면 `createAppQueryClient()`를 사용합니다.
+TanStack Query의 `QueryClient`는 `src/app/providers/queryClient.ts`에서 factory와 브라우저용 singleton을 함께 제공합니다. 테스트나 Storybook에서 별도 client가 필요하면 `createAppQueryClient()`를 사용합니다.
 
 ## 라우팅
 
@@ -57,32 +57,32 @@ export const routes = [
     Component: App,
     ErrorBoundary: RouteError,
     children: [
-      { index: true, lazy: lazyPage(() => import('@pages/Home')) },
-      { path: 'about', lazy: lazyPage(() => import('@pages/About')) },
+      { index: true, lazy: lazyPage(() => import('@/domains/marketing/home')) },
+      { path: 'about', lazy: lazyPage(() => import('@/domains/content/about')) },
     ],
   },
 ]
 ```
 
-새 페이지를 추가할 때는 `src/pages/NewPage/`를 만들고 `src/router/index.tsx`의 children에 lazy route를 추가합니다. 경로 매칭에 필요한 `path`, `index`, `children`은 정적으로 정의하고, 화면 구현만 lazy로 분리합니다.
+새 페이지를 추가할 때는 `src/domains/<domain>/<feature>/`에 `components`와 public `index.ts`를 만들고 `src/app/routes/index.tsx`의 children에 lazy route를 추가합니다. 경로 매칭에 필요한 `path`, `index`, `children`은 정적으로 정의하고, 화면 구현만 lazy로 분리합니다.
 
 ## 상태 관리
 
 ### 서버 상태
 
-TanStack Query를 사용합니다. query key, query hook, mutation hook은 가능하면 `features/<domain>/queries.ts`에 둡니다.
+TanStack Query를 사용합니다. query key, query hook, mutation hook은 가능하면 `domains/<domain>/<feature>/model`에 둡니다. API 계약은 같은 기능의 `api`에 두고, MSW/HTTP 공통 계약은 `infrastructure/http`에서 관리합니다.
 
 ### 클라이언트 상태
 
-Zustand를 사용합니다. 현재 `src/store/index.tsx`는 테마, 사용자, 인증 상태를 localStorage에 persist합니다. 도메인 전용 UI 상태는 해당 feature 안의 작은 store로 분리합니다.
+Zustand를 사용합니다. 현재 `src/infrastructure/storage/appStore.tsx`는 테마, 사용자, 인증 상태를 localStorage에 persist합니다. 도메인 전용 UI 상태는 해당 domain feature의 `model` 안의 작은 store로 분리합니다.
 
 ## i18n
 
 i18next와 react-i18next를 사용합니다.
 
-- `src/i18n/locales/ko.json`
-- `src/i18n/locales/en.json`
-- `src/i18n/locales.test.ts`
+- `src/app/i18n/locales/ko.json`
+- `src/app/i18n/locales/en.json`
+- `src/app/i18n/locales.test.ts`
 
 로케일 키가 어긋나면 `pnpm test:i18n`과 전체 테스트에서 실패합니다. 새 문구를 추가할 때는 모든 지원 언어에 같은 키를 추가해야 합니다.
 

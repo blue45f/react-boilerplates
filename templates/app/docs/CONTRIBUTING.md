@@ -70,7 +70,7 @@ docs: API 클라이언트 사용법 문서화
 ### 스타일
 
 - CSS Modules (`.module.css`) 사용
-- 글로벌 변수는 `src/assets/styles/global.css`에 정의
+- 글로벌 변수는 `src/app/styles/global.css`에 정의
 - 인라인 스타일 지양
 
 ### Import 순서
@@ -81,8 +81,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 // 2. 내부 모듈 (path alias 사용)
-import Button from '@components/common/Button'
-import { useAppContext } from '@store'
+import { Button } from '@/shared/ui'
+import { useAppStore } from '@/infrastructure/storage'
 
 // 3. 타입
 import type { User } from '@types'

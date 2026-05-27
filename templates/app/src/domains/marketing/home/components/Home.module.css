@@ -1,0 +1,112 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.hero {
+  text-align: center;
+  padding: var(--spacing-xl) 0;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: var(--spacing-md);
+  background: linear-gradient(135deg, var(--color-primary), #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.description {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-lg);
+}
+
+.buttons {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+}
+
+.features {
+  padding: var(--spacing-xl) 0;
+}
+
+.sectionTitle {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.featureCard {
+  padding: var(--spacing-lg);
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition);
+}
+
+.featureCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.featureCard h3 {
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-primary);
+}
+
+.featureCard p {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.newsletter {
+  text-align: center;
+  padding: var(--spacing-xl);
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius);
+}
+
+.newsletterDesc {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-lg);
+}
+
+.form {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.form > div {
+  flex: 1;
+}
+
+@media (max-width: 640px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .buttons {
+    flex-direction: column;
+  }
+
+  .form {
+    flex-direction: column;
+  }
+}

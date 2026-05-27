@@ -37,21 +37,20 @@ npx create-react-bp my-app --template app
 my-app/
 ├── src/
 │   ├── app/                 # AppProviders, QueryClient factory
-│   ├── assets/              # 글로벌 스타일과 정적 자원
-│   ├── components/
-│   │   ├── common/          # Button, Input, Modal, Toast 등 범용 컴포넌트
-│   │   ├── layout/          # Header, Footer
-│   │   └── route/           # ProtectedRoute
-│   ├── features/            # 도메인 모듈 (schema, api, queries, store)
-│   ├── hooks/               # 커스텀 훅
-│   ├── i18n/                # i18next 설정과 ko/en 로케일
-│   ├── pages/               # 라우트 단위 화면
-│   ├── router/              # Data Router route object
-│   ├── services/            # API 클라이언트
-│   ├── store/               # Zustand 전역 상태
+│   │   ├── i18n/            # i18next 설정과 ko/en 로케일
+│   │   ├── providers/       # Provider 조립, QueryClient factory
+│   │   ├── routes/          # Data Router route object
+│   │   ├── shell/           # Header, Footer, AppShell
+│   │   └── styles/          # 글로벌 스타일
+│   ├── domains/             # 도메인/기능 모듈
+│   │   ├── marketing/home/  # Home 화면
+│   │   ├── content/about/   # About 화면
+│   │   └── todos/list/      # components/api/model/tests
+│   ├── infrastructure/      # HTTP, MSW, browser storage adapter
+│   ├── shared/              # 도메인 중립 UI/hooks/lib/config
 │   ├── test/                # Vitest setup
 │   ├── types/               # 공유 타입
-│   └── utils/               # 순수 유틸리티
+│   └── main.tsx             # DOM mount only
 ├── e2e/                     # Playwright 테스트
 ├── .storybook/              # Storybook 설정
 ├── docs/                    # 아키텍처/기여 문서
@@ -62,14 +61,14 @@ my-app/
 
 ## 아키텍처 원칙
 
-| 영역            | 원칙                                                                                      |
-| --------------- | ----------------------------------------------------------------------------------------- |
-| 앱 조립         | `src/main.tsx`는 mount만 담당하고 Provider 조립은 `src/app/AppProviders.tsx`에 둡니다.    |
-| 라우팅          | React Router Data Router의 route object와 `lazy` route module을 사용합니다.               |
-| 서버 상태       | query key, query hook, mutation hook은 도메인별 `features/<domain>/queries.ts`에 둡니다.  |
-| 클라이언트 상태 | 앱 전역 상태는 `src/store`, 도메인 UI 상태는 해당 feature 안의 작은 store로 분리합니다.   |
-| 다국어          | ko/en 로케일 키 동기화를 `src/i18n/locales.test.ts`로 검증합니다.                         |
-| 품질 게이트     | format, lint, typecheck, test, build, security audit을 `verify`/`verify:push`로 묶습니다. |
+| 영역            | 원칙                                                                                       |
+| --------------- | ------------------------------------------------------------------------------------------ |
+| 앱 조립         | `src/main.tsx`는 mount만 담당하고 Provider/Router/Shell 조립은 `src/app`에 둡니다.         |
+| 라우팅          | React Router Data Router의 route object와 `lazy` route module을 사용합니다.                |
+| 서버 상태       | query key, query hook, mutation hook은 `domains/<domain>/<feature>/model`에 둡니다.        |
+| 클라이언트 상태 | 앱 전역 상태는 `infrastructure/storage`, 도메인 UI 상태는 해당 feature model로 분리합니다. |
+| 다국어          | ko/en 로케일 키 동기화를 `src/app/i18n/locales.test.ts`로 검증합니다.                      |
+| 품질 게이트     | format, lint, typecheck, test, build, security audit을 `verify`/`verify:push`로 묶습니다.  |
 
 ## 라우트
 
@@ -119,4 +118,4 @@ App 템플릿은 테스트 코드를 최대한 포함합니다.
 VITE_API_URL=http://localhost:8080/api
 ```
 
-`src/services/api.ts`의 기본 API URL로 사용됩니다. 값이 없으면 `/api`를 사용합니다.
+`src/infrastructure/http/api.ts`의 기본 API URL로 사용됩니다. 값이 없으면 `/api`를 사용합니다.

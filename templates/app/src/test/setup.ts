@@ -4,10 +4,9 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import { afterAll, afterEach, beforeAll } from 'vitest'
 
-import { server } from './mocks/server'
-
-import en from '@/i18n/locales/en.json'
-import ko from '@/i18n/locales/ko.json'
+import en from '@/app/i18n/locales/en.json'
+import ko from '@/app/i18n/locales/ko.json'
+import { server } from '@/infrastructure/http/mocks/server'
 
 const passthroughUnhandledRequestPaths = new Set(['/api/down'])
 

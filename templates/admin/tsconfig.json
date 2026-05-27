@@ -19,13 +19,11 @@
     "noUncheckedSideEffectImports": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@components/*": ["./src/components/*"],
-      "@hooks/*": ["./src/hooks/*"],
-      "@lib/*": ["./src/lib/*"],
-      "@pages/*": ["./src/pages/*"],
-      "@providers/*": ["./src/providers/*"],
-      "@stores/*": ["./src/stores/*"],
-      "@styles/*": ["./src/styles/*"]
+      "@app/*": ["./src/app/*"],
+      "@domains/*": ["./src/domains/*"],
+      "@infrastructure/*": ["./src/infrastructure/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@ui/*": ["./src/shared/ui/*"]
     }
   },
   "include": ["src"]

@@ -12,7 +12,7 @@
 - **CSS Modules** - 컴포넌트 스코프 스타일링
 - **TanStack Query + Zustand** - 서버 상태와 클라이언트 상태 분리
 - **Vitest** - 빠른 단위 테스트 프레임워크
-- **Path Aliases** - `@components`, `@pages`, `@hooks` 등 깔끔한 import 경로
+- **Path Aliases** - `@app`, `@domains`, `@infrastructure`, `@shared`, `@ui` 등 경계가 드러나는 import 경로
 - **ESLint 10** - React Hooks, React Refresh 플러그인 포함
 - **다크 모드** - 시스템 테마 감지 + 수동 토글, localStorage 영속화
 - **접근성(a11y)** - Skip Link, focus-visible, aria 속성, reduced-motion 대응
@@ -59,25 +59,22 @@ pnpm dev
 
 ```
 src/
-├── assets/              # 정적 자원 및 글로벌 스타일
+├── app/                 # Provider, QueryClient, route, shell, i18n, global styles
+│   ├── i18n/
+│   ├── providers/
+│   ├── routes/
+│   ├── shell/
 │   └── styles/
-│       └── global.css   # CSS 변수, 리셋, 테마 정의
-├── components/          # 재사용 가능한 UI 컴포넌트
-│   ├── common/          # 범용 컴포넌트 (Button, Input, ErrorBoundary, Loading)
-│   └── layout/          # 레이아웃 컴포넌트 (Header, Footer)
-├── app/                 # AppProviders, QueryClient 등 앱 조립 계층
-├── features/            # 도메인 모듈 (schema, api, query, store)
-├── hooks/               # 커스텀 React 훅
-├── i18n/                # i18next 설정 및 로케일
-├── pages/               # 라우트 단위 페이지 컴포넌트
-├── router/              # React Router Data Router 정의
-├── services/            # API 클라이언트 및 외부 서비스 연동
-├── store/               # Zustand 기반 앱 전역 상태
+├── domains/             # 도메인/기능별 components, api, model, tests
+│   ├── marketing/home/
+│   ├── content/about/
+│   ├── todos/list/
+│   └── system/not-found/
+├── infrastructure/      # HTTP client, MSW, browser storage adapter
+├── shared/              # 도메인 중립 UI, hooks, config, lib
 ├── test/                # 테스트 설정
 ├── types/               # 공유 TypeScript 타입 정의
-├── utils/               # 유틸리티 함수
-├── App.tsx              # 루트 컴포넌트 (lazy routing + ErrorBoundary)
-└── main.tsx             # 애플리케이션 진입점 (AppProviders 포함)
+└── main.tsx             # 애플리케이션 진입점 (DOM mount only)
 ```
 
 ## 핵심 아키텍처
@@ -88,7 +85,7 @@ src/
 서버 상태는 **TanStack Query**, 앱 전역 클라이언트 상태는 **Zustand**로 관리합니다.
 
 ```typescript
-import { useAppStore } from '@store/index'
+import { useAppStore } from '@/infrastructure/storage'
 
 const theme = useAppStore((state) => state.theme)
 const setTheme = useAppStore((state) => state.setTheme)
@@ -101,8 +98,8 @@ setTheme('dark')
 라우트 매칭 정보는 정적으로 유지하고, 화면 컴포넌트만 필요 시점에 로드합니다.
 
 ```tsx
-{ index: true, lazy: lazyPage(() => import('@pages/Home')) }
-{ path: 'about', lazy: lazyPage(() => import('@pages/About')) }
+{ index: true, lazy: lazyPage(() => import('@/domains/marketing/home')) }
+{ path: 'about', lazy: lazyPage(() => import('@/domains/content/about')) }
 ```
 
 ### Error Boundary
@@ -115,7 +112,7 @@ setTheme('dark')
 Fetch API 기반의 타입 안전한 HTTP 클라이언트를 제공합니다.
 
 ```typescript
-import api from '@services/api'
+import api from '@/infrastructure/http'
 
 const { data } = await api.get<User[]>('/users')
 const { data } = await api.post<User>('/users', { name: '홍길동' })
@@ -130,17 +127,15 @@ const { data } = await api.get<User[]>('/users', {
 
 `tsconfig.json`과 `vite.config.ts`에 동기화된 path alias가 설정되어 있습니다.
 
-| Alias           | 경로               |
-| --------------- | ------------------ |
-| `@/*`           | `src/*`            |
-| `@components/*` | `src/components/*` |
-| `@pages/*`      | `src/pages/*`      |
-| `@hooks/*`      | `src/hooks/*`      |
-| `@services/*`   | `src/services/*`   |
-| `@utils/*`      | `src/utils/*`      |
-| `@types/*`      | `src/types/*`      |
-| `@store/*`      | `src/store/*`      |
-| `@assets/*`     | `src/assets/*`     |
+| Alias               | 경로                   |
+| ------------------- | ---------------------- |
+| `@/*`               | `src/*`                |
+| `@app/*`            | `src/app/*`            |
+| `@domains/*`        | `src/domains/*`        |
+| `@infrastructure/*` | `src/infrastructure/*` |
+| `@shared/*`         | `src/shared/*`         |
+| `@ui/*`             | `src/shared/ui/*`      |
+| `@types/*`          | `src/types/*`          |
 
 ### 커스텀 훅
 
@@ -222,7 +217,7 @@ const { data } = await api.get<User[]>('/users', {
 알림 메시지를 표시하는 토스트 시스템입니다. `ToastProvider`로 감싸고 `useToast()`로 사용합니다.
 
 ```tsx
-import { useToast } from '@components/common/Toast'
+import { useToast } from '@/shared/ui'
 
 const { toast } = useToast()
 toast('저장되었습니다', 'success')
@@ -536,9 +531,9 @@ VITE_API_URL=https://api.example.com
 이 프로젝트를 기반으로 새 프로젝트를 시작할 때:
 
 1. `package.json`의 `name`, `version` 수정
-2. `src/pages/` 아래에 페이지 추가 후 `src/router/index.tsx`에 lazy 라우트 등록
-3. `src/components/common/`에 공통 컴포넌트 추가
-4. `src/assets/styles/global.css`의 CSS 변수로 테마 커스터마이징
+2. `src/domains/<domain>/<feature>/` 아래에 화면/도메인 로직 추가 후 `src/app/routes/index.tsx`에 lazy 라우트 등록
+3. `src/shared/ui/`에 도메인 중립 공통 컴포넌트 추가
+4. `src/app/styles/global.css`의 CSS 변수로 테마 커스터마이징
 5. 필요시 `.env` 파일로 API URL 등 환경 변수 설정
 
 ## 기술 스택

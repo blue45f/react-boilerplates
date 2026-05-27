@@ -39,6 +39,24 @@ reviews:
         package scripts, lockfiles, hooks, test setup, and config files still work
         outside the root workspace. Do not recommend catalog: dependencies inside
         template package.json files.
+    - path: 'templates/app/src/**'
+      instructions: >
+        Enforce the feature-oriented architecture contract from the architecture
+        guide: app composition belongs in src/app, user-facing feature code belongs
+        in src/domains/<domain>/<feature>, adapters belong in src/infrastructure,
+        and shared UI/hooks/lib must stay domain-neutral under src/shared. Flag
+        new top-level type folders such as components, hooks, pages, services,
+        features, router, store, or utils unless the architecture test has
+        intentionally been updated with a documented migration reason.
+    - path: 'templates/admin/src/**'
+      instructions: >
+        Enforce the feature-oriented architecture contract from the architecture
+        guide: app composition belongs in src/app, user-facing feature code belongs
+        in src/domains/<domain>/<feature>, adapters belong in src/infrastructure,
+        and shared UI/hooks/lib must stay domain-neutral under src/shared. Flag
+        new top-level type folders such as components, hooks, pages, lib, stores,
+        or providers unless the architecture test has intentionally been updated
+        with a documented migration reason.
     - path: 'templates/**/src/**/*.{ts,tsx}'
       instructions: >
         Prefer user-observable React behavior, Testing Library role queries, MSW
@@ -76,4 +94,8 @@ knowledge_base:
     filePatterns:
       - apps/docs/docs/guides/development-guide.md
       - apps/docs/docs/concepts/scaffolding-vs-boilerplates.md
+      - apps/docs/docs/templates/app.md
+      - apps/docs/docs/templates/admin.md
       - templates/app/docs/ARCHITECTURE.md
+      - templates/app/src/architecture.test.ts
+      - templates/admin/src/architecture.test.ts

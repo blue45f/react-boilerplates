@@ -29,7 +29,7 @@ export default defineConfig(createAppConfig());
 
 - `@vitejs/plugin-react`
 - React Compiler preset (`@rolldown/plugin-babel`)
-- `@/`, `@components`, `@features`, `@router`, `@i18n` 등 앱 표준 별칭
+- `@/`, `@app`, `@domains`, `@infrastructure`, `@shared`, `@ui` 등 앱 표준 별칭
 - vendor/router/query/form/i18n 청크 분리
 - 소스맵
 

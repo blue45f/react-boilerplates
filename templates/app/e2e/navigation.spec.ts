@@ -18,7 +18,7 @@ test.describe('Navigation smoke tests', () => {
     await expect(page.getByText('페이지를 찾을 수 없습니다')).toBeVisible()
 
     await page.getByRole('link', { name: '홈으로 이동' }).click()
-    await expect(page).toHaveURL('http://localhost:5173/')
+    await expect(page).toHaveURL(/\/$/)
   })
 
   test('navigates to Todos page and adds a todo', async ({ page }) => {

@@ -1,0 +1,62 @@
+name: template sync check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      template_repo:
+        description: react-boilerplates repository to compare against
+        required: false
+        default: blue45f/react-boilerplates
+      template_branch:
+        description: Branch, tag, or commit-like reference to use
+        required: false
+        default: main
+      template_path:
+        description: Template path inside repository
+        required: false
+        default: templates/app
+
+permissions:
+  contents: read
+
+jobs:
+  template-sync:
+    name: Sync with react-boilerplates template
+    runs-on: ubuntu-latest
+    env:
+      TEMPLATE_REPO: ${{ github.event_name == 'workflow_dispatch' && inputs.template_repo || vars.REACT_BOILERPLATES_REPO || 'blue45f/react-boilerplates' }}
+      TEMPLATE_BRANCH: ${{ github.event_name == 'workflow_dispatch' && inputs.template_branch || vars.REACT_BOILERPLATES_BRANCH || 'main' }}
+      TEMPLATE_PATH: ${{ github.event_name == 'workflow_dispatch' && inputs.template_path || vars.REACT_BOILERPLATES_TEMPLATE_PATH || 'templates/app' }}
+    steps:
+      - name: Checkout scaffolding
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Checkout react-boilerplates template
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.TEMPLATE_REPO }}
+          ref: ${{ env.TEMPLATE_BRANCH }}
+          path: react-boilerplates-template
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Run template sync check
+        run: |
+          set -euo pipefail
+          TEMPLATE_DIR="${{ github.workspace }}/react-boilerplates-template"
+          echo "Checked out template from: $TEMPLATE_REPO@$TEMPLATE_BRANCH"
+          if [[ "$TEMPLATE_PATH" = /* ]]; then
+            TARGET_TEMPLATE_PATH="$TEMPLATE_PATH"
+          else
+            TARGET_TEMPLATE_PATH="$TEMPLATE_DIR/$TEMPLATE_PATH"
+          fi
+          REACT_BOILERPLATES_TEMPLATE_PATH="$TARGET_TEMPLATE_PATH" node scripts/check-template-sync.mjs

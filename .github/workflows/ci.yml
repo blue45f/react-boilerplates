@@ -137,6 +137,35 @@ jobs:
           path: templates/${{ matrix.template }}/playwright-report
           retention-days: 7
 
+  e2e-react-scaffolding:
+    name: E2E (Playwright - react-scaffolding)
+    runs-on: ubuntu-latest
+    needs: [build]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install root deps
+        run: pnpm install --frozen-lockfile
+      - name: Install app deps
+        run: pnpm --dir apps/react-scaffolding install --ignore-workspace --ignore-scripts
+      - name: Install Playwright browsers
+        run: pnpm --dir apps/react-scaffolding run test:e2e:install
+      - name: Run E2E
+        run: pnpm --dir apps/react-scaffolding run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report-react-scaffolding
+          path: apps/react-scaffolding/playwright-report
+          retention-days: 7
+
   template-verify:
     name: Templates Verify (${{ matrix.template }})
     runs-on: ubuntu-latest

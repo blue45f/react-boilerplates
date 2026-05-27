@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll } from 'vitest';
 
-import { server } from './test/mocks/server';
+import { server } from './infrastructure/http/mocks/server';
 
 beforeAll(() => {
   server.listen({ onUnhandledRequest: 'error' });

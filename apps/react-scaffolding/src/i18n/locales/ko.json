@@ -1,0 +1,88 @@
+{
+  "common": {
+    "appName": "React App",
+    "skipToContent": "본문으로 건너뛰기",
+    "loading": "로딩 중...",
+    "error": "오류가 발생했습니다.",
+    "retry": "다시 시도",
+    "cancel": "취소",
+    "confirm": "확인",
+    "delete": "삭제",
+    "edit": "수정",
+    "save": "저장",
+    "add": "추가",
+    "search": "검색",
+    "language": "언어"
+  },
+  "nav": {
+    "home": "홈",
+    "about": "소개",
+    "todos": "할 일"
+  },
+  "home": {
+    "title": "React 프로젝트를 빠르게 시작하세요",
+    "description": "TypeScript, Vite, React Router가 미리 설정된 현대적인 React 스캐폴딩 프로젝트입니다.",
+    "getStarted": "시작하기",
+    "learnMore": "더 알아보기",
+    "featuresTitle": "주요 기능",
+    "newsletterTitle": "뉴스레터 구독",
+    "newsletterDesc": "최신 업데이트와 팁을 받아보세요.",
+    "emailPlaceholder": "이메일 주소를 입력하세요",
+    "subscribe": "구독하기",
+    "subscribeSuccess": "구독 신청이 완료되었습니다!",
+    "errors": {
+      "emailRequired": "이메일을 입력해주세요.",
+      "emailInvalid": "올바른 이메일 형식이 아닙니다."
+    }
+  },
+  "about": {
+    "title": "소개",
+    "intro": "React Scaffolding은 현대적인 React 애플리케이션을 빠르게 시작할 수 있도록 도와주는 스타터 템플릿입니다.",
+    "techStackTitle": "기술 스택",
+    "teamTitle": "팀 소개",
+    "structureTitle": "프로젝트 구조"
+  },
+  "todos": {
+    "title": "할 일 목록",
+    "subtitle": "TanStack Query · React Hook Form · Zod 통합 예제",
+    "addPlaceholder": "할 일을 입력하세요",
+    "addButton": "추가",
+    "empty": "아직 할 일이 없습니다.",
+    "completed": "완료",
+    "pending": "미완료",
+    "all": "전체",
+    "remaining": "{{count}}개 남음",
+    "errors": {
+      "titleRequired": "제목을 입력해주세요.",
+      "titleMin": "제목은 1자 이상이어야 합니다.",
+      "titleMax": "제목은 80자 이하여야 합니다."
+    },
+    "actions": {
+      "toggle": "완료 상태 토글",
+      "delete": "삭제",
+      "edit": "수정"
+    }
+  },
+  "notFound": {
+    "title": "페이지를 찾을 수 없습니다",
+    "description": "요청하신 페이지가 존재하지 않거나 이동되었습니다.",
+    "goHome": "홈으로 이동"
+  },
+  "header": {
+    "primaryNav": "메인 네비게이션",
+    "openMenu": "메뉴 열기",
+    "closeMenu": "메뉴 닫기"
+  },
+  "footer": {
+    "copyright": "© {{year}} React App. All rights reserved.",
+    "privacy": "개인정보처리방침",
+    "terms": "이용약관",
+    "contact": "문의하기"
+  },
+  "theme": {
+    "toLight": "라이트 모드로 전환",
+    "toDark": "다크 모드로 전환",
+    "lightMode": "라이트 모드",
+    "darkMode": "다크 모드"
+  }
+}

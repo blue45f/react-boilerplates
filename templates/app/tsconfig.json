@@ -21,17 +21,12 @@
     "allowSyntheticDefaultImports": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@components/*": ["./src/components/*"],
-      "@pages/*": ["./src/pages/*"],
-      "@hooks/*": ["./src/hooks/*"],
-      "@services/*": ["./src/services/*"],
-      "@utils/*": ["./src/utils/*"],
+      "@app/*": ["./src/app/*"],
+      "@domains/*": ["./src/domains/*"],
+      "@infrastructure/*": ["./src/infrastructure/*"],
+      "@shared/*": ["./src/shared/*"],
       "@types/*": ["./src/types/*"],
-      "@store/*": ["./src/store/*"],
-      "@assets/*": ["./src/assets/*"],
-      "@features/*": ["./src/features/*"],
-      "@router/*": ["./src/router/*"],
-      "@i18n/*": ["./src/i18n/*"]
+      "@ui/*": ["./src/shared/ui/*"]
     }
   },
   "include": ["src"]

@@ -5,7 +5,7 @@ export default defineConfig({
   timeout: 30000,
   retries: process.env.CI ? 2 : 0,
   use: {
-    baseURL: 'http://localhost:5173',
+    baseURL: 'http://localhost:4173',
     trace: 'on-first-retry',
   },
   projects: [
@@ -15,9 +15,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'pnpm dev',
-    url: 'http://localhost:5173',
-    reuseExistingServer: !process.env.CI,
+    command: 'pnpm dev --host=localhost --port=4173 --strictPort',
+    url: 'http://localhost:4173',
+    reuseExistingServer: false,
     timeout: 60000,
   },
 })
