@@ -299,9 +299,8 @@ describe('api', () => {
   })
 
   it('fetch 자체 에러는 ApiError(0, 원본 메시지)로 감싼다', async () => {
-    const fetchSpy = vi
-      .spyOn(globalThis, 'fetch')
-      .mockRejectedValueOnce(new TypeError('Failed to fetch'))
+    const fetchMock = vi.fn().mockRejectedValue(new TypeError('fetch failed'))
+    vi.stubGlobal('fetch', fetchMock)
 
     try {
       await api.get('/down')
@@ -311,11 +310,12 @@ describe('api', () => {
       expect((err as ApiError).status).toBe(0)
       expect((err as ApiError).message).toBe('fetch failed')
     }
-    fetchSpy.mockRestore()
+    vi.unstubAllGlobals()
   })
 
   it('비-Error rejection은 "Network error" 메시지로 감싼다', async () => {
-    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockRejectedValueOnce('boom')
+    const fetchMock = vi.fn().mockRejectedValue('boom')
+    vi.stubGlobal('fetch', fetchMock)
 
     try {
       await api.get('/down')
@@ -323,9 +323,9 @@ describe('api', () => {
     } catch (err) {
       expect(err).toBeInstanceOf(ApiError)
       expect((err as ApiError).status).toBe(0)
-      expect((err as ApiError).message).toBe('fetch failed')
+      expect((err as ApiError).message).toBe('Network error')
     }
-    fetchSpy.mockRestore()
+    vi.unstubAllGlobals()
   })
 
   it('204 No Content 응답은 data: null을 반환한다', async () => {
