@@ -29,6 +29,7 @@
 - [ ] `pnpm typecheck` 통과
 - [ ] `pnpm lint` 통과
 - [ ] `pnpm test` 통과
+- [ ] `CodeRabbit review gate` 통과
 - [ ] 영향이 있는 템플릿/패키지의 빌드 확인 (`pnpm build`)
 - [ ] 필요한 경우 `pnpm changeset` 추가
 - [ ] 문서(`apps/docs`) 업데이트 필요 여부 확인

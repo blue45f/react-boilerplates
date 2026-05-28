@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "NO_UPDATE_NOTIFIER=1 docusaurus start",
     "build": "NO_UPDATE_NOTIFIER=1 docusaurus build",
+    "lint": "docusaurus lint",
+    "typecheck": "tsc --noEmit",
     "serve": "NO_UPDATE_NOTIFIER=1 docusaurus serve",
     "clear": "NO_UPDATE_NOTIFIER=1 docusaurus clear",
     "clean": "rm -rf build .docusaurus"

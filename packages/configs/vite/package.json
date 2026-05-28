@@ -18,8 +18,8 @@
   "dependencies": {
     "@rolldown/plugin-babel": "catalog:",
     "@vitejs/plugin-react": "catalog:",
-    "vite": "catalog:",
-    "vite-plugin-dts": "^5.0.1"
+    "vite": "^8.0.14",
+    "vite-plugin-dts": "catalog:"
   },
   "peerDependencies": {
     "vite": "^8.0.0"

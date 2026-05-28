@@ -30,16 +30,18 @@
   ],
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts --clean",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "tsc -p tsconfig.json --noEmit",
     "dev": "tsup src/index.ts --format esm --watch",
     "test": "vitest run",
     "test:watch": "vitest",
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "chalk": "^5.6.0",
-    "commander": "^14.0.0",
-    "fs-extra": "^11.3.2",
-    "ora": "^9.0.0",
+    "chalk": "^5.6.2",
+    "commander": "^14.0.3",
+    "fs-extra": "^11.3.5",
+    "ora": "^9.4.0",
     "prompts": "^2.4.2"
   },
   "devDependencies": {
@@ -47,7 +49,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^25.9.1",
     "@types/prompts": "^2.4.9",
-    "tsup": "^8.5.0",
+    "tsup": "^8.5.1",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }

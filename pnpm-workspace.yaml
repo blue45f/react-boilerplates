@@ -13,6 +13,10 @@ onlyBuiltDependencies:
 ignoredBuiltDependencies:
   - core-js
 
+overrides:
+  serialize-javascript: "^7.0.3"
+  uuid: "^11.1.1"
+
 # pnpm catalog: 워크스페이스 전체에서 공통으로 쓰는 의존성 버전을 한곳에서 관리한다.
 # 각 패키지 package.json에서 "catalog:" 프로토콜로 참조한다. (pnpm 9.5+ 정식 지원, pnpm 10 권장)
 catalog:
@@ -63,7 +67,7 @@ catalog:
   zustand: ^5.0.13
   '@tanstack/react-query': ^5.100.14
   '@tanstack/react-query-devtools': ^5.100.14
-  ky: ^1.14.3
+  ky: ^2.0.2
   ofetch: ^1.4.1
   i18next: ^26.3.0
   i18next-browser-languagedetector: ^8.2.1
@@ -92,3 +96,8 @@ catalog:
   '@storybook/react-vite': ^10.4.1
   '@storybook/addon-a11y': ^10.4.1
   '@storybook/addon-themes': ^10.4.1
+
+allowBuilds:
+  core-js: set this to true or false
+  esbuild: set this to true or false
+  unrs-resolver: set this to true or false
