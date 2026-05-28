@@ -49,6 +49,63 @@ Storybook 정적 빌드는 Library 템플릿을 기준으로 확인합니다.
 pnpm build-storybook:bootstrap
 ```
 
+## React 빌드 도입 가이드
+
+템플릿을 새로 추가하거나 기존 템플릿에 빌드 경로가 빠져 있을 때는 아래 기준으로 맞춘다.  
+목표는 로컬/템플릿/CI 어디서도 같은 결과로 빌드가 통과되게 하는 것이다.
+
+### 1) 템플릿 별 스크립트 표준
+
+`templates/app`, `templates/admin`, `templates/lib`를 기준으로 아래가 최소 기준이다.
+
+| 항목              | App / Admin                              | Library                                  |
+| ----------------- | ---------------------------------------- | ---------------------------------------- |
+| 빌드 스크립트     | `tsc -b && vite build`                   | `vite build`                             |
+| 미리보기 스크립트 | `vite preview`                           | 생략 가능                                |
+| 타입 검사         | `tsc -b --noEmit` 또는 `tsc -b` 기반     | `tsc --noEmit`                           |
+| Storybook         | `pnpm storybook`, `pnpm build-storybook` | `pnpm storybook`, `pnpm build-storybook` |
+| 필수 포맷         | `pnpm build`                             | `pnpm build`                             |
+
+공통으로는 `pnpm verify`가 `format -> lint -> typecheck -> test:run -> build`를 묶기 때문에, 새 템플릿을 만들었다면 먼저 `verify` 스크립트에 빌드를 포함해야 한다.
+
+### 2) Vite 설정 최소 조건
+
+- `vite.config.ts`에 `@vitejs/plugin-react`를 넣고, React 19 기준이라면 `tsconfig`를 참조해 `jsx: react-jsx`가 동작하는지 확인한다.
+- App/Admin은 단일 앱 번들 기준으로 `build.target` + `rollupOptions.manualChunks` 정도를 먼저 넣는다.
+- Library는 패키지 소비자가 가져갈 수 있도록 `build.lib`, `formats: ['es', 'cjs']`, `vite-plugin-dts`를 둔다.
+- 라이브러리에서 `peerDependencies`가 맞아야 `vite build` 산출물에서 런타임 번들이 늘어나는 일을 줄일 수 있다.
+
+### 3) 템플릿별 실제 빌드 체크
+
+템플릿 폴더를 직접 기준으로 실행해 CI와 동일한 동작을 재현한다.
+
+```bash
+# 템플릿 기준 프로덕션 빌드
+pnpm --dir templates/app build
+pnpm --dir templates/admin build
+pnpm --dir templates/lib build
+
+# 번들 결과 점검(필요 시 로컬 검증)
+pnpm --dir templates/app run preview -- --host 127.0.0.1 --port 4173
+```
+
+루트에서 템플릿 의존성까지 포함해 한 번에 확인하려면 아래를 쓴다.
+
+```bash
+pnpm build:react:bootstrap
+```
+
+### 4) 템플릿 저장소로 반영할 때의 CI 연결
+
+새로운 템플릿 혹은 빌드 스크립트를 추가한 경우 루트 스크립트 연동도 함께 한다.
+
+1. `build:react` 또는 `verify:templates` 안에 템플릿 빌드 경로를 넣는다.
+2. 템플릿 전용 `pnpm --dir templates/... run verify`가 실패하지 않으면 root 스크립트에도 동등하게 반영한다.
+3. `.github/workflows/ci.yml`에 `verify`/`build-storybook:bootstrap` 연계가 있는지 확인한다.
+4. 문서(개발 가이드/템플릿 가이드)에 `build`/`preview` 명령과 산출물 경로를 반영한다.
+
+이 흐름을 지키면 템플릿 생성기(CLI)로 새 프로젝트를 만들었을 때도 동일하게 작동한다.
+
 ## 어디를 수정해야 할까
 
 | 하고 싶은 일                         | 주로 수정하는 위치                        | 같이 확인할 것                                  |
