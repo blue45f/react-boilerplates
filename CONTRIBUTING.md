@@ -76,6 +76,13 @@ chore(deps): bump vite to 6.3
 4. PR 생성 — 템플릿 체크리스트를 채워 주세요
 5. CI(매트릭스 빌드, Playwright, Storybook 빌드, CodeQL) 통과 확인
 
+### PR 규칙
+
+- PR 본문은 템플릿의 체크리스트 기준으로 작성하고, 변경 증빙 링크(verify/lint/typecheck/build 로그)와 롤백 포인트를 남깁니다.
+- PR 제목은 Conventional Commits(`type(scope): subject`) 형식을 따릅니다.
+- CodeRabbit이 있는 경우 `CodeRabbit review gate`는 최신 head SHA에서 `APPROVED` 상태여야 병합 가능합니다.
+- 자동 머지는 `automerge` / `auto-merge` 라벨 요청된 PR에서만 허용하고, 최소 하나의 사람 승인과 필수 상태 체크 통과를 함께 만족해야 합니다.
+
 ## 릴리스
 
 `changesets/action` 워크플로우가 `main`에 머지될 때마다 "Version Packages" PR을 생성합니다. 이 PR을 머지하면 자동으로 npm에 배포됩니다 (npm provenance 포함). 게시 대상은 CLI 2개와 `@repo/*` configs이며, 템플릿(`react-app`/`react-admin`/`react-lib`)과 `docs`는 게시 대상이 아닙니다.
