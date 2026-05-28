@@ -122,6 +122,15 @@ function serializeBody(body: unknown) {
   return body === undefined ? undefined : JSON.stringify(body)
 }
 
+function getNetworkErrorMessage(error: unknown): string {
+  if (!(error instanceof Error)) return 'Network error'
+
+  const cause = (error as Error & { cause?: unknown }).cause
+  if (cause instanceof Error && cause.message) return cause.message
+
+  return error.message
+}
+
 function request<T>(endpoint: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
   const mergedConfig = addInterceptors(normalizeRequestConfig(endpoint, options))
   const { url, headers, params, body, ...rest } = mergedConfig
@@ -154,7 +163,7 @@ function request<T>(endpoint: string, options: RequestOptions = {}): Promise<Api
       if (error instanceof ApiError) {
         throw error
       }
-      throw new ApiError(0, error instanceof Error ? error.message : 'Network error')
+      throw new ApiError(0, getNetworkErrorMessage(error))
     })
 }
 

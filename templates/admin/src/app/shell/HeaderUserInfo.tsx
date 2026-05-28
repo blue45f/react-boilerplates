@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import type { MenuProps } from 'antd';
 
-import { useAuthStore } from '@/domains/auth/login';
+import { useAuthStore } from '@/domains/auth/login/model/useAuthStore';
 import { useToast } from '@/shared/lib/toast';
 
 function HeaderUserInfo() {

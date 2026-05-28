@@ -3,7 +3,7 @@ import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import AdminLayout from '@/app/shell';
-import { ProtectedRoute } from '@/domains/auth/login';
+import ProtectedRoute from '@/domains/auth/login/components/ProtectedRoute';
 import ErrorBoundary from '@/shared/ui/ErrorBoundary';
 
 const Dashboard = lazy(() => import('@/domains/dashboard/overview'));

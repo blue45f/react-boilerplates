@@ -1,4 +1,4 @@
-import type { User } from '@/domains/auth/login';
+import type { User } from '@/domains/auth/login/model/useAuthStore';
 
 export interface AdminUser {
   id: string;

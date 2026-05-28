@@ -32,12 +32,6 @@
     "build-storybook": "storybook build",
     "prepare": "node scripts/prepare-husky.mjs"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "unrs-resolver"
-    ]
-  },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
       "eslint --fix",
