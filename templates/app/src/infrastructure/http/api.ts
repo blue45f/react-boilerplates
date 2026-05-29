@@ -154,7 +154,15 @@ function request<T>(endpoint: string, options: RequestOptions = {}): Promise<Api
       if (error instanceof ApiError) {
         throw error
       }
-      throw new ApiError(0, error instanceof Error ? error.message : 'Network error')
+      const cause = error instanceof Error ? error.cause : undefined
+      throw new ApiError(
+        0,
+        cause instanceof Error
+          ? cause.message
+          : error instanceof Error
+            ? error.message
+            : 'Network error'
+      )
     })
 }
 
