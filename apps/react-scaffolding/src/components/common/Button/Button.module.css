@@ -4,34 +4,62 @@
   justify-content: center;
   gap: var(--spacing-sm);
   font-weight: 500;
-  border: none;
-  border-radius: var(--border-radius);
-  transition: all var(--transition);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  transition:
+    transform var(--transition),
+    background-color var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition),
+    color var(--transition),
+    opacity var(--transition);
   white-space: nowrap;
+  min-height: 40px;
+  letter-spacing: -0.005em;
 }
 
 .button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  filter: grayscale(0.2);
 }
 
 /* Variants */
 .primary {
   background-color: var(--color-primary);
   color: var(--color-background);
+  border-color: var(--color-primary);
 }
 
 .primary:hover:not(:disabled) {
   background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  box-shadow: 0 6px 16px -10px rgb(0 0 0 / 30%);
+  transform: translateY(-1px);
+}
+
+.primary:focus-visible,
+.outline:focus-visible,
+.ghost:focus-visible,
+.secondary:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.primary:active:not(:disabled),
+.outline:active:not(:disabled),
+.ghost:active:not(:disabled),
+.secondary:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
 .secondary {
   background-color: var(--color-secondary);
   color: var(--color-background);
+  border-color: var(--color-secondary);
 }
 
 .secondary:hover:not(:disabled) {
-  opacity: 0.9;
+  background-color: color-mix(in srgb, var(--color-secondary) 85%, white);
 }
 
 .outline {
@@ -42,6 +70,7 @@
 
 .outline:hover:not(:disabled) {
   background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
 }
 
 .ghost {
@@ -55,7 +84,7 @@
 
 /* Sizes */
 .sm {
-  padding: var(--spacing-xs) var(--spacing-sm);
+  padding: 0.35rem 0.75rem;
   font-size: var(--font-size-sm);
 }
 
@@ -65,7 +94,7 @@
 }
 
 .lg {
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: 0.68rem var(--spacing-lg);
   font-size: var(--font-size-lg);
 }
 

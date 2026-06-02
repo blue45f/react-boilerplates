@@ -20,6 +20,7 @@
     "todos": "Todos"
   },
   "home": {
+    "kicker": "React starter kit",
     "title": "Kickstart your React project",
     "description": "A modern React scaffolding with TypeScript, Vite and React Router preconfigured.",
     "getStarted": "Get started",
@@ -30,6 +31,29 @@
     "emailPlaceholder": "Enter your email",
     "subscribe": "Subscribe",
     "subscribeSuccess": "Subscription complete!",
+    "heroActions": "Primary actions",
+    "metricsTitle": "Core quality signals",
+    "metrics": {
+      "qualityTerm": "Build quality",
+      "qualityValue": "Type-safety + DX",
+      "a11yTerm": "Accessibility",
+      "a11yValue": "Keyboard & screen reader ready",
+      "opsTerm": "Operability",
+      "opsValue": "Test & build gated"
+    },
+    "benefits": {
+      "typescript": "Catch runtime errors early with end-to-end type safety.",
+      "vite": "Fast dev startup with lightweight, optimized bundling.",
+      "router": "Consistent, predictable client-side navigation.",
+      "cssModules": "Scope styles safely per component to prevent clashes."
+    },
+    "quickStartTitle": "Get started in three steps",
+    "quickStartAria": "Quick start checklist",
+    "quickStart": {
+      "step1": "Add todos and manage your team's schedule.",
+      "step2": "Switch progress states at a glance with filters.",
+      "step3": "Toggle status as you finish work to keep a record."
+    },
     "errors": {
       "emailRequired": "Please enter your email.",
       "emailInvalid": "Invalid email format."
@@ -48,6 +72,11 @@
     "addPlaceholder": "What needs to be done?",
     "addButton": "Add",
     "empty": "No todos yet.",
+    "statsTotal": "Total {{count}}",
+    "statsCompleted": "Completed {{count}}",
+    "emptyHint": "Add your first todo to get started.",
+    "emptyFilterTitle": "No matching items.",
+    "emptyFilterHint": "Pick a different filter to see the list again.",
     "completed": "Completed",
     "pending": "Pending",
     "all": "All",

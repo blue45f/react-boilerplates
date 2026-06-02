@@ -29,6 +29,7 @@ function TodoForm() {
 
   const errorKey = errors.title?.message
   const errorText = errorKey ? t(errorKey) : undefined
+  const isBusy = isSubmitting || addTodo.isPending
 
   return (
     <form className={styles.form} onSubmit={onSubmit} noValidate>
@@ -38,8 +39,9 @@ function TodoForm() {
         aria-label={t('todos.addPlaceholder')}
         error={errorText}
         {...register('title')}
+        disabled={isBusy}
       />
-      <Button type="submit" isLoading={isSubmitting || addTodo.isPending}>
+      <Button type="submit" isLoading={isBusy}>
         {t('todos.addButton')}
       </Button>
       {addTodo.isError && (

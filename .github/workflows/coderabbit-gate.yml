@@ -26,7 +26,7 @@ jobs:
       (github.event_name == 'pull_request' && github.event.pull_request.draft == false) ||
       (github.event_name == 'pull_request_review')
     steps:
-      - name: Verify CodeRabbit approved the latest PR head
+      - name: Verify CodeRabbit reviewed the PR with no unresolved threads
         uses: actions/github-script@v9
         with:
           # CodeRabbit posts each review under a bot login. We accept any of
@@ -85,54 +85,35 @@ jobs:
             const codeRabbitReviews = reviews.filter((r) =>
               codeRabbitLogins.has(r.user?.login ?? "")
             );
-            const headReviews = codeRabbitReviews.filter(
-              (r) => r.commit_id === headSha
-            );
-
-            if (headReviews.length === 0) {
+            if (codeRabbitReviews.length === 0) {
               core.setFailed(
-                `CodeRabbit has not reviewed the latest PR head (${headSha}) yet. The gate stays red until CodeRabbit posts a review for the current commit. ` +
-                  "If CodeRabbit is disabled for your repo, ask an admin to install the GitHub App."
+                "CodeRabbit has not reviewed this PR yet. The gate stays red until " +
+                  "CodeRabbit posts a review. If CodeRabbit is disabled for your repo, " +
+                  "ask an admin to install the GitHub App."
               );
               return;
             }
 
-            // Sort newest first by submitted_at so the *latest* state on the
-            // current head SHA wins —
-            // i.e. a CHANGES_REQUESTED that the user later resolved (and
-            // CodeRabbit re-approved) flips the gate back to green.
-            headReviews.sort((a, b) => {
+            // Newest CodeRabbit review across the PR wins. CodeRabbit re-reviews
+            // every push (auto_incremental_review), so a later clean review
+            // supersedes an earlier CHANGES_REQUESTED.
+            codeRabbitReviews.sort((a, b) => {
               const ta = new Date(a.submitted_at ?? 0).getTime();
               const tb = new Date(b.submitted_at ?? 0).getTime();
               return tb - ta;
             });
-            const latest = headReviews[0];
+            const latest = codeRabbitReviews[0];
             const state = String(latest.state ?? "").toUpperCase();
-
             core.info(
-              `Latest CodeRabbit review for ${headSha}: state=${state} id=${latest.id} at=${latest.submitted_at}`
+              `Latest CodeRabbit review: state=${state} id=${latest.id} commit=${latest.commit_id} at=${latest.submitted_at}`
             );
 
-            const summaryLines = [
-              "## CodeRabbit review gate",
-              "",
-              `- PR: #${prNumber}`,
-              `- Head SHA: \`${headSha}\``,
-              `- Latest review state: \`${state}\``,
-              `- Review id: \`${latest.id}\``,
-              `- Submitted at: \`${latest.submitted_at}\``,
-              `- Reviewer: \`${latest.user?.login}\``,
-              "",
-            ];
-            await core.summary.addRaw(summaryLines.join("\n")).write();
-
-            if (state === "APPROVED") {
-              core.notice(
-                `CodeRabbit approved PR #${prNumber} (review id ${latest.id}).`
-              );
-              return;
-            }
-
+            // CodeRabbit (profile: chill, request_changes_workflow: false) posts
+            // COMMENTED reviews, never APPROVED. The gate therefore requires that
+            // CodeRabbit reviewed and did NOT request changes, AND that every
+            // CodeRabbit review thread is resolved — the same guarantee that
+            // branch protection's required_conversation_resolution enforces on
+            // the merge button, surfaced here as a status check.
             if (state === "CHANGES_REQUESTED") {
               core.setFailed(
                 "CodeRabbit requested changes. Address the review comments and push a new commit — CodeRabbit will re-review and the gate will flip back to green."
@@ -140,9 +121,48 @@ jobs:
               return;
             }
 
-            // COMMENTED / DISMISSED / PENDING / anything else — explicit fail
-            // so the gate is never accidentally green from an "I just left
-            // a comment" review.
-            core.setFailed(
-              `CodeRabbit's latest review state is '${state}'. The gate requires 'APPROVED'.`
+            const threadData = await github.graphql(
+              `query ($owner: String!, $repo: String!, $pr: Int!) {
+                repository(owner: $owner, name: $repo) {
+                  pullRequest(number: $pr) {
+                    reviewThreads(first: 100) {
+                      nodes { isResolved comments(first: 1) { nodes { author { login } } } }
+                    }
+                  }
+                }
+              }`,
+              { owner: context.repo.owner, repo: context.repo.repo, pr: prNumber }
+            );
+            const threads =
+              threadData.repository.pullRequest.reviewThreads.nodes ?? [];
+            const unresolvedCodeRabbit = threads.filter(
+              (t) =>
+                !t.isResolved &&
+                codeRabbitLogins.has(t.comments?.nodes?.[0]?.author?.login ?? "")
+            );
+
+            await core.summary
+              .addRaw(
+                [
+                  "## CodeRabbit review gate",
+                  "",
+                  `- PR: #${prNumber}`,
+                  `- Head SHA: \`${headSha}\``,
+                  `- Latest CodeRabbit review: \`${state}\` (id \`${latest.id}\`)`,
+                  `- Unresolved CodeRabbit threads: \`${unresolvedCodeRabbit.length}\``,
+                  "",
+                ].join("\n")
+              )
+              .write();
+
+            if (unresolvedCodeRabbit.length > 0) {
+              core.setFailed(
+                `${unresolvedCodeRabbit.length} unresolved CodeRabbit review thread(s). ` +
+                  "Resolve them (or address and let CodeRabbit re-review) to turn the gate green."
+              );
+              return;
+            }
+
+            core.notice(
+              `CodeRabbit reviewed PR #${prNumber} (state=${state}) with no unresolved threads — gate is green.`
             );

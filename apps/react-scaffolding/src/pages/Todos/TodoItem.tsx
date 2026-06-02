@@ -19,9 +19,14 @@ function TodoItem({ todo }: TodoItemProps) {
           type="checkbox"
           checked={todo.completed}
           aria-label={t('todos.actions.toggle')}
+          aria-describedby={`todo-${todo.id}-label`}
           onChange={(e) => toggleTodo.mutate({ id: todo.id, completed: e.target.checked })}
+          disabled={toggleTodo.isPending}
         />
-        <span className={`${styles.title} ${todo.completed ? styles.titleDone : ''}`}>
+        <span
+          id={`todo-${todo.id}-label`}
+          className={`${styles.todoTitle} ${todo.completed ? styles.titleDone : ''}`}
+        >
           {todo.title}
         </span>
       </label>
@@ -30,7 +35,7 @@ function TodoItem({ todo }: TodoItemProps) {
         className={styles.delete}
         aria-label={t('todos.actions.delete')}
         onClick={() => deleteTodo.mutate(todo.id)}
-        disabled={deleteTodo.isPending}
+        disabled={deleteTodo.isPending || toggleTodo.isPending}
       >
         ×
       </button>
