@@ -20,14 +20,15 @@ function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        <Link to="/" className={styles.logo} aria-label={t('common.appName')}>
-          {t('common.appName')}
+        <Link to="/" className={styles.logoWrap} aria-label={t('common.appName')}>
+          <span className={styles.brandDot} aria-hidden="true" />
+          <span className={styles.logo}>{t('common.appName')}</span>
         </Link>
         <div className={`${styles.actions} ${menuOpen ? styles.open : ''}`}>
-          <nav aria-label={t('header.primaryNav')}>
+          <nav aria-label={t('header.primaryNav')} className={styles.navWrap}>
             <ul className={styles.navList}>
               {navItems.map((item) => (
-                <li key={item.path}>
+                <li key={item.path} className={styles.navItem}>
                   <Link
                     to={item.path}
                     className={`${styles.navLink} ${
@@ -42,8 +43,11 @@ function Header() {
               ))}
             </ul>
           </nav>
-          <LanguageToggle />
-          <ThemeToggle />
+          <div className={styles.controls}>
+            <span className={styles.controlLabel}>{t('common.language')}</span>
+            <LanguageToggle />
+            <ThemeToggle />
+          </div>
         </div>
         <button
           className={styles.menuButton}

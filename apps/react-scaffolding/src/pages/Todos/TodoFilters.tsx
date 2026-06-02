@@ -18,6 +18,8 @@ function TodoFilters() {
           type="button"
           role="tab"
           aria-selected={filter === value}
+          aria-controls="todo-list"
+          id={`todo-filter-${value}`}
           className={`${styles.filter} ${filter === value ? styles.filterActive : ''}`}
           onClick={() => setFilter(value)}
         >

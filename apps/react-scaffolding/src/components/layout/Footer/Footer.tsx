@@ -9,7 +9,10 @@ function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
-        <p className={styles.copyright}>{t('footer.copyright', { year: currentYear })}</p>
+        <div>
+          <p className={styles.brand}>{t('common.appName')}</p>
+          <p className={styles.copyright}>{t('footer.copyright', { year: currentYear })}</p>
+        </div>
         <div className={styles.links}>
           <a href="/privacy" className={styles.link}>
             {t('footer.privacy')}
