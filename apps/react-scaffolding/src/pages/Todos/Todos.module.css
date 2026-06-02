@@ -64,7 +64,7 @@
   display: inline-flex;
   gap: 0.5rem;
   align-items: center;
-  color: var(--color-danger);
+  color: var(--color-error);
   font-size: 0.85rem;
   margin-top: 0.45rem;
 }
@@ -175,8 +175,8 @@
 
 .delete:hover,
 .delete:focus-visible {
-  color: var(--color-danger);
-  border-color: color-mix(in srgb, var(--color-danger) 40%, var(--color-border));
+  color: var(--color-error);
+  border-color: color-mix(in srgb, var(--color-error) 40%, var(--color-border));
 }
 
 .counter {

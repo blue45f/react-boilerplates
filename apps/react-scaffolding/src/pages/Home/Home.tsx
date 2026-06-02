@@ -49,10 +49,10 @@ function Home() {
   return (
     <div className={styles.home}>
       <section className={styles.hero}>
-        <p className={styles.kicker}>{t('home.newsletterTitle')}</p>
+        <p className={styles.kicker}>{t('home.kicker')}</p>
         <h1 className={styles.title}>{t('home.title')}</h1>
         <p className={styles.description}>{t('home.description')}</p>
-        <div className={styles.buttons} aria-label={t('home.heroActions')}>
+        <div className={styles.buttons} role="group" aria-label={t('home.heroActions')}>
           {quickActions.map((label) => (
             <Button
               key={label}

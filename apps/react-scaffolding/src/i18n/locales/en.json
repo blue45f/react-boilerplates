@@ -20,6 +20,7 @@
     "todos": "Todos"
   },
   "home": {
+    "kicker": "React starter kit",
     "title": "Kickstart your React project",
     "description": "A modern React scaffolding with TypeScript, Vite and React Router preconfigured.",
     "getStarted": "Get started",

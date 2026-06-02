@@ -20,6 +20,7 @@
     "todos": "할 일"
   },
   "home": {
+    "kicker": "React 스타터 킷",
     "title": "React 프로젝트를 빠르게 시작하세요",
     "description": "TypeScript, Vite, React Router가 미리 설정된 현대적인 React 스캐폴딩 프로젝트입니다.",
     "getStarted": "시작하기",

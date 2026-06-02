@@ -45,43 +45,45 @@ function Todos() {
 
       <TodoForm />
       <TodoFilters />
-      <p className={styles.counter} aria-live="polite">
-        {t('todos.remaining', { count: remaining })}
-      </p>
-
-      {isPending && <Loading />}
-      {isError && (
-        <div role="alert" className={styles.errorBox}>
-          <p>{error instanceof Error ? error.message : t('common.error')}</p>
-          <button type="button" className={styles.retry} onClick={() => refetch()}>
-            {t('common.retry')}
-          </button>
-        </div>
+      {!isPending && !isError && total > 0 && (
+        <p className={styles.counter} aria-live="polite">
+          {t('todos.remaining', { count: remaining })}
+        </p>
       )}
 
-      {!isPending && !isError && emptyAllState && (
-        <section className={styles.emptyState} role="status">
-          <h2>{t('todos.empty')}</h2>
-          <p>{t('todos.emptyHint')}</p>
-        </section>
-      )}
+      <div id="todo-list" role="tabpanel" aria-labelledby={`todo-filter-${filter}`}>
+        {isPending && <Loading />}
+        {isError && (
+          <div role="alert" className={styles.errorBox}>
+            <p>{error instanceof Error ? error.message : t('common.error')}</p>
+            <button type="button" className={styles.retry} onClick={() => refetch()}>
+              {t('common.retry')}
+            </button>
+          </div>
+        )}
 
-      {!isPending && !isError && emptyFilterState && (
-        <section className={styles.emptyState} role="status">
-          <h2>{t('todos.emptyFilterTitle')}</h2>
-          <p>{t('todos.emptyFilterHint')}</p>
-        </section>
-      )}
+        {!isPending && !isError && emptyAllState && (
+          <section className={styles.emptyState} role="status">
+            <h2>{t('todos.empty')}</h2>
+            <p>{t('todos.emptyHint')}</p>
+          </section>
+        )}
 
-      {visible.length > 0 && (
-        <>
-          <ul id="todo-list" className={styles.list}>
+        {!isPending && !isError && emptyFilterState && (
+          <section className={styles.emptyState} role="status">
+            <h2>{t('todos.emptyFilterTitle')}</h2>
+            <p>{t('todos.emptyFilterHint')}</p>
+          </section>
+        )}
+
+        {visible.length > 0 && (
+          <ul className={styles.list}>
             {visible.map((todo) => (
               <TodoItem key={todo.id} todo={todo} />
             ))}
           </ul>
-        </>
-      )}
+        )}
+      </div>
     </div>
   )
 }

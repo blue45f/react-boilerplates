@@ -44,7 +44,9 @@ function Header() {
             </ul>
           </nav>
           <div className={styles.controls}>
-            <span className={styles.controlLabel}>{t('common.language')}</span>
+            <span className={styles.controlLabel} aria-hidden="true">
+              {t('common.language')}
+            </span>
             <LanguageToggle />
             <ThemeToggle />
           </div>
