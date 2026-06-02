@@ -146,8 +146,6 @@ jobs:
           cache: pnpm
       - name: Install root deps
         run: pnpm install --frozen-lockfile
-      - name: Install app deps
-        run: pnpm --dir apps/react-scaffolding install --ignore-workspace --ignore-scripts
       - name: Install Playwright browsers
         run: pnpm --dir apps/react-scaffolding run test:e2e:install
       - name: Run E2E
