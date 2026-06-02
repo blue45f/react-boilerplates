@@ -1,5 +1,4 @@
 .header {
-  background-color: var(--color-background);
   border-bottom: var(--line);
   background: color-mix(in srgb, var(--color-background) 90%, transparent);
   backdrop-filter: blur(8px);
@@ -186,7 +185,7 @@
   }
 
   .actions.open {
-    animation: fadeIn var(--transition-slow);
+    animation: fade-in var(--transition-slow);
   }
 
   .actions.open {
@@ -243,7 +242,7 @@
   }
 }
 
-@keyframes fadeIn {
+@keyframes fade-in {
   from {
     opacity: 0.3;
   }

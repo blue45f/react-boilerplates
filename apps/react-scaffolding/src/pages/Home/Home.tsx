@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import useDocumentTitle from '@hooks/useDocumentTitle'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router'
 import { z } from 'zod'
 
 import styles from './Home.module.css'
@@ -19,7 +20,11 @@ function Home() {
   const { t } = useTranslation()
   useDocumentTitle(t('home.title'))
   const { toast } = useToast()
-  const quickActions = [t('home.getStarted'), t('home.learnMore')]
+  const navigate = useNavigate()
+  const quickActions = [
+    { label: t('home.getStarted'), to: '/todos', variant: 'primary' as const },
+    { label: t('home.learnMore'), to: '/about', variant: 'outline' as const },
+  ]
   const coreBenefits = [
     { title: 'TypeScript', description: t('home.benefits.typescript') },
     { title: 'Vite', description: t('home.benefits.vite') },
@@ -53,13 +58,14 @@ function Home() {
         <h1 className={styles.title}>{t('home.title')}</h1>
         <p className={styles.description}>{t('home.description')}</p>
         <div className={styles.buttons} role="group" aria-label={t('home.heroActions')}>
-          {quickActions.map((label) => (
+          {quickActions.map((action) => (
             <Button
-              key={label}
-              variant={label === t('home.getStarted') ? 'primary' : 'outline'}
+              key={action.to}
+              variant={action.variant}
               size="lg"
+              onClick={() => navigate(action.to)}
             >
-              {label}
+              {action.label}
             </Button>
           ))}
         </div>

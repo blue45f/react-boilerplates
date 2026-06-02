@@ -1,15 +1,18 @@
 import { ToastProvider } from '@components/common/Toast'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { MemoryRouter } from 'react-router'
 import { describe, it, expect } from 'vitest'
 
 import Home from './Home'
 
 function renderHome() {
   return render(
-    <ToastProvider>
-      <Home />
-    </ToastProvider>
+    <MemoryRouter>
+      <ToastProvider>
+        <Home />
+      </ToastProvider>
+    </MemoryRouter>
   )
 }
 
