@@ -71,7 +71,7 @@ catalog:
   react-router-dom: ^7.15.1
 
   # 폼/검증
-  react-hook-form: ^7.76.1
+  react-hook-form: ^7.77.0
   '@hookform/resolvers': ^5.4.0
   zod: ^4.4.3
 
