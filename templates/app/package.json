@@ -67,7 +67,7 @@
     "@playwright/test": "^1.60.0",
     "@rolldown/plugin-babel": "^0.2.3",
     "@secretlint/secretlint-rule-preset-recommend": "^13.0.2",
-    "@storybook/addon-a11y": "^10.4.1",
+    "@storybook/addon-a11y": "^10.4.2",
     "@storybook/addon-themes": "^10.4.1",
     "@storybook/react-vite": "^10.4.1",
     "@tanstack/react-query-devtools": "^5.100.14",
