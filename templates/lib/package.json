@@ -68,7 +68,7 @@
   "devDependencies": {
     "@babel/core": "^7.29.7",
     "@commitlint/cli": "^21.0.1",
-    "@commitlint/config-conventional": "^21.0.1",
+    "@commitlint/config-conventional": "^21.2.0",
     "@eslint/js": "^10.0.1",
     "@rolldown/plugin-babel": "^0.2.3",
     "@secretlint/secretlint-rule-preset-recommend": "^13.0.2",
