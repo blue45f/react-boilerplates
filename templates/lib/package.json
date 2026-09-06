@@ -83,7 +83,7 @@
     "@types/babel__core": "^7.20.5",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.2",
+    "@vitejs/plugin-react": "^6.1.1",
     "@vitest/coverage-v8": "^4.1.7",
     "@vitest/eslint-plugin": "^1.6.18",
     "babel-plugin-react-compiler": "^1.0.0",
