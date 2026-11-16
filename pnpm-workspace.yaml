@@ -14,10 +14,10 @@ overrides:
 # 각 패키지 package.json에서 "catalog:" 프로토콜로 참조한다. (pnpm 9.5+ 정식 지원, pnpm 10 권장)
 catalog:
   # React
-  react: ^19.2.6
-  react-dom: ^19.2.6
-  '@types/react': ^19.2.15
-  '@types/react-dom': ^19.2.3
+  react: ^19.2.8
+  react-dom: ^19.2.8
+  '@types/react': ^19.2.18
+  '@types/react-dom': ^19.2.5
 
   # TypeScript & 빌드
   typescript: ^6.0.3
