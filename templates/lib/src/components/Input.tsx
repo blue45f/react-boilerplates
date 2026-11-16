@@ -34,9 +34,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   const reactId = useId();
   const inputId = id ?? `rl-input-${reactId}`;
   const sizeKey = `size${size.charAt(0).toUpperCase() + size.slice(1)}` as
-    | 'sizeSm'
-    | 'sizeMd'
-    | 'sizeLg';
+    'sizeSm' | 'sizeMd' | 'sizeLg';
 
   return (
     <div className={styles.wrapper}>

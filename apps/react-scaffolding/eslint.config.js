@@ -2,7 +2,6 @@ import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
-import reactCompiler from 'eslint-plugin-react-compiler'
 import jsxA11y from 'eslint-plugin-jsx-a11y'
 import importX from 'eslint-plugin-import-x'
 import security from 'eslint-plugin-security'
@@ -36,7 +35,6 @@ export default tseslint.config(
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
-      'react-compiler': reactCompiler,
       'import-x': importX,
       security,
     },
@@ -45,7 +43,6 @@ export default tseslint.config(
       ...security.configs.recommended.rules,
       'security/detect-object-injection': 'off',
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-      'react-compiler/react-compiler': 'error',
       'import-x/order': [
         'warn',
         {

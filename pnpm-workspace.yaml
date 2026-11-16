@@ -47,7 +47,6 @@ catalog:
   typescript-eslint: ^8.69.0
   eslint-config-prettier: ^10.1.8
   eslint-plugin-import-x: ^4.17.1
-  eslint-plugin-react-compiler: 19.1.0-rc.2
   eslint-plugin-react-hooks: ^7.1.1
   eslint-plugin-react-refresh: ^0.5.6
   eslint-plugin-security: ^4.0.1
@@ -67,7 +66,7 @@ catalog:
   react-i18next: ^17.0.8
 
   # 라우팅
-  react-router: ^7.15.1
+  react-router: ^7.18.3
   react-router-dom: ^7.18.3
 
   # 폼/검증
@@ -85,7 +84,7 @@ catalog:
 
   # Storybook
   storybook: ^10.6.0
-  '@storybook/react': ^10.4.1
+  '@storybook/react': ^10.6.0
   '@storybook/react-vite': ^10.6.0
   '@storybook/addon-a11y': ^10.6.0
   '@storybook/addon-themes': ^10.6.0

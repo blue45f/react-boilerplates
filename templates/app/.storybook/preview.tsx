@@ -1,7 +1,7 @@
 import { withThemeByDataAttribute } from '@storybook/addon-themes'
 
 import type { Preview } from '@storybook/react-vite'
-import '../src/assets/styles/global.css'
+import '../src/app/styles/global.css'
 
 export const parameters: Preview['parameters'] = {
   controls: {

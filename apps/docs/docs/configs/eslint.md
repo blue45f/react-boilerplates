@@ -86,7 +86,7 @@ export default [...nodeConfig, ...prettierOff];
 | `import-x/order`                             | warn    | import 그룹별 자동 정렬            |
 | `import-x/no-duplicates`                     | error   | 중복 import 방지                   |
 | `security/*`                                 | various | 기본 보안 정적 검사                |
-| `react-compiler/react-compiler`              | error   | React Compiler 호환성 검사         |
+| `react-hooks/*` (recommended)                | various | React Compiler 1.0 호환성 검사     |
 | `react-hooks/rules-of-hooks`                 | error   | Hooks 규칙 준수                    |
 | `react-hooks/exhaustive-deps`                | warn    | 의존성 배열 검사                   |
 | `storybook/*` (recommended)                  | various | 스토리 파일 베스트 프랙티스        |

@@ -1,5 +1,4 @@
 import prettier from 'eslint-config-prettier/flat';
-import reactCompiler from 'eslint-plugin-react-compiler';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import globals from 'globals';
@@ -25,12 +24,10 @@ export default tseslint.config(
     plugins: {
       'react-hooks': reactHooksPlugin,
       'react-refresh': reactRefresh,
-      'react-compiler': reactCompiler,
     },
     rules: {
       ...reactHooksPlugin.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-      'react-compiler/react-compiler': 'error',
     },
   },
   {

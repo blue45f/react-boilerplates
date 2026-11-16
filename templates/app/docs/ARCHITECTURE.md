@@ -107,4 +107,4 @@ TypeScript 타입 체크
   → dist/ 정적 파일 출력
 ```
 
-React Compiler preset은 Vite 설정에서 Babel plugin으로 연결되어 있습니다. 관련 정적 검사는 ESLint의 `react-compiler/react-compiler` 규칙으로 수행합니다.
+React Compiler preset은 Vite 설정에서 Babel plugin으로 연결되어 있습니다. 관련 정적 검사는 `eslint-plugin-react-hooks` v7의 `recommended` 규칙으로 수행합니다.

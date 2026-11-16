@@ -100,7 +100,7 @@ jobs:
 
   e2e:
     name: E2E (Playwright - ${{ matrix.template }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [build]
     timeout-minutes: 20
     strategy:
@@ -134,7 +134,7 @@ jobs:
 
   e2e-react-scaffolding:
     name: E2E (Playwright - react-scaffolding)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [build]
     timeout-minutes: 20
     steps:

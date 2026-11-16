@@ -2,7 +2,6 @@ import js from '@eslint/js';
 import vitest from '@vitest/eslint-plugin';
 import prettier from 'eslint-config-prettier/flat';
 import importX from 'eslint-plugin-import-x';
-import reactCompiler from 'eslint-plugin-react-compiler';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import security from 'eslint-plugin-security';
@@ -23,7 +22,6 @@ export default tseslint.config(
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
-      'react-compiler': reactCompiler,
       'import-x': importX,
       security,
     },
@@ -32,7 +30,6 @@ export default tseslint.config(
       ...security.configs.recommended.rules,
       'security/detect-object-injection': 'off',
       'react-refresh/only-export-components': 'off',
-      'react-compiler/react-compiler': 'error',
       'import-x/order': [
         'warn',
         {
