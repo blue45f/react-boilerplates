@@ -65,7 +65,7 @@
     "@commitlint/config-conventional": "^21.0.1",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.60.0",
-    "@rolldown/plugin-babel": "^0.2.3",
+    "@rolldown/plugin-babel": "^0.3.1",
     "@secretlint/secretlint-rule-preset-recommend": "^13.0.2",
     "@storybook/addon-a11y": "^10.6.0",
     "@storybook/addon-themes": "^10.6.0",
