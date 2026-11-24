@@ -8,6 +8,13 @@
     "node": ">=22",
     "pnpm": ">=11"
   },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "^22.22.2 || ^24.15.0 || >=26.0.0",
+      "onFail": "error"
+    }
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
