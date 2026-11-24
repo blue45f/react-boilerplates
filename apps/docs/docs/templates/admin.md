@@ -14,7 +14,7 @@ Ant Design 5 기반의 관리자 대시보드 템플릿입니다. 보호 라우�
 | Vite                  | 8     | 빌드 도구                       |
 | Ant Design            | 5     | 엔터프라이즈 UI 컴포넌트        |
 | recharts              | 2     | 대시보드 차트                   |
-| React Router          | 7     | 클라이언트 라우팅 (보호 라우트) |
+| React Router          | 8     | 클라이언트 라우팅 (보호 라우트) |
 | TanStack Query        | 5     | 서버 상태 (API 데이터)          |
 | Zustand               | 5     | 인증/UI 상태                    |
 | react-hook-form + zod | 7 / 4 | 로그인/설정 폼 검증             |
@@ -23,6 +23,8 @@ Ant Design 5 기반의 관리자 대시보드 템플릿입니다. 보호 라우�
 | Playwright            | 1     | E2E 테스트 (로그인 플로우 등)   |
 
 ## 생성 방법
+
+React Router 8을 설치하려면 Node.js 22.22.0 이상이 필요합니다. 테스트와 빌드를 포함한 개발 환경은 잠금 파일 기준으로 Node.js 22.22.2 이상(22.x), 24.15.0 이상(24.x) 또는 26 이상을 사용하세요.
 
 ```bash
 npx create-react-bp my-admin --template admin
@@ -58,7 +60,7 @@ my-admin/
 `ProtectedRoute` 컴포넌트가 `useAuthStore`를 확인하고, 인증되지 않은 경우 `/login`으로 리다이렉트합니다.
 
 ```tsx
-import { Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router';
 import { useAuthStore } from '@/domains/auth/login';
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {

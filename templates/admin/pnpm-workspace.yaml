@@ -1,6 +1,7 @@
 packages:
   - .
 
-onlyBuiltDependencies:
-  - esbuild
-  - unrs-resolver
+allowBuilds:
+  esbuild: true
+  msw: false
+  unrs-resolver: true
