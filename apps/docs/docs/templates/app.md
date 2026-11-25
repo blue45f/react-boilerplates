@@ -17,7 +17,7 @@ sidebar_position: 1
 | CSS Modules              | -     | 컴포넌트 스코프 스타일링   |
 | TanStack Query           | 5     | 서버 상태                  |
 | Zustand                  | 5     | 클라이언트 상태            |
-| i18next + react-i18next  | 26/17 | 다국어 처리                |
+| i18next + react-i18next  | 27/17 | 다국어 처리                |
 | react-hook-form + zod    | 7/4   | 폼 상태 + 스키마 검증      |
 | React Compiler           | 1     | 렌더링 최적화 컴파일러     |
 | Vitest                   | 4     | 단위/통합 테스트           |
