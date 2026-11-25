@@ -12,7 +12,7 @@ import {
 } from '@ant-design/icons';
 import { Badge, Button, Drawer, Dropdown, Input, Layout, Menu, theme as antdTheme } from 'antd';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router';
 
 import Breadcrumb from './Breadcrumb';
 import HeaderUserInfo from './HeaderUserInfo';

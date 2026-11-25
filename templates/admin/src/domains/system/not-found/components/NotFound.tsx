@@ -1,5 +1,5 @@
 import { Button, Result } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { useDocumentTitle } from '@/shared/lib/hooks/useDocumentTitle';
 

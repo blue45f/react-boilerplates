@@ -1,6 +1,6 @@
 import { Spin } from 'antd';
 import { lazy, Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 
 import AdminLayout from '@/app/shell';
 import ProtectedRoute from '@/domains/auth/login/components/ProtectedRoute';

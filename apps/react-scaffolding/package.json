@@ -89,7 +89,7 @@
     "globals": "catalog:",
     "husky": "^9.1.7",
     "jsdom": "catalog:",
-    "lint-staged": "^17.4.1",
+    "lint-staged": "^17.6.1",
     "prettier": "^3.9.6",
     "storybook": "catalog:",
     "typescript": "catalog:",

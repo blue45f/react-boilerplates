@@ -547,7 +547,7 @@ VITE_API_URL=https://api.example.com
 | 스타일링        | CSS Modules              | -         |
 | 서버 상태       | TanStack Query           | ^5.100.14 |
 | 클라이언트 상태 | Zustand                  | ^5.0.13   |
-| i18n            | i18next + react-i18next  | ^26 / ^17 |
+| i18n            | i18next + react-i18next  | ^27 / ^17 |
 | 테스트          | Vitest + Testing Library | ^4.1.7    |
 | 린팅            | ESLint                   | ^10.4.0   |
 
