@@ -56,7 +56,7 @@ catalog:
   globals: ^17.6.0
 
   # 상태/데이터
-  zustand: ^5.0.13
+  zustand: ^5.1.0
   '@tanstack/react-query': ^5.108.1
   '@tanstack/react-query-devtools': ^5.108.1
   ky: ^2.0.2
