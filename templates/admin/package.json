@@ -5,7 +5,7 @@
   "packageManager": "pnpm@11.4.0",
   "type": "module",
   "engines": {
-    "node": ">=22",
+    "node": "^22.22.2 || ^24.15.0 || >=26.0.0",
     "pnpm": ">=11"
   },
   "scripts": {
@@ -84,7 +84,7 @@
     "eslint-plugin-security": "^4.0.0",
     "globals": "^17.6.0",
     "husky": "^9.1.7",
-    "jsdom": "^29.1.1",
+    "jsdom": "^31.0.1",
     "lint-staged": "^17.0.5",
     "msw": "^2.14.6",
     "prettier": "^3.9.6",
