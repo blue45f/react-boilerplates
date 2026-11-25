@@ -39,7 +39,7 @@ npx create-react-lib my-lib
 | 템플릿      | 기술 스택                                                       | 용도                        |
 | ----------- | --------------------------------------------------------------- | --------------------------- |
 | **App**     | React 19 + CSS Modules + React Router Data Router + React Query | 일반 웹 애플리케이션        |
-| **Admin**   | React 19 + Ant Design 5 + React Router 7 + recharts             | 관리자 대시보드             |
+| **Admin**   | React 19 + Ant Design 5 + React Router 8 + recharts             | 관리자 대시보드             |
 | **Library** | React 18/19 peer + Vite library mode + Storybook 10             | 디자인 시스템·UI 라이브러리 |
 
 각 템플릿은 **워크스페이스에서 분리**되어 있어서 `npx create-*`로 받자마자 그대로 독립 실행됩니다.
@@ -122,7 +122,7 @@ pnpm changeset                  # 변경 사항 기록
 | 빌드              | [Vite 8](https://vite.dev), [pnpm 10 workspace + catalog](https://pnpm.io)                                           |
 | 언어              | [TypeScript 6](https://www.typescriptlang.org)                                                                       |
 | UI 프레임워크     | CSS Modules, [Ant Design 5](https://ant.design), 자체 디자인 토큰                                                    |
-| 라우팅            | [React Router 7](https://reactrouter.com)                                                                            |
+| 라우팅            | [React Router](https://reactrouter.com) (App 7, Admin 8)                                                             |
 | 서버 상태         | [TanStack Query 5](https://tanstack.com/query)                                                                       |
 | 클라이언트 상태   | [Zustand 5](https://zustand.docs.pmnd.rs)                                                                            |
 | HTTP              | [ky](https://github.com/sindresorhus/ky) (대안: [ofetch](https://github.com/unjs/ofetch))                            |

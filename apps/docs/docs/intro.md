@@ -30,7 +30,7 @@ App / Admin / Library 템플릿, 생성 CLI, 공유 설정, 문서, CI 검증을
 | 템플릿                        | 기술 스택                                         | 용도                     |
 | ----------------------------- | ------------------------------------------------- | ------------------------ |
 | **[App](/templates/app)**     | React 19 + CSS Modules + React Router Data Router | 일반 웹 애플리케이션     |
-| **[Admin](/templates/admin)** | React 19 + Ant Design 5 + React Router 7          | 관리자 대시보드          |
+| **[Admin](/templates/admin)** | React 19 + Ant Design 5 + React Router 8          | 관리자 대시보드          |
 | **[Library](/templates/lib)** | React 18/19 peer + Vite library mode              | 컴포넌트 라이브러리 개발 |
 
 ## 빠른 시작
