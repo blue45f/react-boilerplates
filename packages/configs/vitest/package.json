@@ -17,9 +17,11 @@
     "src"
   ],
   "dependencies": {
-    "@testing-library/jest-dom": "catalog:",
+    "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "catalog:",
-    "jsdom": "catalog:",
+    "jsdom": "catalog:"
+  },
+  "devDependencies": {
     "vitest": "^5.1.1"
   },
   "peerDependencies": {
