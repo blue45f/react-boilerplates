@@ -127,10 +127,10 @@ catalogs:
       specifier: ^17.0.8
       version: 17.1.13
     react-router:
-      specifier: ^7.18.3
+      specifier: ^7.18.6
       version: 7.18.6
     react-router-dom:
-      specifier: ^7.18.3
+      specifier: ^7.18.6
       version: 7.18.6
     secretlint:
       specifier: ^13.0.2
